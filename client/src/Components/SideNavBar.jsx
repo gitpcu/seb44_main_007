@@ -183,15 +183,17 @@ export default function SideNavBar(){
               </Link>
             )
           })}
-          <LowerMenuList>
-            <LowerMenuImg
-              src={menuList.at(-1).image}
-              className='MenuListImg' 
-              selected={curLocation === menuList.at(-1).path ? true : false }
-              onClick={askLogout}></LowerMenuImg>
-            <MenuListSpan className='MenuListSpan'>{menuList.at(-1).title}</MenuListSpan>
-            <MenuListDiv className='MenuListDiv' />
-          </LowerMenuList>
+          <Link to='/login' className='navLink'>
+            <LowerMenuList>
+              <LowerMenuImg
+                src={menuList.at(-1).image}
+                className='MenuListImg' 
+                selected={curLocation === menuList.at(-1).path ? true : false }
+                onClick={askLogout}></LowerMenuImg>
+              <MenuListSpan className='MenuListSpan'>{menuList.at(-1).title}</MenuListSpan>
+              <MenuListDiv className='MenuListDiv' />
+            </LowerMenuList>
+          </Link>
         </Menu>
       </SidebarContainer>
     </Nav>
