@@ -1,4 +1,4 @@
-package com.server.fixed;
+package com.server.fixed.entity;
 
 import com.server.trade.entity.Category;
 import lombok.Getter;

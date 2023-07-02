@@ -1,5 +1,9 @@
-package com.server.fixed;
+package com.server.fixed.controller;
 
+import com.server.fixed.dto.FixedDto;
+import com.server.fixed.entity.Fixed;
+import com.server.fixed.mapper.FixedMapper;
+import com.server.fixed.service.FixedService;
 import com.server.response.MultiResponseDto;
 import com.server.response.SingleResponseDto;
 import com.server.utils.UriCreator;
@@ -58,7 +62,7 @@ public class FixedController {
         return new ResponseEntity<>(new MultiResponseDto<>(fixedInfoList, pageInfo), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{fixedId}")
     public ResponseEntity deleteFixed(@PathVariable("fixedId") @Positive long fixedId) {
         fixedService.deleteFixed(fixedId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
