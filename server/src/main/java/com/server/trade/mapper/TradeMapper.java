@@ -11,8 +11,8 @@ import java.util.List;
 public interface TradeMapper {
     @Mapping(target = "date", source = "requestBody.date")
     Trade tradePostDtoToTrade(TradeDto.Post requestBody);
-//    @Mapping(target = "date", source = "requestBody.date")
-//    Trade tradePatchDtoToTrade(TradeDto.Patch requestBody);
-//    TradeDto.Response tradeToResponseDto(Trade trade);
-//    List<TradeDto.Response> tradesToResponseDtos(List<Trade> trades);
+    @Mapping(target = "date", source = "requestBody.date")
+    Trade tradePatchDtoToTrade(TradeDto.Patch requestBody);
+    TradeDto.Response tradeToResponseDto(Trade trade);
+    List<TradeDto.Response> tradesToResponseDtos(List<Trade> trades);
 }
