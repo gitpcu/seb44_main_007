@@ -9,9 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,7 +35,7 @@ public class TradeDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Patch {
+    public static class Put {
         private long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
@@ -48,7 +45,7 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-        public TradeDto.Patch addTradeId(Long tradeId) {
+        public TradeDto.Put addTradeId(Long tradeId) {
             Assert.notNull(tradeId, "trade id must not be null.");
             this.tradeId = tradeId;
             return this;
@@ -141,6 +138,7 @@ public class TradeDto {
                 )
                 .collect(Collectors.toList());
     }
+
 
 
 }

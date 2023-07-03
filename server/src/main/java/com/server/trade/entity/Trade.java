@@ -1,5 +1,7 @@
 package com.server.trade.entity;
 
+import com.server.member.entity.Member;
+import com.server.total.Total;
 import com.server.utils.CustomBeanUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +29,30 @@ public class Trade {
     private LocalDate date; //날짜 LocalDate.of(2023, 7, 1);
     @Enumerated(EnumType.STRING)
     private Category category;
-    private long memberId;
+
+
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId", nullable = false)
+    private Member member;
+    public void setMember(Member member) {
+        this.member = member;
+        member.getTradeList().add(this);
+    }
+
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "totalId", nullable = false)
+    private Total total;
+
+    public void setTotal(Total total) {
+        this.total = total;
+        total.getTradeList().add(this);
+    }
 
 
     public void setDate(LocalDate date) {
@@ -37,4 +62,6 @@ public class Trade {
     public Trade changeTrade(Trade sourceTrade, CustomBeanUtils<Trade> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceTrade, this);
     }
+
+
 }

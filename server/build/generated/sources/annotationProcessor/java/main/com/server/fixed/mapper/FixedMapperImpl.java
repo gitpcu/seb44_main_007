@@ -1,9 +1,6 @@
 package com.server.fixed.mapper;
 
-import com.server.fixed.dto.FixedDto.Post;
-import com.server.fixed.dto.FixedDto.Put;
-import com.server.fixed.dto.FixedDto.Response;
-import com.server.fixed.dto.FixedDto.Response.ResponseBuilder;
+import com.server.fixed.dto.FixedDto;
 import com.server.fixed.entity.Fixed;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-03T08:11:07+0900",
-    comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
+    date = "2023-07-03T14:12:40+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
 )
 @Component
 public class FixedMapperImpl implements FixedMapper {
 
     @Override
-    public Fixed fixedPostDtoToFixed(Post requestBody) {
+    public Fixed fixedPostDtoToFixed(FixedDto.Post requestBody) {
         if ( requestBody == null ) {
             return null;
         }
@@ -37,7 +34,7 @@ public class FixedMapperImpl implements FixedMapper {
     }
 
     @Override
-    public Fixed fixedPutDtoToFixed(Put requestBody) {
+    public Fixed fixedPutDtoToFixed(FixedDto.Put requestBody) {
         if ( requestBody == null ) {
             return null;
         }
@@ -56,12 +53,12 @@ public class FixedMapperImpl implements FixedMapper {
     }
 
     @Override
-    public Response fixedToResponseDto(Fixed fixed) {
+    public FixedDto.Response fixedToResponseDto(Fixed fixed) {
         if ( fixed == null ) {
             return null;
         }
 
-        ResponseBuilder response = Response.builder();
+        FixedDto.Response.ResponseBuilder response = FixedDto.Response.builder();
 
         response.fixedId( fixed.getFixedId() );
         response.type( fixed.getType() );
@@ -75,12 +72,12 @@ public class FixedMapperImpl implements FixedMapper {
     }
 
     @Override
-    public List<Response> fixedsToResponseDtos(List<Fixed> fixedList) {
+    public List<FixedDto.Response> fixedsToResponseDtos(List<Fixed> fixedList) {
         if ( fixedList == null ) {
             return null;
         }
 
-        List<Response> list = new ArrayList<Response>( fixedList.size() );
+        List<FixedDto.Response> list = new ArrayList<FixedDto.Response>( fixedList.size() );
         for ( Fixed fixed : fixedList ) {
             list.add( fixedToResponseDto( fixed ) );
         }

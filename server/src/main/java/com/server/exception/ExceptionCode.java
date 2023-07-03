@@ -13,7 +13,8 @@ public enum ExceptionCode {
     CANNOT_CHANGE_QNA_QUESTION(403, "Q&A Question can not change"),
     CANNOT_READ_QNA_QUESTION(403, "Q&A Question can not read"),
     TRADE_NOT_FOUND(404, "Trade not found"),
-    FIXED_NOT_FOUND(404, "fixed not found");
+    FIXED_NOT_FOUND(404, "fixed not found"),
+    TOTAL_NOT_FOUND(404, "Total not found");
 
     @Getter
     private int status;
