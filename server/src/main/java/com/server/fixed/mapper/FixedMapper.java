@@ -1,5 +1,7 @@
-package com.server.fixed;
+package com.server.fixed.mapper;
 
+import com.server.fixed.dto.FixedDto;
+import com.server.fixed.entity.Fixed;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,5 +1,6 @@
-package com.server.fixed;
+package com.server.fixed.dto;
 
+import com.server.fixed.entity.Fixed;
 import com.server.response.PageInfo;
 import com.server.trade.entity.Category;
 import lombok.AllArgsConstructor;
