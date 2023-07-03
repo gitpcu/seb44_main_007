@@ -2,7 +2,6 @@ package com.server.trade.service;
 
 import com.server.exception.BusinessLogicException;
 import com.server.exception.ExceptionCode;
-import com.server.total.Total;
 import com.server.trade.entity.Trade;
 import com.server.trade.repository.TradeRepository;
 import com.server.utils.CustomBeanUtils;

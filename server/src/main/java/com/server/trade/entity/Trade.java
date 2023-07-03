@@ -1,7 +1,7 @@
 package com.server.trade.entity;
 
 import com.server.member.entity.Member;
-import com.server.total.Total;
+import com.server.total.entity.Total;
 import com.server.utils.CustomBeanUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,4 +64,13 @@ public class Trade {
     }
 
 
+    public BigDecimal getTotalIncome() {
+        return total.getTotalIncome();
+    }
+    public BigDecimal getTotalOutcome() {
+        return total.getTotalOutcome();
+    }
+    public BigDecimal getGoal() {
+        return total.getGoal();
+    }
 }

@@ -4,7 +4,7 @@ import com.server.audit.Auditable;
 import com.server.exception.BusinessLogicException;
 import com.server.exception.ExceptionCode;
 import com.server.fixed.entity.Fixed;
-import com.server.total.Total;
+import com.server.total.entity.Total;
 import com.server.trade.entity.Trade;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
