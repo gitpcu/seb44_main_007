@@ -145,7 +145,8 @@ export default function SideNavBar(){
   }, [location.pathname]);
   console.log(logoutModal)
   if(location.pathname === '/'
-  || location.pathname === '/login'){
+  || location.pathname === '/login'
+  || location.pathname === '/signup'){
     return ''
   }
   return(
