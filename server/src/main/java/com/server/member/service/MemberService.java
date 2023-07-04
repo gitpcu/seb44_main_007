@@ -34,6 +34,7 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         //
 
+
         return memberRepository.save(member);
     }
 
