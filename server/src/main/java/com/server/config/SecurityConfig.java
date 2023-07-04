@@ -1,58 +1,122 @@
 package com.server.config;
 
+import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.JwtAuthenticationFilter;
+import com.server.auth.JwtVerificationFilter;
+import com.server.config.Handler.*;
+import com.server.config.jwt.JwtTokenizer;
+import com.server.member.repository.MemberRepository;
+import com.server.member.service.MemberService;
+import com.server.redis.RedisService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
+
+import java.util.Arrays;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity //모든요청에 권한을 확인하게되기
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils; // 추가
+    private final RedisService redisService;
+    private final MemberRepository memberRepository;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic().disable()            // 토큰으로 인증할거니까
-                .csrf().disable()                 // csrf비활성화 추후에 풀어서 토큰 검증시켜야함
-                .cors()
+                .headers().frameOptions().sameOrigin() // (1)
                 .and()
-                .formLogin()                      // 폼로그인방식으로 지정
-                .loginPage("/auths/login-form")   // 템플릿페이지로 설정
-                .loginProcessingUrl("/process_login")    //로그인 수행할URL 지정
-                .failureUrl("/auths/login-form?error")   //로그인실패시 수행할 URl
-                .and()                           // 메서드체인
-                .logout()                        // LogoutConfigurer를 리턴
-                .logoutUrl("/logout")            // 로그아웃URL
-                .logoutSuccessUrl("/home")       // 수행후 보여줄 URL
+                .csrf().disable()        // (2)
+                .cors(withDefaults())    // (3)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .exceptionHandling().accessDeniedPage("/auths/access-denied")   //권한이 없는데 접근하면 403에러 처리 페이지
+                .formLogin().disable()   // (4)
+                .httpBasic().disable()   // (5)
+                .exceptionHandling()
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint())  // (1) 추가
+                .accessDeniedHandler(new UserAccessDeniedHandler())
                 .and()
-                .authorizeHttpRequests()  //권한확인 접근허용할지확인할거다!라고 선언, 람다표현식으로 requestURI에 대한 접근권한을 부여
-                .antMatchers("/login", "/join").permitAll()          //로그인은 항상 접근가능
-                .antMatchers("/orders/**").hasRole("ADMIN")        //룰별로 접근가능한 url지정(orders로시작하는 모든URl접근가능)
-                .antMatchers("/members/my-page").hasRole("USER")   //룰별로 접근가능한 url지정
-                .antMatchers(HttpMethod.POST,"answers").authenticated() // 예시로 넣어둠. 답글은 인증필요
+                .apply(new CustomFilterConfigurer())
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //jwt 사용하는경우에 사용
-                .and();
-
-
+//                .authorizeHttpRequests(authorize -> authorize
+////                        .antMatchers(HttpMethod.GET, "/user/**").permitAll()
+////                        .antMatchers(HttpMethod.POST, "/user/signup").permitAll()
+////                        .antMatchers(HttpMethod.PATCH, "/user/edit/**").hasRole("USER")
+////                        .antMatchers(HttpMethod.DELETE, "/user/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.GET, "/answers/**").hasRole("USER")
+//                        .anyRequest().permitAll()
+//                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()
+                )
+                .logout()
+                .logoutUrl("/auth/logout")
+                .addLogoutHandler(new UserLogoutHandler(redisService, jwtTokenizer))
+                .logoutSuccessUrl("/");
+//                .and()
+//                .oauth2Login(oauth2 -> oauth2
+//                        .successHandler(new OAuth2UserSuccessHandler(JwtTokenizer, authorityUtils, userService))  // (1)
+//                );
         return http.build();
-
     }
 
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {  // (2-1)
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {  // (2-2)
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);  // (2-3)
+
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, redisService);  // (2-4)
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");          // (2-5)
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());  // (3) 추가
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFiltureHandler());  // (4) 추가
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, redisService, memberRepository);  // (2) 추가
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);// (2-6)
+//                    .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class); // (2)
+        }
+    }
+
+
+
+    public void addCorsMapptings(CorsRegistry registry){
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET","POST", "PATCH", "DELETE","OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization");
+    }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addExposedHeader("Authorization");
+
+        source.registerCorsConfiguration("/**", configuration);         // 주의 사항: 콘텐츠 표시 오류로 인해 '/**'를 '\/**'로 표기했으니 실제 코드 구현 시에는 '\(역슬래시)'를 빼 주세요.
+
+        return source;
     }
-
-
 }

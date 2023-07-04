@@ -9,13 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-<<<<<<< HEAD
-    date = "2023-07-03T16:14:42+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
-=======
-    date = "2023-07-03T10:15:08+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 19.0.2 (Azul Systems, Inc.)"
->>>>>>> bc1d7723f8143bbd1743d73737085c650eb1cf9d
+    date = "2023-07-05T00:48:59+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
 public class TradeMapperImpl implements TradeMapper {
@@ -39,11 +34,7 @@ public class TradeMapperImpl implements TradeMapper {
     }
 
     @Override
-<<<<<<< HEAD
     public Trade tradePutDtoToTrade(TradeDto.Put requestBody) {
-=======
-    public Trade tradePatchDtoToTrade(TradeDto.Patch requestBody) {
->>>>>>> bc1d7723f8143bbd1743d73737085c650eb1cf9d
         if ( requestBody == null ) {
             return null;
         }

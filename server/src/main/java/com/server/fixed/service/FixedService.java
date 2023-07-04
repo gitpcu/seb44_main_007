@@ -1,7 +1,7 @@
 package com.server.fixed.service;
 
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
 import com.server.fixed.entity.Fixed;
 import com.server.fixed.repository.FixedRepository;
 import com.server.trade.entity.Trade;

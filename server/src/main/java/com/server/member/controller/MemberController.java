@@ -30,6 +30,7 @@ public class MemberController {
     private final MemberMapper memberMapper;
 
 
+
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = memberMapper.memberPostDtoToMember(requestBody);

@@ -1,8 +1,8 @@
 package com.server.member.service;
 
 
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
 import com.server.member.entity.Member;
 import com.server.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -12,12 +12,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
@@ -25,18 +26,32 @@ public class MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     public Member createMember(Member member) {
         // 기존 메일 여부 확인
-        Member findMember = memberRepository.findByEmail(member.getEmail());
-        Member.checkExistEmail(findMember);
+        Optional<Member> findMemberOptional = memberRepository.findByEmail(member.getEmail());
+        if (findMemberOptional.isPresent()) {
+            throw new RuntimeException(member.getEmail() + "은 이미 존재하는 이메일입니다.");
+        }
 
-        //비밀번호 암호화
+        // 비밀번호 암호화
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        //
-
 
         return memberRepository.save(member);
     }
+
+//    public Member createMember(Member member) {
+//        // 기존 메일 여부 확인
+//        Member findMember = memberRepository.findByEmail(member.getEmail());
+//        Member.checkExistEmail(findMember);
+//
+//        //비밀번호 암호화
+//        member.setPassword(passwordEncoder.encode(member.getPassword()));
+//        //
+//
+//
+//        return memberRepository.save(member);
+//    }
 
     public Member updateMember(Member member) {
         Member findMember = findMember(member.getMemberId());

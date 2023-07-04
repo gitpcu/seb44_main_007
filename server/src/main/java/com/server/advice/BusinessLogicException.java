@@ -1,4 +1,4 @@
-package com.server.exception;
+package com.server.advice;
 
 import lombok.Getter;
 

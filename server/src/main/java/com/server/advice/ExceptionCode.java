@@ -1,4 +1,4 @@
-package com.server.exception;
+package com.server.advice;
 
 import lombok.Getter;
 
@@ -14,7 +14,8 @@ public enum ExceptionCode {
     CANNOT_READ_QNA_QUESTION(403, "Q&A Question can not read"),
     TRADE_NOT_FOUND(404, "Trade not found"),
     FIXED_NOT_FOUND(404, "fixed not found"),
-    TOTAL_NOT_FOUND(404, "Total not found");
+    TOTAL_NOT_FOUND(404, "Total not found"),
+    EMAIL_NOT_FOUND(404, "Email not found");
 
     @Getter
     private int status;

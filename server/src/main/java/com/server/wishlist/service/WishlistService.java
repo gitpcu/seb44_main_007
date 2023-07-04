@@ -1,7 +1,7 @@
 package com.server.wishlist.service;
 
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
 import com.server.wishlist.entity.Wishlist;
 import com.server.wishlist.repository.WishlistRepository;
 import org.springframework.data.domain.Page;

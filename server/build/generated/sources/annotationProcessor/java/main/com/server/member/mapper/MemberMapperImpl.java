@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-03T15:41:37+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
+    date = "2023-07-05T00:48:59+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
 public class MemberMapperImpl implements MemberMapper {
@@ -22,14 +22,14 @@ public class MemberMapperImpl implements MemberMapper {
             return null;
         }
 
-        Member member = new Member();
+        Member.MemberBuilder member = Member.builder();
 
-        member.setEmail( requestBody.getEmail() );
-        member.setPassword( requestBody.getPassword() );
-        member.setName( requestBody.getName() );
-        member.setPhoneNumber( requestBody.getPhoneNumber() );
+        member.email( requestBody.getEmail() );
+        member.password( requestBody.getPassword() );
+        member.name( requestBody.getName() );
+        member.phoneNumber( requestBody.getPhoneNumber() );
 
-        return member;
+        return member.build();
     }
 
     @Override
@@ -38,13 +38,15 @@ public class MemberMapperImpl implements MemberMapper {
             return null;
         }
 
-        Member member = new Member();
+        Member.MemberBuilder member = Member.builder();
 
-        member.setMemberId( requestBody.getMemberId() );
-        member.setName( requestBody.getName() );
-        member.setPhoneNumber( requestBody.getPhoneNumber() );
+        member.memberId( requestBody.getMemberId() );
+        member.name( requestBody.getName() );
+        if ( requestBody.getPhoneNumber() != null ) {
+            member.phoneNumber( String.valueOf( requestBody.getPhoneNumber() ) );
+        }
 
-        return member;
+        return member.build();
     }
 
     @Override
@@ -62,7 +64,9 @@ public class MemberMapperImpl implements MemberMapper {
         memberId = member.getMemberId();
         name = member.getName();
         email = member.getEmail();
-        phoneNumber = member.getPhoneNumber();
+        if ( member.getPhoneNumber() != null ) {
+            phoneNumber = Integer.parseInt( member.getPhoneNumber() );
+        }
         if ( member.getCreatedAt() != null ) {
             createdAt = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( member.getCreatedAt() );
         }

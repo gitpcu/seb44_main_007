@@ -1,24 +1,23 @@
 package com.server.member.entity;
 
 import com.server.audit.Auditable;
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
 import com.server.fixed.entity.Fixed;
 import com.server.total.entity.Total;
 import com.server.trade.entity.Trade;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
 @Entity
-public class Member extends Auditable implements Principal {
+public class Member extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +33,7 @@ public class Member extends Auditable implements Principal {
     private String name;
 
     @Column(nullable = false)
-    private Integer phoneNumber;
+    private String phoneNumber;
 
     @Column
     private String imageURL;
@@ -42,9 +41,13 @@ public class Member extends Auditable implements Principal {
     @Column
     private boolean premium;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(length = 20, nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = true)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+//    @Enumerated(value = EnumType.STRING)
+//    @Column(length = 20, nullable = false)
+//    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -82,12 +85,6 @@ public class Member extends Auditable implements Principal {
 
     public Member(long memberId) {this.memberId = memberId;}
 
-    public Member(String email, String password, String name, Integer phoneNumber) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-    }
 
     //Utility
     public static void checkExistEmail(Member targetMember) {
