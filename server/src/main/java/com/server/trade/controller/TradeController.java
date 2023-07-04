@@ -1,8 +1,6 @@
 package com.server.trade.controller;
 
-import com.server.response.MultiResponseDto;
-import com.server.response.PageInfo;
-import com.server.response.SingleResponseDto;
+import com.server.dto.ResponseDto;
 import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
 import com.server.trade.mapper.TradeMapper;
@@ -42,23 +40,22 @@ public class TradeController {
     public ResponseEntity postTrade(@Valid @RequestBody TradeDto.Post requestBody) {
         Trade trade = tradeService.createTrade(mapper.tradePostDtoToTrade(requestBody));
         URI location = UriCreator.createUri(TRADES_URL, trade.getTradeId());
-
-//        return ResponseEntity.created(location).build();
         return new ResponseEntity<>(TradeDto.Response.response(trade), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{tradeId}")
-    public ResponseEntity patchTrade(@PathVariable("tradeId") @Positive long tradeId,
-                                     @Valid @RequestBody TradeDto.Patch requestBody) {
-        Trade trade = tradeService.updateTrade(mapper.tradePatchDtoToTrade(requestBody.addTradeId(tradeId)));
-        return new ResponseEntity(new SingleResponseDto<>(mapper.tradeToResponseDto(trade)),
+
+    @PutMapping("/{tradeId}")
+    public ResponseEntity putTrade(@PathVariable("tradeId") @Positive long tradeId,
+                                   @Valid @RequestBody TradeDto.Put requestBody) {
+        Trade trade = tradeService.updateTrade(mapper.tradePutDtoToTrade(requestBody.addTradeId(tradeId)));
+        return new ResponseEntity(new ResponseDto.SingleResponseDto<>(mapper.tradeToResponseDto(trade)),
                 HttpStatus.OK);
     }
 
     @GetMapping("/{tradeId}")
     public ResponseEntity getTrade(@PathVariable("tradeId") @Positive long tradeId) {
         Trade trade = tradeService.findTrade(tradeId);
-        return new ResponseEntity<>(new SingleResponseDto<>(TradeDto.Response.response(trade)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(TradeDto.Response.response(trade)), HttpStatus.OK);
     }
 
 
@@ -82,7 +79,8 @@ public class TradeController {
         List<Trade> trades = tradePage.getContent();
         List<TradeDto.ListElement> tradeInfoList = TradeDto.getList(trades);
 
-        return new ResponseEntity<>(new MultiResponseDto<>(tradeInfoList, tradePage), HttpStatus.OK);
+
+        return new ResponseEntity<>(new ResponseDto.MultiResponseDto<>(tradeInfoList, tradePage), HttpStatus.OK);
     }
 
 

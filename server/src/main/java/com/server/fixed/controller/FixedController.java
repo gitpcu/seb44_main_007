@@ -1,11 +1,10 @@
 package com.server.fixed.controller;
 
+import com.server.dto.ResponseDto;
 import com.server.fixed.dto.FixedDto;
 import com.server.fixed.entity.Fixed;
 import com.server.fixed.mapper.FixedMapper;
 import com.server.fixed.service.FixedService;
-import com.server.response.MultiResponseDto;
-import com.server.response.SingleResponseDto;
 import com.server.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -43,14 +42,14 @@ public class FixedController {
     public ResponseEntity putFixed(@PathVariable("fixedId") @Positive long fixedId,
                                    @Valid @RequestBody FixedDto.Put requestBody) {
         Fixed fixed = fixedService.updateFixed(mapper.fixedPutDtoToFixed(requestBody.addFixed(fixedId)));
-        return new ResponseEntity(new SingleResponseDto<>(mapper.fixedToResponseDto(fixed)),
+        return new ResponseEntity(new ResponseDto.SingleResponseDto<>(mapper.fixedToResponseDto(fixed)),
                 HttpStatus.OK);
     }
 
     @GetMapping("/{fixedId}")
     public ResponseEntity getFixed(@PathVariable("fixedId") @Positive long fixedId) {
         Fixed fixed = fixedService.findFixed(fixedId);
-        return new ResponseEntity<>(new SingleResponseDto<>(FixedDto.Response.response(fixed)), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(FixedDto.Response.response(fixed)), HttpStatus.OK);
     }
 
     @GetMapping
@@ -59,7 +58,7 @@ public class FixedController {
         Page<Fixed> pageInfo = fixedService.findFixeds(page -1, size);
         List<Fixed> fixedList = pageInfo.getContent();
         List<FixedDto.ListElement> fixedInfoList = FixedDto.getList(fixedList);
-        return new ResponseEntity<>(new MultiResponseDto<>(fixedInfoList, pageInfo), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto.MultiResponseDto<>(fixedInfoList, pageInfo), HttpStatus.OK);
     }
 
     @DeleteMapping("/{fixedId}")

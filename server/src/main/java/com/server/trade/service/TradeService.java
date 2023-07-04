@@ -6,9 +6,7 @@ import com.server.trade.entity.Trade;
 import com.server.trade.repository.TradeRepository;
 import com.server.utils.CustomBeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +31,11 @@ public class TradeService {
 
     public Trade updateTrade(Trade trade) {
         Trade findTrade = findTrade(trade.getTradeId());
-        setTradeInfos(findTrade, trade);
+        setTradeInfo(findTrade, trade);
         return tradeRepository.save(findTrade);
     }
 
-    private void setTradeInfos(Trade findTrade, Trade trade) {
+    private void setTradeInfo(Trade findTrade, Trade trade) {
         Optional.ofNullable(trade.getType())
                 .ifPresent(type -> findTrade.setType(type));
         Optional.ofNullable(trade.getTradeName())
@@ -53,7 +51,7 @@ public class TradeService {
     }
 
     @Transactional(readOnly = true)
-    public Trade findTrade(Long tradeId) {
+    public Trade findTrade(long tradeId) {
         Trade findTrade = tradeRepository.findById(tradeId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.TRADE_NOT_FOUND));
         return findTrade;
@@ -65,9 +63,12 @@ public class TradeService {
         return tradeRepository.findByDateBetween(startDate, endDate, pageable);
     }
 
-    public void deleteTrade(Long tradeId){
+    public void deleteTrade(long tradeId){
         tradeRepository.deleteById(tradeId);
     }
+
+
+
 
 //    @Transactional(readOnly = true) //getMapping
 //    public Page<Trade> findTrades(Pageable pageable) {

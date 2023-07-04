@@ -1,9 +1,6 @@
 package com.server.trade.mapper;
 
-import com.server.trade.dto.TradeDto.Patch;
-import com.server.trade.dto.TradeDto.Post;
-import com.server.trade.dto.TradeDto.Response;
-import com.server.trade.dto.TradeDto.Response.ResponseBuilder;
+import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-03T08:11:07+0900",
-    comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
+    date = "2023-07-03T16:14:42+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
 )
 @Component
 public class TradeMapperImpl implements TradeMapper {
 
     @Override
-    public Trade tradePostDtoToTrade(Post requestBody) {
+    public Trade tradePostDtoToTrade(TradeDto.Post requestBody) {
         if ( requestBody == null ) {
             return null;
         }
@@ -37,7 +34,7 @@ public class TradeMapperImpl implements TradeMapper {
     }
 
     @Override
-    public Trade tradePatchDtoToTrade(Patch requestBody) {
+    public Trade tradePutDtoToTrade(TradeDto.Put requestBody) {
         if ( requestBody == null ) {
             return null;
         }
@@ -56,12 +53,12 @@ public class TradeMapperImpl implements TradeMapper {
     }
 
     @Override
-    public Response tradeToResponseDto(Trade trade) {
+    public TradeDto.Response tradeToResponseDto(Trade trade) {
         if ( trade == null ) {
             return null;
         }
 
-        ResponseBuilder response = Response.builder();
+        TradeDto.Response.ResponseBuilder response = TradeDto.Response.builder();
 
         response.tradeId( trade.getTradeId() );
         response.type( trade.getType() );
@@ -75,12 +72,12 @@ public class TradeMapperImpl implements TradeMapper {
     }
 
     @Override
-    public List<Response> tradesToResponseDtos(List<Trade> trades) {
+    public List<TradeDto.Response> tradesToResponseDtos(List<Trade> trades) {
         if ( trades == null ) {
             return null;
         }
 
-        List<Response> list = new ArrayList<Response>( trades.size() );
+        List<TradeDto.Response> list = new ArrayList<TradeDto.Response>( trades.size() );
         for ( Trade trade : trades ) {
             list.add( tradeToResponseDto( trade ) );
         }

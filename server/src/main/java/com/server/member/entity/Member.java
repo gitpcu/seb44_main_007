@@ -3,11 +3,16 @@ package com.server.member.entity;
 import com.server.audit.Auditable;
 import com.server.exception.BusinessLogicException;
 import com.server.exception.ExceptionCode;
+import com.server.fixed.entity.Fixed;
+import com.server.total.entity.Total;
+import com.server.trade.entity.Trade;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -39,6 +44,19 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Total> totalList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Trade> tradeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Fixed> fixedList = new ArrayList<>();
+
+
+
 
     public enum MemberStatus {
 
