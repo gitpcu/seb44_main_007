@@ -1,7 +1,6 @@
 package com.server.trade.controller;
 
 import com.server.response.MultiResponseDto;
-import com.server.response.PageInfo;
 import com.server.response.SingleResponseDto;
 import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
