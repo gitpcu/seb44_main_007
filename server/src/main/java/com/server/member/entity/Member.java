@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter @Setter
 @Entity
-public class Member extends Auditable {
+public class Member extends Auditable implements Principal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +55,9 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Fixed> fixedList = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)  //시큐리티로 추가
+    private List<String> roles = new ArrayList<>();
 
 
 
