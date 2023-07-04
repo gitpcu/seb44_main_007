@@ -4,8 +4,8 @@ import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface TradeMapper {

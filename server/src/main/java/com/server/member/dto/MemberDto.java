@@ -44,7 +44,7 @@ public class MemberDto {
         private Integer phoneNumber;
 
         public Put addMemberId(Long memberId){
-            Assert.notNull(memberId, "Member Id must not beNull");
+            Assert.notNull(memberId, "Member Id must not be Null");
             this.memberId = memberId;
             return this;
         }
