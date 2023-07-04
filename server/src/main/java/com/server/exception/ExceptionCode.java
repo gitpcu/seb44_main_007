@@ -7,7 +7,7 @@ public enum ExceptionCode {
     MEMBER_EXISTS(409, "Member exists"),
     PASSWORD_INCORRECT(405, "Password incorrect"),
     COFFEE_CODE_EXISTS(409, "Coffee Code exists"),
-    ORDER_NOT_FOUND(404, "Order not found"),
+    WISHLIST_NOT_FOUND(404, "Wishlist not found"),
     CANNOT_CHANGE_ORDER(403, "Order can not change"),
     QNA_QUESTION_NOT_FOUND(404, "Q&A Question not found"),
     CANNOT_CHANGE_QNA_QUESTION(403, "Q&A Question can not change"),
