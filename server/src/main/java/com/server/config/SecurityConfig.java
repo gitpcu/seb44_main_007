@@ -1,13 +1,14 @@
 package com.server.config;
 
+
 import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.Handler.*;
 import com.server.auth.JwtAuthenticationFilter;
+
 import com.server.auth.JwtVerificationFilter;
-import com.server.config.Handler.*;
-import com.server.config.jwt.JwtTokenizer;
+import com.server.auth.jwt.JwtTokenizer;
 import com.server.member.repository.MemberRepository;
-import com.server.member.service.MemberService;
-import com.server.redis.RedisService;
+import com.server.auth.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

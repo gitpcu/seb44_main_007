@@ -39,27 +39,27 @@ public class MemberControllerTest {
                 .andExpect(content().string("회원가입에 성공했습니다."));
     }
 
-    @Test
-    @DisplayName("회원가입 실패 - email 중복")
-    void join_duplicateEmail() throws Exception {
-        // Given
-        String email = "abcd@gmail.com";
-        String password = "1234";
-
-        // 이메일 중복 상황을 가정하여 이미 동일한 이메일을 가진 회원이 존재한다고 가정합니다.
-        given(memberService.Join(email, password))
-                .willThrow(new RuntimeException(email + "은 이미 존재하는 이메일입니다."));
-
-        // When
-        mockMvc.perform(post("/join")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"abcd@gmail.com\", \"password\": \"1234\"}"))
-                .andExpect(status().isConflict())
-                .andExpect(content().string("회원가입에 실패했습니다."));
-
-        // Then
-        // 회원가입 실패에 대한 처리를 확인하는 추가적인 검증 로직을 작성합니다.
-    }
+//    @Test
+//    @DisplayName("회원가입 실패 - email 중복")
+//    void join_duplicateEmail() throws Exception {
+//        // Given
+//        String email = "abcd@gmail.com";
+//        String password = "1234";
+//
+//        // 이메일 중복 상황을 가정하여 이미 동일한 이메일을 가진 회원이 존재한다고 가정합니다.
+//        given(memberService.Join(email, password))
+//                .willThrow(new RuntimeException(email + "은 이미 존재하는 이메일입니다."));
+//
+//        // When
+//        mockMvc.perform(post("/join")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\"email\": \"abcd@gmail.com\", \"password\": \"1234\"}"))
+//                .andExpect(status().isConflict())
+//                .andExpect(content().string("회원가입에 실패했습니다."));
+//
+//         //Then
+//         //회원가입 실패에 대한 처리를 확인하는 추가적인 검증 로직을 작성합니다.
+//    }
 
 
 

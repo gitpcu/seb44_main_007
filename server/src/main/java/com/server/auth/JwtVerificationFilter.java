@@ -1,9 +1,9 @@
 package com.server.auth;
 
-import com.server.config.jwt.JwtTokenizer;
+import com.server.auth.jwt.JwtTokenizer;
+import com.server.auth.redis.RedisService;
 import com.server.member.entity.Member;
 import com.server.member.repository.MemberRepository;
-import com.server.redis.RedisService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -34,14 +34,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         this.memberRepository = memberRepository;
     }
 
-    //    public JwtVerificationFilter(JwtTokenizer JwtTokenizer, CustomAuthorityUtils authorityUtils, RedisService redisService) {
-//        this.JwtTokenizer = JwtTokenizer;
-//        this.authorityUtils = authorityUtils;
-//        this.redisService = redisService;
-//    }
 
-
-    // (2)
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -87,7 +80,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
         Map<String, Object> newClaims = new HashMap<>();
 
-        newClaims.put("name", member.getEmail());
+        newClaims.put("username", member.getEmail());
         newClaims.put("roles", member.getRoles());
 
         String subject = member.getEmail();

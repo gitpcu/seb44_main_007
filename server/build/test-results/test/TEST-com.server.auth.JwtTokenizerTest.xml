@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.server.auth.JwtTokenizerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-07-05T00:19:58" hostname="DESKTOP-NIKJHOF" time="0.03">
+  <properties/>
+  <testcase name="encodeBase64SecretKeyTest()" classname="com.server.auth.JwtTokenizerTest" time="0.03"/>
+  <system-out><![CDATA[a2V2aW4xMjM0MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

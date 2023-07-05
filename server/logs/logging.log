@@ -3108,3 +3108,32 @@ Consider defining a bean of type 'java.lang.String' in your configuration.
 2023-07-05 01:01:45.529  INFO 16556 --- [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2023-07-05 01:01:45.530  INFO 16556 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2023-07-05 01:01:45.531  INFO 16556 --- [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-07-05 08:53:00.389  INFO 23316 --- [main] com.server.ServerApplication             : Starting ServerApplication using Java 11.0.18 on DESKTOP-NIKJHOF with PID 23316 (C:\Users\lisso\Documents\dev\0703\seb44_main_007\server\build\classes\java\main started by lisso in C:\Users\lisso\Documents\dev\0703\seb44_main_007\server)
+2023-07-05 08:53:00.394  INFO 23316 --- [main] com.server.ServerApplication             : No active profile set, falling back to 1 default profile: "default"
+2023-07-05 08:53:01.613  INFO 23316 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-07-05 08:53:01.617  INFO 23316 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-07-05 08:53:01.844  INFO 23316 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 215 ms. Found 5 JPA repository interfaces.
+2023-07-05 08:53:02.712  INFO 23316 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-07-05 08:53:02.725  INFO 23316 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-07-05 08:53:02.725  INFO 23316 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.76]
+2023-07-05 08:53:02.900  INFO 23316 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-07-05 08:53:02.900  INFO 23316 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2429 ms
+2023-07-05 08:53:03.148  INFO 23316 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-07-05 08:53:03.221  INFO 23316 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-07-05 08:53:03.435  INFO 23316 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-07-05 08:53:03.597  INFO 23316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-07-05 08:53:04.004  INFO 23316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-07-05 08:53:04.024  INFO 23316 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-07-05 08:53:05.225  INFO 23316 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-07-05 08:53:05.235  INFO 23316 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-07-05 08:53:06.468  INFO 23316 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3763aafd, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@16ca4532, org.springframework.security.web.context.SecurityContextPersistenceFilter@24caa80, org.springframework.security.web.header.HeaderWriterFilter@1488d1c, org.springframework.web.filter.CorsFilter@2cc82c83, org.springframework.security.web.authentication.logout.LogoutFilter@76929266, com.server.auth.JwtAuthenticationFilter@75a5a912, com.server.auth.JwtVerificationFilter@5f3bc119, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44d36b56, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4733662d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1b9cfc19, org.springframework.security.web.session.SessionManagementFilter@578ac0be, org.springframework.security.web.access.ExceptionTranslationFilter@19bad88, org.springframework.security.web.access.intercept.AuthorizationFilter@120661d2]
+2023-07-05 08:53:06.519  WARN 23316 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-07-05 08:53:07.142  INFO 23316 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-07-05 08:53:07.151  INFO 23316 --- [main] com.server.ServerApplication             : Started ServerApplication in 7.53 seconds (JVM running for 8.115)
+2023-07-05 08:53:26.188  INFO 23316 --- [http-nio-8080-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-07-05 08:53:26.188  INFO 23316 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-07-05 08:53:26.190  INFO 23316 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-07-05 08:58:12.288  WARN 23316 --- [http-nio-8080-exec-6] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1048, SQLState: 23000
+2023-07-05 08:58:12.289 ERROR 23316 --- [http-nio-8080-exec-6] o.h.engine.jdbc.spi.SqlExceptionHelper   : Column 'member_id' cannot be null
+2023-07-05 08:58:24.440  WARN 23316 --- [http-nio-8080-exec-7] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1048, SQLState: 23000
+2023-07-05 08:58:24.441 ERROR 23316 --- [http-nio-8080-exec-7] o.h.engine.jdbc.spi.SqlExceptionHelper   : Column 'member_id' cannot be null

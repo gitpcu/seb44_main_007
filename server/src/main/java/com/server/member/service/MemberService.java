@@ -3,8 +3,10 @@ package com.server.member.service;
 
 import com.server.advice.BusinessLogicException;
 import com.server.advice.ExceptionCode;
+import com.server.auth.CustomAuthorityUtils;
 import com.server.member.entity.Member;
 import com.server.member.repository.MemberRepository;
+import com.server.utils.CustomBeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,13 +21,17 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final CustomBeanUtils<Member> beanUtils;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+
+    public MemberService(MemberRepository memberRepository, CustomBeanUtils<Member> beanUtils, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
+        this.beanUtils = beanUtils;
         this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
     }
-
 
     public Member createMember(Member member) {
         // 기존 메일 여부 확인
@@ -35,8 +41,9 @@ public class MemberService {
         }
 
         // 비밀번호 암호화
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+        member.setRoles(authorityUtils.createRoles(member.getEmail()));
         return memberRepository.save(member);
     }
 

@@ -1,9 +1,9 @@
 package com.server.auth;
 
-import com.server.config.jwt.JwtTokenizer;
+import com.server.auth.jwt.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.member.entity.Member;
-import com.server.redis.RedisService;
+import com.server.auth.redis.RedisService;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.redisService = redisService;
     }
 
-    @SneakyThrows
+    @SneakyThrows  //로그인할때 쓰이는 메소드로 인증을 시도하고 인증매니저에게 전달
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter.attemptAuthentication");
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(authenticationToken);
     }
 
-    @Override
+    @Override   // 사용자 인증이 성공했을때 JWT토큰을 생성하고, 응답정보 설정
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
@@ -54,8 +54,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("JwtAuthenticationFilter.successfulAuthentication");
         Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(member);   // (4-2)
-        String refreshToken = delegateRefreshToken(member); // (4-3)
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
 
         // redis -> key(email) : value(refreshToken) 저장, expireDate(refreshToken) 시간 지난 후 삭제됨
         redisService.setDataWithExpiration(
@@ -71,7 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 
-    public String delegateAccessToken(Member member){
+    public String delegateAccessToken(Member member){  //엑세스토큰생성
         Map<String, Object> claims = new HashMap<>();
         claims.put("name", member.getEmail());
         claims.put("roles", member.getRoles());
@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return accessToken;
     }
 
-    private String delegateRefreshToken(Member member) {
+    private String delegateRefreshToken(Member member) { //리프레시토큰생성
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
