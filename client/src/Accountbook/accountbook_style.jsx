@@ -14,10 +14,10 @@ padding: 50px;
 
 export const userWelcome = styled.p`
 font-size: 36px;
-margin-bottom: 56px;
+margin-bottom: 36px;
 `
 
-export const AccountBox = styled.div`
+export const AccountBox = styled.ul`
 width: 1000px;
 height: 130px;
 border-radius: 20px;
@@ -25,10 +25,10 @@ border: solid 2px rgb(160, 160, 160) ;
 display: flex;
 flex-direction: row;
 justify-content: space-between;
-margin-bottom: 26px;
+margin-bottom: 10px;
 `
 
-export const InnerWrapper = styled.div`
+export const InnerWrapper = styled.li`
 flex: 1;
 display: flex;
 flex-direction: column;
@@ -62,17 +62,16 @@ align-items: center;
 .datePicker {
   display: flex;
   align-items: center;
-  border: 1px solid colors.$GRAY6;
   border-radius: 4px;
   background-color: rgb(34, 34, 31);
   box-shadow: none;
   box-sizing: border-box;
   width: 100%;
   height: 30px;
+  margin-left: 10px;
   color: white;
   text-align: center;
   padding-right: 14px;
-
   &:focus {
     border: 2px solid colors.$ORANGE;
   }
@@ -82,25 +81,13 @@ export const TabHeader = styled.div`
   display: ${(props) => (props.active ? 'block' : 'none')};
   flex-direction: row;
   font-size: 20px;
+  >p{
+    font-size: 16px;
+  }
 `;
 
-export const MonthChange = styled.div`
-display: ${(props) => (props.active ? 'block' : 'none')};
-flex-direction: row;
->img {
-    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(118deg) brightness(102%) contrast(102%);
-    width: 10px;
-    height: 10px;
-}
->p{
-    font-size: 24px;
-}
-`
-
 export const TabButton = styled.button`
-width: 74px;
-height: 40px;
-font-size: 16px;
+font-size: 14px;
 padding: 8px 16px;
 margin-left: 10px;
 background-color: ${(props) => (props.active ? 'rgb(246, 111, 60)' : 'rgb(34, 34, 31)')};
@@ -114,16 +101,16 @@ outline: none;
 export const AccountbookContents = styled.div`
 display: flex;
 flex: 1;
-border: 1px solid green;
-margin-top: 42px;
+
 `
 
 export const TabContents = styled.div`
   display: ${(props) => (props.active ? 'block' : 'none')};
-height: 400px;
+height: 550px;
 
 `;
 export const DatePage = styled.div`
+padding-top: 42px;
 display: flex;
 flex-direction: row;
 >p{
@@ -136,9 +123,67 @@ flex-direction: row;
 }
 `
 export const DateContent = styled.div`
+display: flex;
+flex-direction: row;
 `
 
 export const MonthDay = styled.div`
-width: 100px;
-border-right: 2px solid linear-gradient(to top  , rgba(246, 111, 60, 1), rgba(34, 34, 31, 1));
+width: 110px;
+height: 400px;
+margin-top: 30px;
+padding: 10px 20px;
+display: flex;
+justify-content: flex-end;
+border-right: 2px solid;
+border-image: linear-gradient(to bottom,rgba(220, 220, 220, 1), rgba(34, 34, 31, 1)) 1;
 `
+export const DataUl = styled.ul`
+width:830px;
+margin-top: 30px;
+`
+export const DataLi = styled.li`
+padding: 10px 20px;
+display: flex;
+flex-direction: row;
+align-items: center;
+border: 1px solid transparent;
+border-radius: 10px;
+transition: border-color 0.3s;
+&:hover {
+    border: 1px solid #C5FF78;
+}
+&:focus {
+    border: 1px solid #C5FF78;
+}
+`
+
+export const Category = styled.div`
+margin-left: 30px;
+width: 80px;
+font-size: 14px;
+border-right: 1px solid rgb(160, 160, 160);
+display: flex;
+flex-direction: column;
+`
+export const TradeName = styled.div`
+width: 150px;
+padding-left: 20px;
+font-size: 17px;
+font-weight: 600;
+`
+export const Note = styled.div`
+width: 430px;
+padding-left: 20px;
+font-size: 14px;
+font-weight: 300;
+color: rgb(210, 210, 210);
+`
+export const AmountLi = styled(TradeName)`
+color: ${props => props.isIncome ? 'rgb(246, 111, 60)' : 'inherit'};
+font-weight: 800;
+display: flex;
+justify-content: flex-end;
+padding-right: 20px;
+`
+
+
