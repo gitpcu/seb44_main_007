@@ -35,7 +35,7 @@ public class TradeDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Patch {
+    public static class Put {
         private long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
@@ -45,7 +45,7 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-        public TradeDto.Patch addTradeId(Long tradeId) {
+        public TradeDto.Put addTradeId(Long tradeId) {
             Assert.notNull(tradeId, "trade id must not be null.");
             this.tradeId = tradeId;
             return this;
@@ -67,6 +67,7 @@ public class TradeDto {
 
 
 
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -79,6 +80,7 @@ public class TradeDto {
         private String note; //비고
         private LocalDate date;
         private Category category;
+
 
 
         public static Response response(Trade trade) {
@@ -114,6 +116,15 @@ public class TradeDto {
     @Getter
     @Builder
     @AllArgsConstructor
+    public static class TotalInfo {
+        private BigDecimal totalIncome;
+        private BigDecimal totalOutcome;
+        private BigDecimal goal;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
     public static class ListElement {
         private long tradeId;
         private String type; //수입 or 지출
@@ -122,6 +133,11 @@ public class TradeDto {
         private String note; //비고
         private LocalDate date;
         private Category category;
+
+
+        private BigDecimal totalIncome;
+        private BigDecimal totalOutcome;
+        private BigDecimal goal;
     }
 
     public static List<ListElement> getList(List<Trade> trades) {
@@ -134,10 +150,14 @@ public class TradeDto {
                         .note(trade.getNote())
                         .date(trade.getDate())
                         .category(trade.getCategory())
+                        .totalIncome(trade.getTotalIncome())
+                        .totalIncome(trade.getTotalOutcome())
+                        .goal(trade.getGoal())
                         .build()
                 )
                 .collect(Collectors.toList());
     }
+
 
 
 }

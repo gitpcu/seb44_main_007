@@ -30,7 +30,8 @@ public class Wishlist extends Auditable {
     @Column
     private String goodsImageURL;
 
-    @OneToOne(mappedBy = "limitAccountId")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "limitAccountId", referencedColumnName = "Id")
     private BigDecimal limitAccount;
 
     public Wishlist (long wishlistId) {this.wishlistId = wishlistId;}

@@ -40,7 +40,7 @@ public class WishlistService {
     }
 
     @Transactional(readOnly = true)
-        public Page<Wishlist> findWishlistsByLatest(int page, int size, String tab) {
+        public Page<Wishlist> findWishlistsByCategory(int page, int size, String tab) {
             Page<Wishlist> pageWishlist;
         if (tab.equals("latest")) {
             pageWishlist = wishlistRepository.findAll(PageRequest.of(page, size, Sort.by(
@@ -54,7 +54,7 @@ public class WishlistService {
         return pageWishlist;
     }
 
-    public void deleteMember(long wishlistId) {
+    public void deleteWishlist(long wishlistId) {
         Wishlist findWishlist = findWishlist(wishlistId);
         wishlistRepository.delete(findWishlist);
     }

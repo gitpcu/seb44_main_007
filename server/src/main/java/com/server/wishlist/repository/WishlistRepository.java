@@ -12,7 +12,7 @@ public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
 
     Wishlist findByName(String name);
 
-    @Query(value = "SELECT * FROM Wishlist WHERE price < limitAccount ORDER BY price DESC")
+    @Query(value = "SELECT w FROM Wishlist w JOIN w.limitAccount la WHERE w.price < la.limitAccount ORDER BY w.price DESC")
     Page<Wishlist> findWishlistsByLA(Pageable pageable);
 }
 

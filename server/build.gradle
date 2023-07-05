@@ -34,9 +34,12 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.3.0'
 
 
 	runtimeOnly 'com.h2database:h2'
+//	implementation 'com.mysql:mysql-connector-j:8.0.31'
 }
 
 tasks.named('test') {
