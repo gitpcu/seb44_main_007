@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import Home from "./Pages/Home";
 import SideNavBar from "./Components/SideNavBar";
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
     <BrowserRouter>
       <SideNavBar />
       <Routes>
-        <Route path="/" element="홈화면"></Route>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/login" element="로그인"></Route>
         <Route path="/signup" element="회원가입"></Route>
         <Route path="/accountbook" element="가계부"></Route>
