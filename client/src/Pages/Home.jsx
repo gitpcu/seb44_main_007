@@ -149,6 +149,34 @@ const SignupButton = styled(StartButton)`
   font-size: 24px;
   margin: 15px 0px;
 `
+const Footer = styled.footer`
+  width: 100%;
+  height: 100px;
+  padding: 50px 500px;
+  background-color: #191919;
+  display: flex;
+  flex-direction: row;
+`
+const FooterLogoDiv = styled.div`
+  width: 100px;
+  height: 100px;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const FooterLogo = styled.img`
+  width: 50px;
+`
+const FooterNameDiv = styled.div`
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  margin-left: 100px;
+`
 export default function Home(){
   const innerText = [
     {
@@ -249,6 +277,18 @@ export default function Home(){
           </Link>
         </SignupDiv>
       </MainDescribeContainer>
+      <Footer>
+        <FooterLogoDiv>
+          <FooterLogo src='https://media.discordapp.net/attachments/1121698218313531492/1125698587003719740/Asset_4.png'></FooterLogo>
+        </FooterLogoDiv>
+        <FooterNameDiv>
+          <span>김소희</span>
+          <span>노동준</span>
+          <span>송경후</span>
+          <span>이수민</span>
+          <span>임재섭</span>
+        </FooterNameDiv>
+      </Footer>
     </>
   )
 }
