@@ -3,3 +3,50 @@
   padding:0;
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: 'ChosunBg';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunBg.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
+
+.navLink, .navLink:hover, .navLink:visited{
+  color:white;
+  text-decoration: none;
+}
+
+@keyframes appearText{
+  0% {opacity: 0;}
+  100%{opacity: 1;}
+}
+@keyframes appear1{
+  5% {opacity: 0;}
+  100%{opacity: 1;}
+}
+@keyframes appear2{
+  12% {opacity: 0;}
+  100%{opacity: 1;}
+}
+@keyframes appear3{
+  19% {opacity: 0;}
+  100%{opacity: 1;}
+}
+@keyframes appearButton{
+  0% {opacity: 0;}
+  100%{opacity: 0.7;}
+}
+@keyframes arrowMotion{
+  0% {margin-top: 0px;}
+	100% {margin-top: 10px;}
+}
+@keyframes scrollme{
+  0% {margin-top: 100px;}
+	100% {margin-top: 110px;}
+}
+@keyframes rotate_image{
+  100% {
+      transform: rotate(360deg);
+  }
+}
