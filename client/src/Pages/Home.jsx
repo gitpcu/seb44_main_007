@@ -143,7 +143,7 @@ const SignupText = styled.span`
   color: #A9A9A9;
   font-size: 12px;
 `
-const SignupButton = styled(StartButton)`
+export const SignupButton = styled(StartButton)`
   animation: '';
   padding: 15px;
   font-size: 24px;
@@ -240,7 +240,12 @@ export default function Home(){
       <SummaryContainer ref={element}>
         <SummaryDiv ref={second}>
           <LogoContainer>
-            <SummaryImg src={logo1} ani='appear1' isView={isView}/>
+            <SummaryImg
+              src={logo1}
+              ani='appear1'
+              isView={isView}
+              filter='invert(100%) sepia(0%) saturate(882%) hue-rotate(56deg) brightness(113%) contrast(91%)'
+            />
             <SummaryImg src={logo2} ani='appear2' isView={isView}/>
             <SummaryImg src={logo3} ani='appear3' isView={isView}/>
           </LogoContainer>

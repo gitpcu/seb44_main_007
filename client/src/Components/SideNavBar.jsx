@@ -134,16 +134,11 @@ export default function SideNavBar(){
   ]
 
   const [curLocation, setLocation] = useState('/accountbook');
-  const [logoutModal, openLogoutModal] = useState(false);
-  const askLogout = () => {
-    openLogoutModal(true);
-  }
 
   const location = useLocation();
   useEffect(() => {
     setLocation(location.pathname)
   }, [location.pathname]);
-  console.log(logoutModal)
   if(location.pathname === '/'
   || location.pathname === '/login'
   || location.pathname === '/signup'){
@@ -190,7 +185,7 @@ export default function SideNavBar(){
                 src={menuList.at(-1).image}
                 className='MenuListImg' 
                 selected={curLocation === menuList.at(-1).path ? true : false }
-                onClick={askLogout}></LowerMenuImg>
+               ></LowerMenuImg>
               <MenuListSpan className='MenuListSpan'>{menuList.at(-1).title}</MenuListSpan>
               <MenuListDiv className='MenuListDiv' />
             </LowerMenuList>
