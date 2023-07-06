@@ -26,6 +26,9 @@ const Background = styled.div`
   left:0;
   font-family: 'ChosunBg';
   z-index:1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &::before {
     content: '';
     position: absolute;
@@ -37,34 +40,43 @@ const Background = styled.div`
 `
 const MainDiv = styled.div`
   position: absolute;
-  top: 50%;
   left: 50%;
-  width: 70%;
-  height: 70vh;
-  margin: -48vh 0 0 -35%;
-  padding-top: 26vh;
+  width: 70vw;
+  height: 100%;
+  margin: 0 0 0 -35%;
+  padding-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
+  & > .buttonLink{
+    position: relative;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+  }
 `
 const MainText = styled.p`
   color: white;
-  font-size: 64px;
+  font-size: 5rem;
   text-shadow: 0px 1px 10px #00000045;
-  margin: 10px;
+  margin: 1%;
   animation: appearText 1s;
+  &.downText{
+    margin-bottom: calc(20vh);
+  }
 `
 const StartButton = styled.button`
-  width: 300px;
-  padding: 30px;
+  width: 80%;
+  padding: 8%;
   background-color: #F9591D;
   border: 0px;
   border-radius: 20px;
   color: white;
-  font-size: 36px;
+  font-size: 2rem;
   font-weight: bold;
-  margin: 150px;
   opacity: 0.7;
   animation: appearButton 1s;
   &:hover{
@@ -74,6 +86,7 @@ const StartButton = styled.button`
 const ScrollArrow = styled.img`
   width: 75px;
   height: 75px;
+  margin-top: calc(20vh);
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   &:hover{
     animation: arrowMotion 0.3s linear 0s infinite alternate; margin-top: 0;
@@ -164,7 +177,7 @@ export const SignupButton = styled(StartButton)`
 const Footer = styled.footer`
   width: 100%;
   height: 150px;
-  padding: 40px 500px;
+  padding: 40px 0px;
   background-color: #191919;
   display: flex;
   flex-direction: row;
@@ -216,6 +229,11 @@ export default function Home(){
     },
   ]
 
+  const [windowSize, setWindowSize] = useState(window.innerheight);
+  window.onresize = () => {
+    setWindowSize(window.innerheight);
+  };
+
   const element = useRef();
   const onMoveBox = () => {
     element.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -236,10 +254,10 @@ export default function Home(){
           <MainText>
             소중한 내 돈,
           </MainText>
-          <MainText>
+          <MainText className='downText'>
             Burrycade로 똑똑하게 관리하자
           </MainText>
-          <Link to='/login'>
+          <Link to='/login' className='buttonLink'>
             <StartButton>
               시작하기
             </StartButton>
@@ -247,6 +265,7 @@ export default function Home(){
           <ScrollArrow
             src='https://www.svgrepo.com/show/334629/down-arrow-square.svg'
             onClick={onMoveBox}
+            isView={windowSize > 500}
           >
           </ScrollArrow>
         </MainDiv>

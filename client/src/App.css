@@ -38,8 +38,8 @@
   100%{opacity: 0.7;}
 }
 @keyframes arrowMotion{
-  0% {margin-top: 0px;}
-	100% {margin-top: 10px;}
+  0% {margin-top: 20vh;}
+	100% {margin-top: 22vh;}
 }
 @keyframes scrollme{
   0% {margin-top: 200px;}
