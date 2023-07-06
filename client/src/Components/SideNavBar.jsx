@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 
 const Nav = styled.nav`
   position: fixed;
+  top: 0px;
+  left: 0px;
   width: 300px;
   height: 100%;
   background-color: #191919;

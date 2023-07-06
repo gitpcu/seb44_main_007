@@ -11,6 +11,10 @@ import logo1 from '../Images/logo_appear_1.png';
 import logo2 from '../Images/logo_appear_2.png';
 import logo3 from '../Images/logo_appear_3.png';
 
+const A = styled.div`
+  position: relative;
+`
+
 const Background = styled.div`
   background-image: url('https://images.unsplash.com/photo-1580508174046-170816f65662?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
   background-size: cover;
@@ -18,6 +22,8 @@ const Background = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
+  top:0;
+  left:0;
   font-family: 'ChosunBg';
   z-index:1;
   &::before {
@@ -75,29 +81,37 @@ const ScrollArrow = styled.img`
 `
 const SummaryContainer = styled.div`
   position: relative;
+  top:0;
+  left:0;
   width: 100%;
   height: 100vh;
   background-color: #191919;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
-const SummaryDiv = styled(MainDiv)`
-  padding-top: 15vh;
+const SummaryDiv = styled.div`
+  position: absolute;
+  width: 70%;
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
 `
 const LogoContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
-  margin: 50px 0px 135px 0px;
+  height: 250px;
+  margin: 50px 0px 50px 0px;
   display: flex;
   justify-content: center;
 `
 const SummaryImg = styled.img`
   position: absolute;
-  width: 13%;
+  height: 100%;
   opacity: 0;
   animation: ${props => props.isView ? props.ani : ''};
   animation-duration: 5s;
@@ -109,7 +123,6 @@ const SummaryText = styled(MainText)`
   font-family: 'Pretendard', sans-serif;
 `
 const ScrollMeDiv = styled.div`
-  margin-top: 100px;
   height: 60px;
 `
 const ScrollMeImg = styled.img`
@@ -117,7 +130,6 @@ const ScrollMeImg = styled.img`
   height: 50px;
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   float: center;
-  margin-top: 100px;
   opacity: 0.5;
   animation: scrollme 0.3s linear 0s infinite alternate;
 `
@@ -151,11 +163,13 @@ export const SignupButton = styled(StartButton)`
 `
 const Footer = styled.footer`
   width: 100%;
-  height: 100px;
-  padding: 50px 500px;
+  height: 150px;
+  padding: 40px 500px;
   background-color: #191919;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `
 const FooterLogoDiv = styled.div`
   width: 100px;
@@ -216,7 +230,7 @@ export default function Home(){
   }, [inView])
 
   return (
-    <>
+    <A>
       <Background>
         <MainDiv>
           <MainText>
@@ -294,6 +308,6 @@ export default function Home(){
           <span>임재섭</span>
         </FooterNameDiv>
       </Footer>
-    </>
+    </A>
   )
 }
