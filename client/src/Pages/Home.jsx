@@ -11,10 +11,6 @@ import logo1 from '../Images/logo_appear_1.png';
 import logo2 from '../Images/logo_appear_2.png';
 import logo3 from '../Images/logo_appear_3.png';
 
-const A = styled.div`
-  position: relative;
-`
-
 const Background = styled.div`
   background-image: url('https://images.unsplash.com/photo-1580508174046-170816f65662?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
   background-size: cover;
@@ -69,7 +65,7 @@ const MainText = styled.p`
   }
 `
 const StartButton = styled.button`
-  width: 80%;
+  width: 90%;
   padding: 8%;
   background-color: #F9591D;
   border: 0px;
@@ -84,8 +80,8 @@ const StartButton = styled.button`
   }
 `
 const ScrollArrow = styled.img`
-  width: 75px;
-  height: 75px;
+  width: 8%;
+  height: 8%;
   margin-top: calc(20vh);
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   &:hover{
@@ -139,8 +135,8 @@ const ScrollMeDiv = styled.div`
   height: 60px;
 `
 const ScrollMeImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   float: center;
   opacity: 0.5;
@@ -159,20 +155,25 @@ const MainDescribeContainer = styled.div`
   padding-top: 100px;
 `
 const SignupDiv = styled.div`
+  width: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px 0px 100px 0px;
+  margin: 2% 0px 8% 0px;
+  & > .buttonLink{
+    width: 40%;
+  }
 `
 const SignupText = styled.span`
   color: #A9A9A9;
   font-size: 12px;
+  margin-bottom: 1%;
 `
 export const SignupButton = styled(StartButton)`
+  width: 100%;
   animation: '';
-  padding: 15px;
-  font-size: 24px;
-  margin: 15px 0px;
+  padding: 5% 10%;
+  font-size: 1.5rem;
 `
 const Footer = styled.footer`
   width: 100%;
@@ -248,7 +249,7 @@ export default function Home(){
   }, [inView])
 
   return (
-    <A>
+    <>
       <Background>
         <MainDiv>
           <MainText>
@@ -310,7 +311,7 @@ export default function Home(){
         })}
         <SignupDiv>
           <SignupText>아직 회원이 아니시라면?</SignupText>
-          <Link to='/signup'>
+          <Link to='/signup' className='buttonLink'>
             <SignupButton>Buyrricade 시작해보기</SignupButton>
           </Link>
         </SignupDiv>
@@ -327,6 +328,6 @@ export default function Home(){
           <span>임재섭</span>
         </FooterNameDiv>
       </Footer>
-    </A>
+    </>
   )
 }
