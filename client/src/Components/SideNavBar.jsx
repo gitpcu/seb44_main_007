@@ -3,11 +3,11 @@ import { Link, useLocation} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 const Nav = styled.nav`
-  position: fixed;
+  position: relative;
   top: 0px;
   left: 0px;
   width: 300px;
-  height: 100%;
+  height: 100vh;
   background-color: #191919;
 `
 const SidebarContainer =  styled.div`
@@ -43,8 +43,7 @@ const MenuList = styled.li`
   position: relative;
   width: 100%;
   height: 30px;
-  margin: 20px 0px;
-  padding: 20px 0px;
+  margin: 25% 0px;
   display: flex;
   align-items: center;
   border: 0px;
@@ -53,54 +52,96 @@ const MenuList = styled.li`
 const MenuListDiv =styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 5rem;
   display: flex;
+  flex-direction: row;
   align-items: center;
   border: 0px;
   border-radius: 20px;
+  padding: 5px 10px;
+  ${props => props.isHovered ? (
+    'background: linear-gradient(to right, #191919, #F9591D);'
+    ) : ''
+  };
+  & > .navLink{
+    width: 4rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `
 const MenuListImg = styled.img`
   position: absolute;
-  width:40px;
-  padding: 0px 20px;
+  width:2.5rem;
   background-color: rgba(0, 0, 0, 0);
+  margin-left: 10px;
   filter: ${props => props.selected ? 
   'invert(56%) sepia(41%) saturate(7144%) hue-rotate(347deg) brightness(97%) contrast(101%)' : 
   'invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)'};
   transition: 500ms;
   z-index: 5;
   &:hover{
-    width: 45px;
+    width: 3rem;
     filter: invert(56%) sepia(41%) saturate(7144%) hue-rotate(347deg) brightness(97%) contrast(101%);
-    & ~ .MenuListSpan{
-      color:white;
-      transform: translate(40px, 0px);
-      opacity:1;
-    }
-    & ~ .MenuListDiv{
-      background: linear-gradient(to right, #191919, #F9591D);
-    }
   }
 `
 const MenuListSpan = styled.span`
   font-family: 'ChosunBg';
   width: 100%;
-  margin-left: 50px;
   color: white;
-  transition: 300ms;
+  transition: 400ms;
   opacity:0;
-  z-index: 3;
+  z-index: 10;
+  ${props => props.isHovered ? (
+    'color:white; transform: translate(40px, 0px); opacity:1;'
+    ) : ''
+  }
 `
 const LowerMenuImg = styled(MenuListImg)`
-  width:30px;
+    width:2rem;
   &:hover{
-    width: 35px;
+    width:2.5rem;
   }
 `
 const LowerMenuList = styled(MenuList)`
-  margin: 15px 0px;
-  padding: 10px 0px;
+  margin: 15% 0px;
+
 `
+const LowerMenuDiv = styled(MenuListDiv)`
+  height: 3rem;
+`
+
+const UpperMenu = ({el, idx, hoveredIdx, setHoveredIdx, curLocation}) => {
+  return (
+    <MenuList>
+      <MenuListDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false}>
+        <Link to={el.path} className='navLink'>
+          <MenuListImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }
+          onMouseOver={() => setHoveredIdx(idx)}
+          onMouseOut={() => setHoveredIdx('')}></MenuListImg>
+        </Link>
+        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}>{el.title}</MenuListSpan>
+      </MenuListDiv>
+    </MenuList>
+  )
+}
+const LowerMenu = ({el, idx, hoveredIdx, setHoveredIdx, curLocation, logout}) => {
+  return(
+    <LowerMenuList>
+      <LowerMenuDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false}>
+        <Link to={el.path} className='navLink'>
+          <LowerMenuImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }
+          onMouseOver={() => setHoveredIdx(idx)}
+          onMouseOut={() => setHoveredIdx('')}
+          onClick={idx === 5 ? logout : null}></LowerMenuImg>
+        </Link>
+        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}>{el.title}</MenuListSpan>
+      </LowerMenuDiv>
+    </LowerMenuList>
+  )
+}
+
 export default function SideNavBar(){
   const menuList = [
     {
@@ -131,16 +172,22 @@ export default function SideNavBar(){
     {
       image: 'https://www.svgrepo.com/show/507772/logout.svg',
       title: '로그아웃',
-      path:'/logout'
     }
   ]
 
   const [curLocation, setLocation] = useState('/accountbook');
+  const [hoveredIdx, setHoveredIdx] = useState(0);
+
+  const logout =() => {
+    alert('로그아웃합니다!')
+  }
 
   const location = useLocation();
   useEffect(() => {
     setLocation(location.pathname)
   }, [location.pathname]);
+
+
   if(location.pathname === '/'
   || location.pathname === '/login'
   || location.pathname === '/signup'){
@@ -152,47 +199,36 @@ export default function SideNavBar(){
         <LogoDiv>
           <LogoImg src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/368px-Google_2015_logo.svg.png'></LogoImg>
         </LogoDiv>
-        <DivideBar margin='30px 0px' />
+        <DivideBar margin='3rem 0px 1rem 0px' />
         <MenuDiv>
           <Menu>
-            {menuList.slice(0, 3).map(el => {
-              return(
-              <Link to={el.path} className='navLink'>
-                <MenuList>
-                  <MenuListImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }></MenuListImg>
-                  <MenuListSpan className='MenuListSpan'>{el.title}</MenuListSpan>
-                  <MenuListDiv className='MenuListDiv' />
-                </MenuList>
-              </Link>
-              )
-            })}
+          {menuList.map((el, idx) => {
+            return idx < 3 ? (
+              <>
+                <UpperMenu
+                  el={el}
+                  idx={idx}
+                  hoveredIdx={hoveredIdx}
+                  setHoveredIdx={setHoveredIdx}
+                  curLocation={curLocation}
+                  key={idx}
+                />
+                {idx === 2 ? <DivideBar margin='3rem 0px 18rem 0px' /> : null}
+              </>
+            ) : (
+              <LowerMenu
+                el={el}
+                idx={idx}
+                hoveredIdx={hoveredIdx}
+                setHoveredIdx={setHoveredIdx}
+                curLocation={curLocation}
+                logout={logout}
+                key={idx}
+              />
+            );
+          })}
           </Menu>
         </MenuDiv>
-        <DivideBar margin='50px 0px 180px 0px' />
-        <Menu>
-          {menuList.slice(3, 5).map(el => {
-            return(
-              <Link to={el.path} className='navLink'>
-                <LowerMenuList>
-                  <LowerMenuImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }></LowerMenuImg>
-                  <MenuListSpan className='MenuListSpan'>{el.title}</MenuListSpan>
-                  <MenuListDiv className='MenuListDiv' />
-                </LowerMenuList>
-              </Link>
-            )
-          })}
-          <Link to='/login' className='navLink'>
-            <LowerMenuList>
-              <LowerMenuImg
-                src={menuList.at(-1).image}
-                className='MenuListImg' 
-                selected={curLocation === menuList.at(-1).path ? true : false }
-               ></LowerMenuImg>
-              <MenuListSpan className='MenuListSpan'>{menuList.at(-1).title}</MenuListSpan>
-              <MenuListDiv className='MenuListDiv' />
-            </LowerMenuList>
-          </Link>
-        </Menu>
       </SidebarContainer>
     </Nav>
   )
