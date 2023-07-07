@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Accountbook from './Accountbook/accountbook'
+import Accountbook from "./Pages/accountbook";
 import Home from "./Pages/Home";
 import SideNavBar from "./Components/SideNavBar";
 
