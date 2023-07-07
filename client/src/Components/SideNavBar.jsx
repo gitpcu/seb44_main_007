@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 import { Link, useLocation} from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import mainLogo from '../Images/logo_main.png'
 
 const Nav = styled.nav`
   position: relative;
@@ -197,7 +198,7 @@ export default function SideNavBar(){
     <Nav>
       <SidebarContainer>
         <LogoDiv>
-          <LogoImg src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/368px-Google_2015_logo.svg.png'></LogoImg>
+          <LogoImg src={mainLogo}></LogoImg>
         </LogoDiv>
         <DivideBar margin='3rem 0px 1rem 0px' />
         <MenuDiv>
