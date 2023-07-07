@@ -139,60 +139,85 @@ export default function LoginSignup({page}){
 
     const emailPreferance = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isCorrectEmail = emailPreferance.test(email);
-    if (email === "") {
-      setEmailValidMessage("이메일을 입력하세요");
-      return false
-    } else if (!isCorrectEmail) {
-      setEmailValidMessage("올바르지 않은 이메일 형식입니다");
-      return false
-    }
-    // ✅서버통신 구현되면 지울 코드
-    else if (memberdata.filter(el => el.email === email).length < 1) {
-      setEmailValidMessage("등록되지 않은 이메일입니다");
-      return false
-    }
-    else {
-      setEmailValidMessage("");
-    }
-
     const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const isLengthValid = password.length >= 10;
-    if (password === "") {
-      setPwValidMessage("비밀번호를 입력하세요");
-      return false
-    } else if (!(hasSpecialChar && hasLetter && hasNumber && isLengthValid)) {
-      setPwValidMessage("비밀번호는 특수문자와 문자, 숫자를 포함해 10자 이상이어야 합니다");
-      return false
-    } 
-    // ✅서버통신 구현되면 지울 코드
-    else if (memberdata.filter(el => el.email === email)[0].password !== password) {
-      setPwValidMessage("비밀번호가 틀립니다!");
-      return false
-    } 
-    else {
-      setPwValidMessage("");
-    }
+    const phonenumLen = phonenum.length === 11
+    const onlynumLen = phonenum.replace(/-/g, '').length === 11
+    if(page === 'login'){
+      if (email === "") {
+        setEmailValidMessage("이메일을 입력하세요");
+        return false
+      } else if (!isCorrectEmail) {
+        setEmailValidMessage("올바르지 않은 이메일 형식입니다");
+        return false
+      }
+      // ✅서버통신 구현되면 지울 코드
+      else if (memberdata.filter(el => el.email === email).length < 1) {
+        setEmailValidMessage("등록되지 않은 이메일입니다");
+        return false
+      }
+      else {
+        setEmailValidMessage("");
+      }
 
-    if(page === 'signup'){
+      if (password === "") {
+        setPwValidMessage("비밀번호를 입력하세요");
+        return false
+      } else if (!(hasSpecialChar && hasLetter && hasNumber && isLengthValid)) {
+        setPwValidMessage("비밀번호는 특수문자와 문자, 숫자를 포함해 10자 이상이어야 합니다");
+        return false
+      } 
+      // ✅서버통신 구현되면 지울 코드
+      else if (memberdata.filter(el => el.email === email)[0].password !== password) {
+        setPwValidMessage("비밀번호가 틀립니다!");
+        return false
+      } 
+      else {
+        setPwValidMessage("");
+      }
+    } else if(page === 'signup'){
       if (nickname === "") {
         setNicknameValidMessage("닉네임을 입력하세요");
         return false
-      } else if (memberdata.filter(el => el.name === nickname)) {
+      }
+      // ✅서버통신 구현되면 지울 코드
+      else if (memberdata.filter(el => el.name === nickname).length > 0) {
         setNicknameValidMessage("다른 회원님이 사용중인 닉네임입니다");
         return false
-      } else {
+      }
+      else {
         setNicknameValidMessage("");
       }
-    
-      if(memberdata.filter(el => el.email === email).length > 0){
+
+      if (email === "") {
+        setEmailValidMessage("이메일을 입력하세요");
+        return false
+      } else if (!isCorrectEmail) {
+        setEmailValidMessage("올바르지 않은 이메일 형식입니다");
+        return false
+      }
+      // ✅서버통신 구현되면 지울 코드
+      else if (memberdata.filter(el => el.email === email).length > 0) {
         setEmailValidMessage("이미 존재하는 이메일입니다");
         return false
       }
+      else {
+        setEmailValidMessage("");
+      }
+      
+      if (password === "") {
+        setPwValidMessage("비밀번호를 입력하세요");
+        return false
+      } else if (!(hasSpecialChar && hasLetter && hasNumber && isLengthValid)) {
+        setPwValidMessage("비밀번호는 특수문자와 문자, 숫자를 포함해 10자 이상이어야 합니다");
+        return false
+      } 
+      else {
+        setPwValidMessage("");
+      }
 
-      const phonenumLen = phonenum.length === 11
-      const onlynumLen = phonenum.replace(/-/g, '').length === 11
       if (phonenum === "") {
         setPhonenumValidMessage("전화번호를 입력하세요");
         return false
@@ -260,6 +285,7 @@ export default function LoginSignup({page}){
     if(page === 'login' && validCheck(email, password)){
       login();
     } else if(page === 'signup' && validCheck(email, password, nickname, phonenum)){
+      console.log(memberdata.filter(el => el.name === nickname))
       signup();
     }
   };
