@@ -3,6 +3,7 @@ import { SignupButton } from '../Pages/Home'
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
+import { memberdata } from '../InitData/memberdata';
 
 const Container = styled.div`
   width: 100%;
@@ -144,7 +145,13 @@ export default function LoginSignup({page}){
     } else if (!isCorrectEmail) {
       setEmailValidMessage("올바르지 않은 이메일 형식입니다");
       return false
-    } else {
+    }
+    // ✅서버통신 구현되면 지울 코드
+    else if (memberdata.filter(el => el.email === email).length < 1) {
+      setEmailValidMessage("등록되지 않은 이메일입니다");
+      return false
+    }
+    else {
       setEmailValidMessage("");
     }
 
@@ -158,7 +165,13 @@ export default function LoginSignup({page}){
     } else if (!(hasSpecialChar && hasLetter && hasNumber && isLengthValid)) {
       setPwValidMessage("비밀번호는 특수문자와 문자, 숫자를 포함해 10자 이상이어야 합니다");
       return false
-    } else {
+    } 
+    // ✅서버통신 구현되면 지울 코드
+    else if (memberdata.filter(el => el.email === email)[0].password !== password) {
+      setPwValidMessage("비밀번호가 틀립니다!");
+      return false
+    } 
+    else {
       setPwValidMessage("");
     }
 
@@ -166,13 +179,17 @@ export default function LoginSignup({page}){
       if (nickname === "") {
         setNicknameValidMessage("닉네임을 입력하세요");
         return false
-      } else if (nickname === '김코딩') {
+      } else if (memberdata.filter(el => el.name === nickname)) {
         setNicknameValidMessage("다른 회원님이 사용중인 닉네임입니다");
         return false
       } else {
         setNicknameValidMessage("");
       }
     
+      if(memberdata.filter(el => el.email === email).length > 0){
+        setEmailValidMessage("이미 존재하는 이메일입니다");
+        return false
+      }
 
       const phonenumLen = phonenum.length === 11
       const onlynumLen = phonenum.replace(/-/g, '').length === 11
@@ -180,7 +197,7 @@ export default function LoginSignup({page}){
         setPhonenumValidMessage("전화번호를 입력하세요");
         return false
       } else if(!phonenumLen && !onlynumLen){
-        setPhonenumValidMessage('전화번호는 -를 제외하고 11자여야 합니다')
+        setPhonenumValidMessage('전화번호는 -를 제외하고 11자 이상이어야 합니다')
         return false
       }else {
         setPhonenumValidMessage("");
@@ -191,41 +208,52 @@ export default function LoginSignup({page}){
   }
 
   const login = () => {
-    const memberInfo = {
-      email: email,
-      password: password,
-    }
-    axios
-    .post('url', memberInfo)
-    .then(res => {
-      localStorage.setItem('Authorization-Token', res.Header.Authorization)
-      localStorage.setItem('Refresh-Token', res.Header.Refresh)
+    if(memberdata.filter(el => el.email === email).length > 0 && 
+    memberdata.filter(el => el.password === password).length > 0){
       navigate('/accountbook')
-    })
-    .catch(err =>{
-      console.log(err)
-      setEmailValidMessage('이메일과 비밀번호를 확인해주세요')
-      setPwValidMessage('이메일과 비밀번호를 확인해주세요')
-    })
+    }
+  }
+  const signup = () => {
+    navigate('/login')
   }
 
-  // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
-  const signup = () => {
-    const memberInfo = {
-      email: email,
-      password: password,
-      name: nickname,
-      phoneNumber: phonenum,
-    }
-    axios
-    .post('url', memberInfo)
-    .then(res => {
-      navigate('/login')
-    })
-    .catch(err =>{
-      console.log(err)
-    })
-  }
+  // ✅이하 서버 통신 구현 되면 사용할 코드
+  // const login = () => {
+  //   const memberInfo = {
+  //     email: email,
+  //     password: password,
+  //   }
+  //   axios
+  //   .post('url', memberInfo)
+  //   .then(res => {
+  //     localStorage.setItem('Authorization-Token', res.Header.Authorization)
+  //     localStorage.setItem('Refresh-Token', res.Header.Refresh)
+  //     navigate('/accountbook')
+  //   })
+  //   .catch(err =>{
+  //     console.log(err)
+  //     setEmailValidMessage('이메일과 비밀번호를 확인해주세요')
+  //     setPwValidMessage('이메일과 비밀번호를 확인해주세요')
+  //   })
+  // }
+
+  // // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
+  // const signup = () => {
+  //   const memberInfo = {
+  //     email: email,
+  //     password: password,
+  //     name: nickname,
+  //     phoneNumber: phonenum,
+  //   }
+  //   axios
+  //   .post('url', memberInfo)
+  //   .then(res => {
+  //     navigate('/login')
+  //   })
+  //   .catch(err =>{
+  //     console.log(err)
+  //   })
+  // }
 
   const navigate = useNavigate()
   const clickLoginButton = () => {
