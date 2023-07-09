@@ -1,15 +1,26 @@
 package com.server.member.dto;
 
+import com.server.member.entity.Member;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 
 
 public class MemberDto {
+
+    @Getter
+    @AllArgsConstructor
+    public class Login {
+        private String email;
+        private String password;
+    }
 
     @Getter
     @AllArgsConstructor
@@ -28,6 +39,7 @@ public class MemberDto {
         @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",
                 message = "휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다")
         private String phoneNumber;
+
 
     }
 
@@ -70,12 +82,26 @@ public class MemberDto {
     }
 
     @Getter
+    @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Response{
         private long memberId;
         private String name;
         private String email;
-        private Integer phoneNumber;
-        private String createdAt;
+        private String phoneNumber;
+        private boolean premium;
+        private LocalDateTime createdAt;
+
+        public static Response response(Member member) {
+            return Response.builder()
+                    .memberId(member.getMemberId())
+                    .name(member.getName())
+                    .email(member.getEmail())
+                    .phoneNumber(member.getPhoneNumber())
+                    .premium(member.isPremium())
+                    .createdAt(member.getCreatedAt())
+                    .build();
+        }
     }
 }

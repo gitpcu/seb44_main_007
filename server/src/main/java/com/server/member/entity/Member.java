@@ -9,14 +9,16 @@ import com.server.trade.entity.Trade;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
 @Entity
+@Table(name = "members")
 public class Member extends Auditable{
 
     @Id
@@ -41,14 +43,10 @@ public class Member extends Auditable{
     @Column
     private boolean premium;
 
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = true)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
-
-//    @Enumerated(value = EnumType.STRING)
-//    @Column(length = 20, nullable = false)
-//    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
-
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Total> totalList = new ArrayList<>();
@@ -61,8 +59,6 @@ public class Member extends Auditable{
 
     @ElementCollection(fetch = FetchType.EAGER)  //시큐리티로 추가
     private List<String> roles = new ArrayList<>();
-
-
 
 
     public enum MemberStatus {
@@ -81,7 +77,8 @@ public class Member extends Auditable{
         }
     }
 
-    //Constructor
+
+
 
     public Member(long memberId) {this.memberId = memberId;}
 
@@ -90,5 +87,18 @@ public class Member extends Auditable{
     public static void checkExistEmail(Member targetMember) {
         if(targetMember != null) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
+
+    public static void isExistEmail(Optional<Member> targetMember) {
+        if(targetMember.isPresent())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    public Member(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+
 
 }

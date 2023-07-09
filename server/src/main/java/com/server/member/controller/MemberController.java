@@ -1,6 +1,7 @@
 package com.server.member.controller;
 
 import com.server.dto.ResponseDto;
+import com.server.fixed.dto.FixedDto;
 import com.server.member.dto.MemberDto;
 import com.server.member.entity.Member;
 import com.server.member.mapper.MemberMapper;
@@ -31,6 +32,8 @@ public class MemberController {
 
 
 
+
+
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = memberMapper.memberPostDtoToMember(requestBody);
@@ -38,7 +41,7 @@ public class MemberController {
         Member createdMember = memberService.createMember(member);
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, createdMember.getMemberId());
 
-        return ResponseEntity.created(location).build();
+        return new ResponseEntity<>(MemberDto.Response.response(member), HttpStatus.CREATED);
     }
 
     @PutMapping ("/{member-id}")

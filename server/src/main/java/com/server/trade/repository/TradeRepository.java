@@ -11,4 +11,5 @@ import java.time.LocalDate;
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
     Page<Trade> findByDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
+
 }

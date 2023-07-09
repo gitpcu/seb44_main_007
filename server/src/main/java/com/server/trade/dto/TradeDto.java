@@ -21,6 +21,7 @@ public class TradeDto {
     @NoArgsConstructor
     @Builder
     public static class Post {
+        private long memberId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -28,6 +29,7 @@ public class TradeDto {
         private String note; //비고
         private LocalDate date;
         private Category category;
+
 
     }
 

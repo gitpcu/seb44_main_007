@@ -2,11 +2,17 @@ package com.server.trade.service;
 
 import com.server.advice.BusinessLogicException;
 import com.server.advice.ExceptionCode;
+import com.server.auth.jwt.JwtTokenizer;
+import com.server.member.entity.Member;
+import com.server.member.repository.MemberRepository;
 import com.server.trade.entity.Trade;
 import com.server.trade.repository.TradeRepository;
 import com.server.utils.CustomBeanUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,18 +22,41 @@ import java.util.Optional;
 @Service
 public class TradeService {
     private final TradeRepository tradeRepository;
+    private final MemberRepository memberRepository;
     private final CustomBeanUtils<Trade> beanUtils;
+    private final JwtTokenizer jwtTokenizer;
 
-    public TradeService(TradeRepository tradeRepository, CustomBeanUtils<Trade> beanUtils) {
+
+    public TradeService(TradeRepository tradeRepository, MemberRepository memberRepository, CustomBeanUtils<Trade> beanUtils, JwtTokenizer jwtTokenizer) {
         this.tradeRepository = tradeRepository;
+        this.memberRepository = memberRepository;
         this.beanUtils = beanUtils;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
-    public Trade createTrade(Trade trade) {
-        Trade savedTrade = tradeRepository.save(trade);
-        return savedTrade;
+    public Trade createTrade(String token, Trade trade) {
 
+        Jws<Claims> claims = jwtTokenizer.getClaims(token, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
+        Claims claims1 = claims.getBody();
+        String email = (String) claims1.get("userName");
+//        Member member = findByAuthentication(authentication);
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        trade.setMember(member);
+        try{return tradeRepository.save(trade);}
+        catch (Exception e) {
+            Throwable cause = e.getCause();
+            if (cause != null) {
+                System.out.println("Cause: " + cause.getMessage());
+                System.out.println(e.getMessage());
+            }
+        }
+        return tradeRepository.save(trade);
     }
+
+    private Member findByAuthentication(Authentication authentication) {
+        return memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 
     public Trade updateTrade(Trade trade) {
         Trade findTrade = findTrade(trade.getTradeId());

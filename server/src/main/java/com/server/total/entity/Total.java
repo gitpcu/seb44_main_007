@@ -2,6 +2,7 @@ package com.server.total.entity;
 
 import com.server.member.entity.Member;
 import com.server.trade.entity.Trade;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter

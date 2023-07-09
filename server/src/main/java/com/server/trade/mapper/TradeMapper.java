@@ -10,7 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TradeMapper {
     @Mapping(target = "date", source = "requestBody.date")
-    @Mapping(target = "member", ignore = true)
     @Mapping(target = "total", ignore = true)
     Trade tradePostDtoToTrade(TradeDto.Post requestBody);
     @Mapping(target = "date", source = "requestBody.date")

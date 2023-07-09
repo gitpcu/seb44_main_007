@@ -12,7 +12,8 @@ import java.time.Duration;
 @Transactional
 @RequiredArgsConstructor
 public class RedisService {
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
+
 
     public String getData(String key) {
         return (String) redisTemplate.opsForValue().get(key);

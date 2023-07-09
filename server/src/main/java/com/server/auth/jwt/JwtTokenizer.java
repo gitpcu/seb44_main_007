@@ -21,12 +21,11 @@ public class JwtTokenizer {
 
     @Getter
     @Value("${jwt.key}")
-    private String secretKey;       // (2)
-
+    private String secretKey;
 
     @Getter
     @Value("${jwt.access-token-expiration-minutes}")
-    private int accessTokenExpirationMinutes;        // (3)
+    private int accessTokenExpirationMinutes;
 
     @Getter
     @Value("${jwt.refresh-token-expiration-minutes}")

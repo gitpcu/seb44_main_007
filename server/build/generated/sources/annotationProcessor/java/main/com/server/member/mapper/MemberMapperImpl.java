@@ -2,7 +2,6 @@ package com.server.member.mapper;
 
 import com.server.member.dto.MemberDto;
 import com.server.member.entity.Member;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-05T00:48:59+0900",
+    date = "2023-07-09T13:59:28+0900",
     comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -55,25 +54,16 @@ public class MemberMapperImpl implements MemberMapper {
             return null;
         }
 
-        long memberId = 0L;
-        String name = null;
-        String email = null;
-        Integer phoneNumber = null;
-        String createdAt = null;
+        MemberDto.Response.ResponseBuilder response = MemberDto.Response.builder();
 
-        memberId = member.getMemberId();
-        name = member.getName();
-        email = member.getEmail();
-        if ( member.getPhoneNumber() != null ) {
-            phoneNumber = Integer.parseInt( member.getPhoneNumber() );
-        }
-        if ( member.getCreatedAt() != null ) {
-            createdAt = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( member.getCreatedAt() );
-        }
+        response.memberId( member.getMemberId() );
+        response.name( member.getName() );
+        response.email( member.getEmail() );
+        response.phoneNumber( member.getPhoneNumber() );
+        response.premium( member.isPremium() );
+        response.createdAt( member.getCreatedAt() );
 
-        MemberDto.Response response = new MemberDto.Response( memberId, name, email, phoneNumber, createdAt );
-
-        return response;
+        return response.build();
     }
 
     @Override

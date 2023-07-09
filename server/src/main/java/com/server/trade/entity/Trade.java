@@ -3,9 +3,7 @@ package com.server.trade.entity;
 import com.server.member.entity.Member;
 import com.server.total.entity.Total;
 import com.server.utils.CustomBeanUtils;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,10 +11,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 @Entity
 @Table(name = "trade")
+@Builder
 public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,16 +37,21 @@ public class Trade {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
+
+
     public void setMember(Member member) {
         this.member = member;
         member.getTradeList().add(this);
+    }
+    public long getUserId(){
+        return member.getMemberId();
     }
 
 
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "totalId", nullable = false)
+    @JoinColumn(name = "totalId", nullable = true)
     private Total total;
 
     public void setTotal(Total total) {
@@ -62,6 +67,7 @@ public class Trade {
     public Trade changeTrade(Trade sourceTrade, CustomBeanUtils<Trade> beanUtils) {
         return beanUtils.copyNonNullProperties(sourceTrade, this);
     }
+
 
 
     public BigDecimal getTotalIncome() {

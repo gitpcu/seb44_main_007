@@ -1,3 +1,4 @@
+
 spring:
   jpa:
     database: mysql
@@ -19,8 +20,8 @@ spring:
       client:
         registration:
           google:
-            clientId: 491567044577-acj81dopm7f8njrf4d2b73p1hrljuq4v.apps.googleusercontent.com
-            clientSecret: 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
+            clientId: 935988023864-rrm6bo9u69r2abs63t92hbsu0ovoeku8.apps.googleusercontent.com
+            clientSecret: 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
             scope:
               - email
               - profile
@@ -40,7 +41,7 @@ spring:
 
 jwt:
   key: asdfqwerasdfqwerasdfqwerasdfqwerasdfasdfasdfasdf
-  access-token-expiration-minutes: 1
+  access-token-expiration-minutes: 10
   refresh-token-expiration-minutes: 200
 
 
