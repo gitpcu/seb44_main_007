@@ -282,7 +282,7 @@ export default function LoginSignup({page}){
 
   const navigate = useNavigate()
   const clickLoginButton = () => {
-    if(page === 'login' && validCheck(email, password)){
+    if(page === 'login' && validCheck(email, password, '', '')){
       login();
     } else if(page === 'signup' && validCheck(email, password, nickname, phonenum)){
       console.log(memberdata.filter(el => el.name === nickname))

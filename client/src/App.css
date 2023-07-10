@@ -3,6 +3,14 @@
   padding:0;
   box-sizing: border-box;
 }
+.main-else{
+  display: flex;
+  flex-direction: row;
+}
+.main-home{
+  display: flex;
+  flex-direction: column;
+}
 
 @font-face {
   font-family: 'ChosunBg';
