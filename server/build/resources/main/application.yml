@@ -9,6 +9,9 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
+      hibernate:
+        connection:
+          isolation: 1
   datasource:
     url: jdbc:mysql://localhost:3306/database1?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
@@ -50,5 +53,7 @@ logging:
     name: logs/logging.log
   level:
     spring:
+      root: DEBUG
+      com.server: DEBUG
       server:
         auth: debug

@@ -33,7 +33,6 @@ public class Trade {
 
 
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
@@ -50,7 +49,7 @@ public class Trade {
 
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "totalId", nullable = true)
     private Total total;
 
@@ -79,4 +78,11 @@ public class Trade {
     public BigDecimal getGoal() {
         return total.getGoal();
     }
+
+
+
+
+    
+
+
 }

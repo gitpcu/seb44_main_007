@@ -31,6 +31,9 @@ public class TradeDto {
         private Category category;
 
 
+        public void setMemberId(long memberId) {
+            this.memberId = memberId;
+        }
     }
 
     @Getter
@@ -153,7 +156,7 @@ public class TradeDto {
                         .date(trade.getDate())
                         .category(trade.getCategory())
                         .totalIncome(trade.getTotalIncome())
-                        .totalIncome(trade.getTotalOutcome())
+                        .totalOutcome(trade.getTotalOutcome())
                         .goal(trade.getGoal())
                         .build()
                 )

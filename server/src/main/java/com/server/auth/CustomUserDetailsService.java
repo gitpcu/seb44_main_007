@@ -26,20 +26,32 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> findUser = memberRepository.findByEmail(username);
-        if (findUser.isEmpty()) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        }
-        return new CustomUserDetails(findUser.get());
+        Optional<Member> optionalMember = memberRepository.findByEmail(username);
+//        if (findUser.isEmpty()) {
+//            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+//        }
+//        return new CustomUserDetails(findUser.get());
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        return new MemberDetails(findMember);
     }
 
-    private final class CustomUserDetails extends Member implements UserDetails {
-        CustomUserDetails(Member member) {
+    private final class MemberDetails extends Member implements UserDetails {
+        // (1)
+        MemberDetails(Member member) {
             setMemberId(member.getMemberId());
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
         }
+
+//    private final class CustomUserDetails extends Member implements UserDetails {
+//        CustomUserDetails(Member member) {
+//            setMemberId(member.getMemberId());
+//            setEmail(member.getEmail());
+//            setPassword(member.getPassword());
+//            setRoles(member.getRoles());
+//        }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -50,11 +62,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         public String getPassword() {
             return super.getPassword();
         }
-
         @Override
         public String getUsername() {
-            return getName();
+            return getEmail();
         }
+
+//        @Override
+//        public String getUsername() {
+//            return getUsername();
+//        }
 
         @Override
         public boolean isAccountNonExpired() {

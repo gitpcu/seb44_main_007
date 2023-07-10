@@ -12,14 +12,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+
+
+
 @Service
+@Transactional
 public class TradeService {
     private final TradeRepository tradeRepository;
     private final MemberRepository memberRepository;
@@ -34,12 +37,16 @@ public class TradeService {
         this.jwtTokenizer = jwtTokenizer;
     }
 
+//    public Trade createTrade(Trade trade) { //임보크에러가 떠서 수정중인코드
+//        return tradeRepository.save(trade);
+//    }
+
+
     public Trade createTrade(String token, Trade trade) {
 
         Jws<Claims> claims = jwtTokenizer.getClaims(token, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
         Claims claims1 = claims.getBody();
-        String email = (String) claims1.get("userName");
-//        Member member = findByAuthentication(authentication);
+        String email = (String) claims1.get("username");
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         trade.setMember(member);
         try{return tradeRepository.save(trade);}
@@ -53,14 +60,27 @@ public class TradeService {
         return tradeRepository.save(trade);
     }
 
-    private Member findByAuthentication(Authentication authentication) {
-        return memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
 
+    public Trade updateTrade(String token, Trade trade) {
+        Jws<Claims> claims = jwtTokenizer.getClaims(token, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
+        Claims claims1 = claims.getBody();
+        String email = (String) claims1.get("username");
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        trade.setMember(member);
 
-    public Trade updateTrade(Trade trade) {
         Trade findTrade = findTrade(trade.getTradeId());
         setTradeInfo(findTrade, trade);
+
+        try {
+            return tradeRepository.save(findTrade);
+        }
+        catch (Exception e) {
+            Throwable cause = e.getCause();
+            if (cause != null) {
+                System.out.println("Cause: " + cause.getMessage());
+                System.out.println(e.getMessage());
+            }
+        }
         return tradeRepository.save(findTrade);
     }
 
@@ -87,9 +107,26 @@ public class TradeService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Page<Trade> findTradesByDateRange(String token, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        try {
+            Jws<Claims> claims = jwtTokenizer.getClaims(token, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
+            Claims claims1 = claims.getBody();
+            String email = (String) claims1.get("username");
+            Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-    public Page<Trade> findTradesByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
-        return tradeRepository.findByDateBetween(startDate, endDate, pageable);
+            System.out.println("==================왜안될까1===========");
+            return tradeRepository.findByDateBetween(startDate, endDate, pageable);
+        } catch (Exception e) {
+            Throwable cause = e.getCause();
+            if (cause != null) {
+                System.out.println("Cause: " + cause.getMessage());
+                System.out.println(e.getMessage());
+                System.out.println("==================왜안될까2===========");
+            }
+            System.out.println("==================왜안될까3===========");
+            throw new BusinessLogicException(ExceptionCode.TRADE_NOT_FOUND);
+        }
     }
 
     public void deleteTrade(long tradeId){
@@ -97,17 +134,6 @@ public class TradeService {
     }
 
 
-
-
-//    @Transactional(readOnly = true) //getMapping
-//    public Page<Trade> findTrades(Pageable pageable) {
-//        return tradeRepository.findAll(pageable);
-//    }
-//
-//    @Transactional(readOnly = true) //getMapping
-//    public Page<Trade> findTrades(int page, int size) {
-//        return tradeRepository.findAll(PageRequest.of(page, size, Sort.by("date").descending()));
-//    }
 
 
 }

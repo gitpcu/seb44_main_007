@@ -92,6 +92,7 @@ public class JwtTokenizer {
         return (String) claims.get("sub");
     }
 
+    // JWT 검증
     public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 

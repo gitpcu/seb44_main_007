@@ -41,7 +41,4 @@ public class Total {
     @OneToMany(mappedBy = "total", cascade = CascadeType.ALL)
     private List<Trade> tradeList = new ArrayList<>();
 
-
-
-
 }

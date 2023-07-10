@@ -9,7 +9,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.security.SignatureException;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,12 +37,41 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         this.memberRepository = memberRepository;
     }
 
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request); // (3)
-        setAuthenticationToContext(claims);      // (4)
+        // (1)
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+        } catch (SignatureException se) {
+            request.setAttribute("exception", se);
+        } catch (ExpiredJwtException ee) {
+            request.setAttribute("exception", ee);
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
 
-        filterChain.doFilter(request, response); // (5)
+        filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String authorization = request.getHeader("Authorization");  // (6-1)
+        return authorization == null || !authorization.startsWith("Bearer ");
+    }
+
+    private Map<String, Object> verifyJws(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", ""); // request의 header에서 JWT를 얻음.
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); //  JWT 서명(Signature)을 검증하기 위한 Secret Key를 얻음.
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // JWT에서 Claims를 파싱
+
+        return claims;
+    }
+
+    private void setAuthenticationToContext(Map<String, Object> claims) {
+        String username = (String) claims.get("username");
+        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List) claims.get("roles"));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 
@@ -88,31 +116,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return request.getHeader("Refresh");
     }
 
-//    private Map<String, Object> verifyJws(HttpServletRequest request, HttpServletResponse response) {
-//        String jws = request.getHeader("Authorization").replace("Bearer ", "");
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-//        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
-//        return claims;
-//    }
 
-    private Map<String, Object> verifyJws(HttpServletRequest request) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", ""); // request의 header에서 JWT를 얻음.
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); //  JWT 서명(Signature)을 검증하기 위한 Secret Key를 얻음.
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // JWT에서 Claims를 파싱
 
-        return claims;
-    }
 
-    private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("username");
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List) claims.get("roles"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String authorization = request.getHeader("Authorization");  // (6-1)
-        return authorization == null || !authorization.startsWith("Bearer ");
-    }
+
 }

@@ -1,14 +1,11 @@
 package com.server.auth.filter;
 
-import com.server.auth.CustomAuthorityUtils;
 import com.server.auth.dto.LoginDto;
 import com.server.auth.jwt.JwtTokenizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.server.member.entity.Member;
 import com.server.auth.redis.RedisService;
-import com.server.member.repository.MemberRepository;
 import lombok.SneakyThrows;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -79,7 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public String delegateAccessToken(Member member){  //엑세스토큰생성
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userName", member.getEmail());
+        claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
 
         String subject = member.getEmail();

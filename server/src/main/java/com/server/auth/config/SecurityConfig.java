@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -25,19 +24,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer{
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils; // 추가
     private final RedisService redisService;
     private final MemberRepository memberRepository;
+//    private final ControllerInterceptor controllerInterceptor;
 
     @Value("${spring.security.oauth2.client.registration.google.clientId}")
     private String clientId;
@@ -107,6 +106,13 @@ public class SecurityConfig {
         }
     }
 
+//    @Override //내가 만든 인터셉터 등록
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(controllerInterceptor)
+//                .addPathPatterns("/trade/*")
+//                .excludePathPatterns("/member/*");
+//    }
+
 
 
     public void addCorsMapptings(CorsRegistry registry){
@@ -129,7 +135,7 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");
 
-        source.registerCorsConfiguration("/**", configuration);         // 주의 사항: 콘텐츠 표시 오류로 인해 '/**'를 '\/**'로 표기했으니 실제 코드 구현 시에는 '\(역슬래시)'를 빼 주세요.
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
