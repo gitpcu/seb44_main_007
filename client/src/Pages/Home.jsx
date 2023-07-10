@@ -18,8 +18,13 @@ const Background = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
+  top:0;
+  left:0;
   font-family: 'ChosunBg';
   z-index:1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &::before {
     content: '';
     position: absolute;
@@ -31,34 +36,43 @@ const Background = styled.div`
 `
 const MainDiv = styled.div`
   position: absolute;
-  top: 50%;
   left: 50%;
-  width: 70%;
-  height: 70vh;
-  margin: -48vh 0 0 -35%;
-  padding-top: 26vh;
+  width: 70vw;
+  height: 100%;
+  margin: 0 0 0 -35%;
+  padding-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
+  & > .buttonLink{
+    position: relative;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+  }
 `
 const MainText = styled.p`
   color: white;
-  font-size: 64px;
+  font-size: 5rem;
   text-shadow: 0px 1px 10px #00000045;
-  margin: 10px;
+  margin: 1%;
   animation: appearText 1s;
+  &.downText{
+    margin-bottom: calc(20vh);
+  }
 `
 const StartButton = styled.button`
-  width: 300px;
-  padding: 30px;
+  width: 90%;
+  padding: 8%;
   background-color: #F9591D;
   border: 0px;
   border-radius: 20px;
   color: white;
-  font-size: 36px;
+  font-size: 2rem;
   font-weight: bold;
-  margin: 150px;
   opacity: 0.7;
   animation: appearButton 1s;
   &:hover{
@@ -66,8 +80,9 @@ const StartButton = styled.button`
   }
 `
 const ScrollArrow = styled.img`
-  width: 75px;
-  height: 75px;
+  width: 8%;
+  height: 8%;
+  margin-top: calc(20vh);
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   &:hover{
     animation: arrowMotion 0.3s linear 0s infinite alternate; margin-top: 0;
@@ -75,29 +90,37 @@ const ScrollArrow = styled.img`
 `
 const SummaryContainer = styled.div`
   position: relative;
+  top:0;
+  left:0;
   width: 100%;
   height: 100vh;
   background-color: #191919;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
-const SummaryDiv = styled(MainDiv)`
-  padding-top: 15vh;
+const SummaryDiv = styled.div`
+  position: absolute;
+  width: 70%;
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
 `
 const LogoContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
-  margin: 50px 0px 135px 0px;
+  height: 250px;
+  margin: 50px 0px 50px 0px;
   display: flex;
   justify-content: center;
 `
 const SummaryImg = styled.img`
   position: absolute;
-  width: 13%;
+  height: 100%;
   opacity: 0;
   animation: ${props => props.isView ? props.ani : ''};
   animation-duration: 5s;
@@ -109,15 +132,13 @@ const SummaryText = styled(MainText)`
   font-family: 'Pretendard', sans-serif;
 `
 const ScrollMeDiv = styled.div`
-  margin-top: 100px;
   height: 60px;
 `
 const ScrollMeImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
   float: center;
-  margin-top: 100px;
   opacity: 0.5;
   animation: scrollme 0.3s linear 0s infinite alternate;
 `
@@ -134,28 +155,35 @@ const MainDescribeContainer = styled.div`
   padding-top: 100px;
 `
 const SignupDiv = styled.div`
+  width: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px 0px 100px 0px;
+  margin: 2% 0px 8% 0px;
+  & > .buttonLink{
+    width: 40%;
+  }
 `
 const SignupText = styled.span`
   color: #A9A9A9;
   font-size: 12px;
+  margin-bottom: 1%;
 `
-const SignupButton = styled(StartButton)`
+export const SignupButton = styled(StartButton)`
+  width: 100%;
   animation: '';
-  padding: 15px;
-  font-size: 24px;
-  margin: 15px 0px;
+  padding: 5% 10%;
+  font-size: 1.5rem;
 `
 const Footer = styled.footer`
   width: 100%;
-  height: 100px;
-  padding: 50px 500px;
+  height: 150px;
+  padding: 40px 0px;
   background-color: #191919;
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `
 const FooterLogoDiv = styled.div`
   width: 100px;
@@ -202,6 +230,11 @@ export default function Home(){
     },
   ]
 
+  const [windowSize, setWindowSize] = useState(window.innerheight);
+  window.onresize = () => {
+    setWindowSize(window.innerheight);
+  };
+
   const element = useRef();
   const onMoveBox = () => {
     element.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -222,10 +255,10 @@ export default function Home(){
           <MainText>
             소중한 내 돈,
           </MainText>
-          <MainText>
+          <MainText className='downText'>
             Burrycade로 똑똑하게 관리하자
           </MainText>
-          <Link to='/login'>
+          <Link to='/login' className='buttonLink'>
             <StartButton>
               시작하기
             </StartButton>
@@ -233,6 +266,7 @@ export default function Home(){
           <ScrollArrow
             src='https://www.svgrepo.com/show/334629/down-arrow-square.svg'
             onClick={onMoveBox}
+            isView={windowSize > 500}
           >
           </ScrollArrow>
         </MainDiv>
@@ -240,7 +274,12 @@ export default function Home(){
       <SummaryContainer ref={element}>
         <SummaryDiv ref={second}>
           <LogoContainer>
-            <SummaryImg src={logo1} ani='appear1' isView={isView}/>
+            <SummaryImg
+              src={logo1}
+              ani='appear1'
+              isView={isView}
+              filter='invert(100%) sepia(0%) saturate(882%) hue-rotate(56deg) brightness(113%) contrast(91%)'
+            />
             <SummaryImg src={logo2} ani='appear2' isView={isView}/>
             <SummaryImg src={logo3} ani='appear3' isView={isView}/>
           </LogoContainer>
@@ -272,7 +311,7 @@ export default function Home(){
         })}
         <SignupDiv>
           <SignupText>아직 회원이 아니시라면?</SignupText>
-          <Link to='/signup'>
+          <Link to='/signup' className='buttonLink'>
             <SignupButton>Buyrricade 시작해보기</SignupButton>
           </Link>
         </SignupDiv>
