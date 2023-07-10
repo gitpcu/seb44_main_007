@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import Palette from "../../Palette/Palette";
 
 function PieGraph({ data }) {
+  const [dataType, setDataType] = useState(null);
+
+  useEffect(() => {
+    if (data.length !== 0) {
+      setDataType(data[0].type);
+    }
+  }, [data]);
   const sum = data.reduce((sums, obj) => {
     const { amount, category } = obj;
     if (sums[category]) {
@@ -19,7 +26,20 @@ function PieGraph({ data }) {
     }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 4);
-
+  // const top3Data = sortData.slice(0, 3);
+  // const restData = sortData.slice(3);
+  // const chartData = [
+  //   ...top3Data,
+  //   {
+  //     name:
+  //       dataType === "지출"
+  //         ? "기타지출"
+  //         : dataType === "수입"
+  //         ? "기타수입"
+  //         : null,
+  //     value: restData.reduce((sum, obj) => sum + obj.value, 0),
+  //   },
+  // ];
   const chartColors = chartData.map((it) => {
     return Palette[it.name];
   });

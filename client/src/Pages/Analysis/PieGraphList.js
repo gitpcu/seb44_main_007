@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import Palette from "../../Palette/Palette";
 const ListUL = styled.ul`
   display: flex;
   flex-direction: column;
@@ -35,13 +35,34 @@ const ListPrice = styled.div`
   text-align: right;
 `;
 
-function PieGraphList() {
-  const ListData = [
-    { category: "식비/간식", percentage: 52, price: 108000, color: "#F4CD72" },
-    { category: "의류/미용", percentage: 23, price: 52000, color: "#EF9620" },
-    { category: "의료/건강", percentage: 18, price: 43200, color: "#835BA1" },
-    { category: "기타", percentage: 7, price: 16000, color: "#F4CD72" },
-  ];
+function PieGraphList({ data }) {
+  const sum = data.reduce((sums, obj) => {
+    const { amount, category } = obj;
+    if (sums[category]) {
+      sums[category] += amount;
+    } else {
+      sums[category] = amount;
+    }
+    return sums;
+  }, {});
+  const chartData = Object.entries(sum)
+    .map(([name, value]) => ({
+      name,
+      value,
+    }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 4);
+
+  const totalSum = chartData.reduce((sum, obj) => sum + obj.value, 0);
+
+  // Convert data to the desired format
+  const ListData = chartData.map((obj) => ({
+    category: obj.name,
+    percentage: ((obj.value / totalSum) * 100).toFixed(2),
+    price: obj.value,
+    color: Palette[obj.name.toLowerCase().replace(/ /g, "_")],
+  }));
+
   return (
     <ListUL>
       {ListData.map((it) => {

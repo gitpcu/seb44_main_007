@@ -14,8 +14,8 @@ const PageWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1%;
+  width: calc(100% - 300px);
   height: 100vh;
-  margin-left: 300px;
 `;
 
 // PageTop
@@ -128,7 +128,8 @@ function Analysis() {
   const initData = useSelector((state) => state.data.initData);
 
   // dataState
-  const [monthData, setMonthData] = useState([]); // 전체 데이터
+  const [lastmonthData, setLastMonthData] = useState([]); // 전체 데이터(지난달)
+  const [monthData, setMonthData] = useState([]); // 전체 데이터(이번달)
   const [spend, setSpend] = useState(0); // 총 지출
   const [income, setIncome] = useState(0); // 총 수입
   const [spendData, setSpendData] = useState([]);
@@ -285,7 +286,10 @@ function Analysis() {
             </RightlegendWrap>
           </MiddleRightTop>
           <MiddleRightBottomWrap>
-            <CategoryCompare />
+            <CategoryCompare
+              spendData={spendData}
+              lastmonthData={lastmonthData}
+            />
           </MiddleRightBottomWrap>
         </MiddleRight>
       </PageMiddle>

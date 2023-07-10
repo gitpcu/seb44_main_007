@@ -9,17 +9,33 @@ const Wrap = styled.div`
   justify-content: space-around;
 `;
 
-function CategoryCompare() {
+function CategoryCompare({ spendData, lastmonthData }) {
+  const curmonth = spendData;
+  const prevmonth = lastmonthData;
+
+  // 카테고리 종류
+  const categoryarr = [
+    ...new Set(
+      curmonth.map((it) => {
+        return it.category;
+      })
+    ),
+  ];
+
+  const curmonthByCategory = curmonth.reduce((result, item) => {
+    if (result[item.category]) {
+      result[item.category] += item.amount;
+    } else {
+      result[item.category] = item.amount;
+    }
+    return result;
+  }, {});
   return (
     <Wrap>
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
-      <CategoryCompageDetail />
+      {categoryarr.map((it) => {
+        const categoryamount = curmonthByCategory[it];
+        return <CategoryCompageDetail categoryamount={categoryamount} />;
+      })}
     </Wrap>
   );
 }
