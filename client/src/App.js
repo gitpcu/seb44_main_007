@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Accountbook from "./Accountbook/accountbook";
@@ -6,8 +6,20 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import SideNavBar from "./Components/SideNavBar";
+import Analysis from "./Pages/Analysis/Analysis";
+
+//dummyData
+import { data } from "./InitData/data";
+//redux
+import { useDispatch } from "react-redux";
+import { setfetchData } from "./Redux/reducers";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setfetchData(data));
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <SideNavBar />
@@ -16,7 +28,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/accountbook" element={<Accountbook />}></Route>
-        <Route path="/analysis" element="소비패턴분석"></Route>
+        <Route path="/analysis" element={<Analysis />}></Route>
         <Route path="/wishList" element="위시리스트"></Route>
         <Route path="/premium" element="프리미엄"></Route>
       </Routes>
