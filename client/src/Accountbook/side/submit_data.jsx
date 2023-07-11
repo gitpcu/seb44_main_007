@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {styled} from "styled-components";
-import { addAccountData } from '../submit_data_reducer';
+import { addAccountData } from '../../Redux/submit_data_reducer';
 import DropdownExpend from './category_dropdown_expend';
 import DropdownProfit from './category_dropdown_profit';
 

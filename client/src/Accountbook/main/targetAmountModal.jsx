@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { targetExpend } from '../account_reducer';
+import { targetExpend } from '../../Redux/account_reducer';
 import Modal from 'react-modal';
 
 const TargetAmountModal = () => {

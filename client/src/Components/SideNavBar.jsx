@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Link, useLocation} from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import mainLogo from '../Images/logo_main.png'
 
@@ -7,12 +7,13 @@ const Nav = styled.nav`
   position: relative;
   top: 0px;
   left: 0px;
-  width: 300px;
+  width: 15%;
   height: 100vh;
   background-color: #191919;
 `
 const SidebarContainer =  styled.div`
   position: relative;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding: 40px;
@@ -64,6 +65,10 @@ const MenuListDiv =styled.div`
     'background: linear-gradient(to right, #191919, #F9591D);'
     ) : ''
   };
+  ${props => props.selected ? (
+    'background: linear-gradient(to right, #191919, #F9591D);'
+    ) : ''
+  }
   & > .navLink{
     width: 4rem;
     height: 2rem;
@@ -98,6 +103,10 @@ const MenuListSpan = styled.span`
     'color:white; transform: translate(40px, 0px); opacity:1;'
     ) : ''
   }
+  ${props => props.selected ? (
+    'color:white; transform: translate(40px, 0px); opacity:1;'
+    ) : ''
+  }
 `
 const LowerMenuImg = styled(MenuListImg)`
     width:2rem;
@@ -116,13 +125,13 @@ const LowerMenuDiv = styled(MenuListDiv)`
 const UpperMenu = ({el, idx, hoveredIdx, setHoveredIdx, curLocation}) => {
   return (
     <MenuList>
-      <MenuListDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false}>
+      <MenuListDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false} selected={curLocation === el.path ? true : false }>
         <Link to={el.path} className='navLink'>
           <MenuListImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }
           onMouseOver={() => setHoveredIdx(idx)}
           onMouseOut={() => setHoveredIdx('')}></MenuListImg>
         </Link>
-        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}>{el.title}</MenuListSpan>
+        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}  selected={curLocation === el.path ? true : false }>{el.title} </MenuListSpan>
       </MenuListDiv>
     </MenuList>
   )
@@ -130,20 +139,20 @@ const UpperMenu = ({el, idx, hoveredIdx, setHoveredIdx, curLocation}) => {
 const LowerMenu = ({el, idx, hoveredIdx, setHoveredIdx, curLocation, logout}) => {
   return(
     <LowerMenuList>
-      <LowerMenuDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false}>
+      <LowerMenuDiv className='MenuListDiv' isHovered={idx === hoveredIdx ? true : false}  selected={curLocation === el.path ? true : false }>
         <Link to={el.path} className='navLink'>
           <LowerMenuImg src={el.image} className='MenuListImg' selected={curLocation === el.path ? true : false }
           onMouseOver={() => setHoveredIdx(idx)}
           onMouseOut={() => setHoveredIdx('')}
           onClick={idx === 5 ? logout : null}></LowerMenuImg>
         </Link>
-        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}>{el.title}</MenuListSpan>
+        <MenuListSpan className='MenuListSpan' isHovered={idx === hoveredIdx ? true : false}  selected={curLocation === el.path ? true : false }>{el.title}</MenuListSpan>
       </LowerMenuDiv>
     </LowerMenuList>
   )
 }
 
-export default function SideNavBar(){
+export default function SideNavBar({setIsHome}){
   const menuList = [
     {
       image: 'https://www.svgrepo.com/show/333903/dollar-circle.svg',
@@ -179,19 +188,26 @@ export default function SideNavBar(){
   const [curLocation, setLocation] = useState('/accountbook');
   const [hoveredIdx, setHoveredIdx] = useState(0);
 
+  const navigate = useNavigate();
   const logout =() => {
-    alert('로그아웃합니다!')
+    alert('로그아웃합니다!');
+    navigate('/')
   }
 
-  const location = useLocation();
+  const location = useLocation().pathname;
   useEffect(() => {
-    setLocation(location.pathname)
-  }, [location.pathname]);
+    setLocation(location)
+  }, [location]);
 
+  if(location === '/'){
+    setIsHome(true)
+  } else {
+    setIsHome(false)
+  }
 
-  if(location.pathname === '/'
-  || location.pathname === '/login'
-  || location.pathname === '/signup'){
+  if(location === '/'
+  || location === '/login'
+  || location === '/signup'){
     return ''
   }
   return(

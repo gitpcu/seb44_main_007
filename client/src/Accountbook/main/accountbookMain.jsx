@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { totalProfit, totalExpend } from '../account_reducer'
-import { selectDate } from '../date_reducer';
+import { totalProfit, totalExpend } from '../../Redux/account_reducer'
+import { selectDate } from '../../Redux/date_reducer';
 import * as S from './accountbookMain_style';
 import TargetAmountModal from "./targetAmountModal";
 import DatePicker from 'react-datepicker';
