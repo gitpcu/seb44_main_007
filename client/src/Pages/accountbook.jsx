@@ -3,6 +3,7 @@ import AccountbookSide from "../Accountbook/side/accountbookSide";
 import {styled} from "styled-components";
 
 const AccountBook = styled.div`
+    width: calc(100% - 300px);  
     display: flex;
     flex-direction: row;
 `

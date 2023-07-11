@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { format, addMonths, subMonths } from 'date-fns';
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
-import { isSameMonth, isSameDay, addDays, parse } from 'date-fns';
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
+import { isSameMonth, isSameDay, addDays } from 'date-fns';
 import { styled } from 'styled-components';
 import { data } from '../../InitData/data';
 
@@ -42,7 +43,6 @@ export const Calender = () => {
     const monthEnd = endOfMonth(currentMonth);
     const weekStart = startOfWeek(monthStart);
     const weekEnd = endOfWeek(monthEnd);
-    const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
     const rows = [];
     let days = [];
@@ -50,13 +50,14 @@ export const Calender = () => {
     let formattedDate = '';
 
     //데이터 리듀스
-    const dateSums = data.reduce((acc, item) => {
+    const accountDataList = useSelector((state) => state.accountData.accountDataList);
+    const dateSums = accountDataList.reduce((acc, item) => {
         const { date, type, amount } = item;
-        const daySum = acc[date] || { income: 0, expense: 0 };
+        const daySum = acc[date] || { profit: 0, expend: 0 };
         if (type === '수입') {
-          daySum.income += amount;
+          daySum.profit += amount;
         } else if (type === '지출') {
-          daySum.expense += amount;
+          daySum.expend += amount;
         }
         acc[date] = daySum;
         return acc;
@@ -67,7 +68,7 @@ export const Calender = () => {
         for (let i = 0; i < 7; i++) {
             formattedDate = format(day, 'yyyy-MM-dd');
             const cloneDay = day;
-            const daySum = dateSums[formattedDate] || { income: 0, expense: 0 };
+            const daySum = dateSums[formattedDate] || { profit: 0, expend: 0 };
             days.push(
                 <CellTextContainer
                     className={` ${
@@ -87,8 +88,8 @@ export const Calender = () => {
                     }} >
                         <TextDay>{format(day, 'd')}</TextDay>
                         <TextType>
-                            <Income>{daySum.income !== 0 && daySum.income.toLocaleString()}</Income>
-                            <Expense>{daySum.expense !== 0 && daySum.expense.toLocaleString()}</Expense>
+                            <Profit>{daySum.profit !== 0 && daySum.profit.toLocaleString()}</Profit>
+                            <Expend>{daySum.expend !== 0 && daySum.expend.toLocaleString()}</Expend>
                         </TextType>
                     </CellText>
                             
@@ -215,13 +216,13 @@ const TextType = styled.div`
     color: #365A42;
 `;
 
-const Income = styled.p`
+const Profit = styled.p`
     text-align: center;
     color: #365A42;
     margin-bottom: 3px;
 `;
 
-const Expense = styled.p`
+const Expend = styled.p`
     text-align: center;
     color: rgb(255, 64, 52);
 `;

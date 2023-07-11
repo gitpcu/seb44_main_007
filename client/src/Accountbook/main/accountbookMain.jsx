@@ -1,44 +1,73 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { totalProfit, totalExpend } from '../account_reducer'
+import { selectDate } from '../date_reducer';
 import * as S from './accountbookMain_style';
 import TargetAmountModal from "./targetAmountModal";
 import DatePicker from 'react-datepicker';
-import { ko } from "date-fns/esm/locale";
+// import { ko } from "date-fns/esm/locale";
 import 'react-datepicker/dist/react-datepicker.css';
-import { data } from '../../InitData/data'
 import { Calender } from './calender';
 
 
 const AccountbookMain = () => {
+  const dispatch = useDispatch();
+
   const targetExpend = useSelector((state) => state.targetExpend);
   const totalProfitSelector = useSelector((state) => state.totalProfit);
   const totalExpendSelector = useSelector((state) => state.totalExpend);
-  const dispatch = useDispatch();
-
-  const [startDate, setStartDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState(0);
 
   const today = new Date();
   const year = today.getFullYear();
   const month = (today.getMonth() + 1) > 9 ? (today.getMonth() + 1) : '0' + (today.getMonth() + 1);
   const day = today.getDate() > 9 ? today.getDate() : '0' + today.getDate();
-  const monthEng = today.toLocaleDateString('en-us', { month: 'short'}).toUpperCase();
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
   };
 
+  
+  //날짜
+  const selectedDate = useSelector((state) => state.selectedDate);
+  
+  const handleDateChange = (date) => {
+    dispatch(selectDate(date));
+  };
+
+  const currentDate = selectedDate.selectedDate;
+
+  const formatDate = (date) => {
+    const formattedDate = new Date(date);
+    const year = formattedDate.getFullYear();
+    const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(formattedDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  const formatDateShort = (date) => {
+    const formattedDate = new Date(date);
+    const month = formattedDate.toLocaleString('en-US', { month: 'short' });
+    const day = formattedDate.getDate();
+    const formattedString = `${month} ${day}`;
+    return formattedString;
+}
+
+  // console.log(new Date())
+  // console.log(currentDate)
+  // console.log(formatDate(currentDate))
+
   //총 수입, 지출 리듀서
+  const accountDataList = useSelector((state) => state.accountData.accountDataList); 
+  //데이터 받아오면 data => accountDataList
   useEffect(() => {
     const calTotalProfit = () => {
-      const ProfitData = data
+      const ProfitData = accountDataList
         .filter((item) => item.type === '수입')
         .reduce((sum, item) => sum + item.amount, 0);
       dispatch(totalProfit(ProfitData));
     };
     const calTotalExpend = () => {
-      const ExpendData = data
+      const ExpendData = accountDataList
         .filter((item) => item.type === '지출')
         .reduce((sum, item) => sum + item.amount, 0);
       dispatch(totalExpend(ExpendData));
@@ -46,7 +75,7 @@ const AccountbookMain = () => {
 
     calTotalProfit();
     calTotalExpend();
-  }, [dispatch] );
+  }, [dispatch, accountDataList] );
 
     return (
       <>
@@ -74,15 +103,12 @@ const AccountbookMain = () => {
             <S.AccountbookSection>
               <S.AccountbookHeader>
                 <S.TabHeader active={activeTab === 0}>
-                  <p>날짜 선택
-                    <DatePicker
-                      className='datePicker'
-                      locale={ko}
-                      dateFormat="yyyy-MM-dd"
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                    />
-                  </p>
+                  <p>날짜 선택</p>
+                  <DatePicker
+                    className='datePicker'
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                  />
                 </S.TabHeader>
                 <S.TabHeader active={activeTab === 1}>
                   <p>Today {`${year}-${month}-${day}`}</p>
@@ -100,9 +126,9 @@ const AccountbookMain = () => {
                     <img src="icon/right_arrow.png" alt=">" />
                   </S.DatePage>
                   <S.DateContent>
-                    <S.MonthDay>{monthEng} {day}</S.MonthDay>
+                    <S.MonthDay>{formatDateShort(currentDate)}</S.MonthDay>
                     <S.DataUl>
-                      {data.filter((data) => data.date === startDate?.toISOString().split('T')[0]).map((item) => {return(
+                      {accountDataList.filter((data) => data.date === formatDate(currentDate)).map((item) => {return(
                         <S.DataLi>
                           <S.Category>{item.category}</S.Category>
                           <S.TradeName>{item.tradeName}</S.TradeName>

@@ -1,8 +1,11 @@
 import {styled} from "styled-components";
 
 export const AccountbookPage = styled.body`
+margin-left: 300px;
 height: 100%;
 color: white;
+display: flex;
+flex-direction: row;
 `
 
 export const AccountbookWrapper = styled.div`

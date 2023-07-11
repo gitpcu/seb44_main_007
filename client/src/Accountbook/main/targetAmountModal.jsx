@@ -24,7 +24,9 @@ const TargetAmountModal = () => {
   };
 
   const handleNumberChange = (e) => {
-    setInputTarget(parseInt(e.target.value));
+    const number = e.target.value;
+    const numerValue = number.replace(/\D/g, '');
+    setInputTarget(parseInt(numerValue));
   };
 
   return (
@@ -37,7 +39,7 @@ const TargetAmountModal = () => {
       >
         <h2>Enter a Number</h2>
         <input
-          type="number"
+          type="text"
           value={inputTarget}
           onChange={handleNumberChange}
         />
