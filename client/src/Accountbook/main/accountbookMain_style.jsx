@@ -1,8 +1,11 @@
 import {styled} from "styled-components";
 
 export const AccountbookPage = styled.body`
+margin-left: 300px;
 height: 100%;
 color: white;
+display: flex;
+flex-direction: row;
 `
 
 export const AccountbookWrapper = styled.div`
@@ -40,8 +43,12 @@ background: linear-gradient(to left top , rgba(246, 111, 60, 1), rgba(34, 34, 31
 border-radius: 18px;
 `
 
-export const Title = styled.p`
+export const Title = styled.div`
 font-size: 22px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
 `
 export const Amount = styled.p`
 font-weight: bold;

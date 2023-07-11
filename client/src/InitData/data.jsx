@@ -27,7 +27,7 @@ export const data = [
       "category": "식비_간식"
     },
     {
-      "incomeId": 1,
+      "tradeId": 1,
       "type": "수입",
       "tradeName": "n빵",
       "amount": 14500,
@@ -72,7 +72,7 @@ export const data = [
       "category": "식비_간식"
     }, 
     {
-      "fixedId": 1,
+      "tradeId": 1,
       "type": "지출",
       "tradeName": "월세",
       "amount": 500000,
@@ -108,7 +108,7 @@ export const data = [
       "category": "식비_간식"
     }, 
     {
-      "incomeId": 2,
+      "tradeId": 2,
       "type": "수입",
       "tradeName": "월급",
       "amount": 3000000,
@@ -117,7 +117,7 @@ export const data = [
       "category": "월급_용돈"
     },
     {
-      "incomeId": 3,
+      "tradeId": 3,
       "type": "수입",
       "tradeName": "찬호형 n빵",
       "amount": 30000,
@@ -153,7 +153,7 @@ export const data = [
       "category": "생활_마트"
     },
     {
-      "fixedId": 2,
+      "tradeId": 2,
       "type": "지출",
       "tradeName": "교통카드 충전",
       "amount": 50000,
@@ -162,7 +162,7 @@ export const data = [
       "category": "교육_문화"
     },
     {
-      "incomeId": 4,
+      "tradeId": 4,
       "type": "수입",
       "tradeName": "세금 환급",
       "amount": 30000,
@@ -171,7 +171,7 @@ export const data = [
       "category": "기타수입"
     },
     {
-      "incomeId": 5,
+      "tradeId": 5,
       "type": "수입",
       "tradeName": "은행이자",
       "amount": 30,
