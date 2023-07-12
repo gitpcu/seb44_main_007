@@ -22,14 +22,14 @@ function App() {
   useEffect(() => {
     dispatch(setfetchData(data));
   }, [dispatch]);
-  const [isHome, setIsHome] = useState(true)
-  console.log(isHome)
+  const [isHome, setIsHome] = useState(true);
+  console.log(isHome);
   return (
-    <main className={isHome ? 'main-home' : 'main-else'}>
+    <main className={isHome ? "main-home" : "main-else"}>
       <BrowserRouter>
         <SideNavBar setIsHome={setIsHome} />
         <Routes>
-          <Route path="/" element={<Home /> } />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/accountbook" element={<Accountbook />} />
