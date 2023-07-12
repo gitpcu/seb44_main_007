@@ -186,7 +186,7 @@ export default function SideNavBar({setIsHome}){
   ]
 
   const [curLocation, setLocation] = useState('/accountbook');
-  const [hoveredIdx, setHoveredIdx] = useState(0);
+  const [hoveredIdx, setHoveredIdx] = useState(99);
 
   const navigate = useNavigate();
   const logout =() => {
