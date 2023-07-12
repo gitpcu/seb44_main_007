@@ -9,6 +9,7 @@ import Signup from "./Pages/Signup";
 // import Wishlist from "./Pages/Wishlist";
 import SideNavBar from "./Components/SideNavBar";
 import Analysis from "./Pages/Analysis/Analysis";
+import MyPage from "./Pages/MyPage";
 
 //dummyData
 import { data } from "./InitData/data";
@@ -36,7 +37,8 @@ function App() {
           <Route path="/analysis" element={<Analysis />} />
           {/* <Route path="/wishList" element={<Wishlist />} /> */}
           <Route path="/premium" element="프리미엄" />
-        </Routes>
+          <Route path="/mypage" element={<MyPage />} />
+        </Routes> 
       </BrowserRouter>
     </main>
   );
