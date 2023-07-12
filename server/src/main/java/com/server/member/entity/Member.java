@@ -34,6 +34,9 @@ public class Member extends Auditable{
     @Column(length = 100, nullable = false)
     private String name;
 
+    @Column(unique = true) //시큐리티의 유저네임
+    private String username;
+
     @Column(nullable = false)
     private String phoneNumber;
 
@@ -51,8 +54,8 @@ public class Member extends Auditable{
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Total> totalList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Trade> tradeList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) //순환참조를 일으켜서 삭제
+//    private List<Trade> tradeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Fixed> fixedList = new ArrayList<>();
@@ -81,6 +84,7 @@ public class Member extends Auditable{
 
 
     public Member(long memberId) {this.memberId = memberId;}
+
 
 
     //Utility

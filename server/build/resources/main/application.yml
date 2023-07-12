@@ -8,7 +8,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       hibernate:
         connection:
           isolation: 1
@@ -43,10 +43,7 @@ spring:
       matching-strategy: ant_path_matcher
 
 jwt:
-  key: asdfqwerasdfqwerasdfqwerasdfqwerasdfasdfasdfasdf
-  access-token-expiration-minutes: 10
-  refresh-token-expiration-minutes: 200
-
+  secret: ${JWT_SECRET_KEY}
 
 logging:
   file:
@@ -57,3 +54,11 @@ logging:
       com.server: DEBUG
       server:
         auth: debug
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: admin@gmail.com

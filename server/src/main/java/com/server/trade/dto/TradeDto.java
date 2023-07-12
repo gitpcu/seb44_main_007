@@ -3,10 +3,7 @@ package com.server.trade.dto;
 import com.server.response.PageInfo;
 import com.server.trade.entity.Category;
 import com.server.trade.entity.Trade;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
@@ -17,11 +14,9 @@ import java.util.stream.Collectors;
 
 public class TradeDto {
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Builder
     public static class Post {
-        private long memberId;
+        private Long memberId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -38,10 +33,9 @@ public class TradeDto {
 
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     public static class Put {
-        private long tradeId;
+        @Setter
+        private Long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -50,41 +44,40 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-        public TradeDto.Put addTradeId(Long tradeId) {
-            Assert.notNull(tradeId, "trade id must not be null.");
+        public Put addTradeId(Long tradeId){
+            Assert.notNull(tradeId, "Trade Id must not be Null");
             this.tradeId = tradeId;
             return this;
         }
-
     }
 
 
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class ResponseDto<T> {
-        private List<T> data;
-        private PageInfo pageInfo;
-    }
+//    @Getter
+//    @Builder
+//    public static class ResponseDto<T> {
+//        private List<T> data;
+//        private PageInfo pageInfo;
+//    }
 
 
 
 
 
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
     @Builder
     public static class Response {
-        private long tradeId;
+        @Setter
+        private Long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         private BigDecimal amount; //금액
         private String note; //비고
         private LocalDate date;
         private Category category;
+        private BigDecimal totalIncome;
+        private BigDecimal totalOutcome;
+        private BigDecimal goal;
 
 
 
@@ -97,6 +90,9 @@ public class TradeDto {
                     .note(trade.getNote())
                     .date(trade.getDate())
                     .category(trade.getCategory())
+                    .totalIncome(trade.getTotalIncome())
+                    .totalOutcome(trade.getTotalOutcome())
+                    .goal(trade.getGoal())
                     .build();
         }
     }

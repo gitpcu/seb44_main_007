@@ -45,9 +45,8 @@ public class MemberController {
     }
 
     @PutMapping ("/{member-id}")
-    public ResponseEntity putMember(
-            @PathVariable("member-id") @Positive long memberId,
-            @Valid @RequestBody MemberDto.Put requestBody) {
+    public ResponseEntity putMember(@PathVariable("member-id") @Positive long memberId,
+                                    @Valid @RequestBody MemberDto.Put requestBody) {
 
         Member member =
                 memberService.updateMember(memberMapper.memberPutDtoToMember(requestBody.addMemberId(memberId)));

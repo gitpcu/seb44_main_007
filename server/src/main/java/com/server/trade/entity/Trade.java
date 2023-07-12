@@ -2,8 +2,8 @@ package com.server.trade.entity;
 
 import com.server.member.entity.Member;
 import com.server.total.entity.Total;
-import com.server.utils.CustomBeanUtils;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,37 +15,42 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
-@Table(name = "trade")
+@Table(name = "trades")
 @Builder
 public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long tradeId;
+    private Long tradeId;
+
+    @Column(nullable = false)
     private String type; //수입 or 지출
+
+    @Column(nullable = false)
     private String tradeName; //내역
+
     @NotNull
+    @Column(nullable = false, length = 128)
+    @Length(min = 1, max = 128)
     private BigDecimal amount; //금액정확도를 위해 BigDecimal 타입을 사용했습니다.
+
+    @Column
     private String note; //비고
+
+    @Column(nullable = false)
     private LocalDate date; //날짜 LocalDate.of(2023, 7, 1);
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
-
-
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
-
-    public void setMember(Member member) {
+    public void setMember(Member member){
         this.member = member;
-        member.getTradeList().add(this);
     }
-    public long getUserId(){
-        return member.getMemberId();
-    }
-
 
 
 
@@ -63,12 +68,6 @@ public class Trade {
         this.date = date;
     }
 
-    public Trade changeTrade(Trade sourceTrade, CustomBeanUtils<Trade> beanUtils) {
-        return beanUtils.copyNonNullProperties(sourceTrade, this);
-    }
-
-
-
     public BigDecimal getTotalIncome() {
         return total.getTotalIncome();
     }
@@ -79,10 +78,6 @@ public class Trade {
         return total.getGoal();
     }
 
-
-
-
-    
 
 
 }
