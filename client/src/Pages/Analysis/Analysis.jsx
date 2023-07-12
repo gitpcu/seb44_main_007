@@ -151,7 +151,7 @@ const PageWrap = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1%;
-  width: calc(100% - 300px);
+  width: calc(100% - 285px);
   height: 100vh;
 `;
 
