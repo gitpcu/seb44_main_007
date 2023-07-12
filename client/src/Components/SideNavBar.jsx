@@ -244,6 +244,10 @@ export default function SideNavBar({ setIsHome }) {
   if (location === "/" || location === "/login" || location === "/signup") {
     return "";
   }
+
+  if (location === "/" || location === "/login" || location === "/signup") {
+    return "";
+  }
   return (
     <Nav>
       <SidebarContainer>
