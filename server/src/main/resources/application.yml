@@ -1,0 +1,64 @@
+
+spring:
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+      hibernate:
+        connection:
+          isolation: 1
+  datasource:
+    url: jdbc:mysql://localhost:3306/database1?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 935988023864-rrm6bo9u69r2abs63t92hbsu0ovoeku8.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+
+  redis:
+    host: localhost
+    port: 6379
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+
+logging:
+  file:
+    name: logs/logging.log
+  level:
+    spring:
+      root: DEBUG
+      com.server: DEBUG
+      server:
+        auth: debug
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: admin@gmail.com
