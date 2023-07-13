@@ -1,9 +1,8 @@
 import { styled } from "styled-components";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useInView } from "react-intersection-observer";
 import Palette from "../Palette/Palette";
 import { data } from "../InitData/wishlist";
+import Modal from "../Components/Modal";
 
 const WishlistContainer = styled.div`
   width: calc(100% - 300px);
@@ -43,13 +42,20 @@ const LimitSpan = styled.span`
   color: white;
   font-size: 1.5rem;
 `
-const LimitInput = styled.input`
+export const LimitInput = styled.input`
   width: 100%;
   background-color: rgba(0,0,0,0);
-  border: 1px solid white;
+  border: 0px;
   border-radius: 5px;
   color: white;
-  font-size: 1.5rem;
+  font-size: ${props => props.fontsize};
+  padding: 1%;
+  &:focus{
+    outline: none;
+  }
+  ::placeholder{
+    color: rgba(255,255,255,0.5);
+  }
 `
 const WishDiv = styled.div`
   width: 100%;
@@ -76,13 +82,13 @@ const ButtonDiv = styled.div`
   justify-content: flex-start;
   padding-top: 5px;
 `
-const Button = styled.button`
+export const Button = styled.button`
   border-radius: 20px;
   margin: 0px 1%;
   padding: 10px;
   width: 18%;
   background-color: ${props => props.selected ? '#F9591D' : 'white'};
-  color: ${props => props.selected ? 'white' : 'black'};;
+  color: ${props => props.selected ? 'white' : 'black'};
 `
 const AddDiv = styled.div`
   width: 15%;
@@ -163,10 +169,10 @@ const ListSpan = styled.span`
   color: white;
   font-size: 1.2rem;
 `
-const CategoryCircle = styled.div`
+export const CategoryCircle = styled.div`
   border-radius: 100%;
   background-color: ${props => props.bgcolor};
-  width: 18px;
+  width: 21px;
   height: 18px;
   margin: 0px 10px;
 `
@@ -178,56 +184,10 @@ const DeleteImg = styled.img`
   width: 3%;
   filter: invert(37%) sepia(90%) saturate(2999%) hue-rotate(340deg) brightness(100%) contrast(103%);
 `
-const ModalBackground = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
-  display: ${props => props.open ? 'flex' : 'none'};
-  align-items: center;
-  justify-content: center;
-`
-const ModalContainer = styled.div`
-  width: 25%;
-  height: 60%;
-  border: 2px solid red;
-  border-radius: 20px;
-  background-color: #22221F;
-  padding: 5% 3%;
-`
-const ModalDiv = styled.div`
-  border: 2px solid green;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const ModaMenutDiv = styled.div`
-  border: 2px solid blue;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-`
-const ModatTitleDiv = styled.div`
-  width: 60%;
-  text-align: left;
-  border: 2px solid pink;
-`
-const ModalTitle = styled.span`
-  width: 70%;
-  color: white;
-  font-weight: bold;
-  font-size: 1.2rem;
-`
-const ModalContentDiv = styled.div`
-  width: 40%;
-  text-align: left;
-  border: 2px solid lime;
-`
-
-const WishLists = ({wishlist}) => {
+const WishLists = ({wishlist, editFunc, deleteFunc}) => {
+  const handleDelete = () => {
+    deleteFunc(wishlist); 
+  };
   return (
     <WishLi available={wishlist.available}>
       <DragImg src='https://www.svgrepo.com/show/506246/menu-hamburger.svg'></DragImg>
@@ -240,15 +200,15 @@ const WishLists = ({wishlist}) => {
           <ListSpan>\{wishlist.price.toLocaleString()}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
-          <CategoryCircle bgcolor={Palette[wishlist.category.replace('/', '_')]}></CategoryCircle>
-          <ListSpan>{wishlist.category}</ListSpan>
+          <CategoryCircle bgcolor={Palette[wishlist.category]}></CategoryCircle>
+          <ListSpan>{wishlist.category.replace('/', '_')}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
           <ListSpan>{wishlist.date}</ListSpan>
         </ListSpanDiv>
       </ListSpanContainer>
-      <EditImg src='https://www.svgrepo.com/show/488318/pencil-ui.svg'></EditImg>
-      <DeleteImg src='https://www.svgrepo.com/show/485930/trashcan.svg'></DeleteImg>
+      <EditImg src='https://www.svgrepo.com/show/488318/pencil-ui.svg' onClick={editFunc}></EditImg>
+      <DeleteImg src='https://www.svgrepo.com/show/485930/trashcan.svg' onClick={handleDelete}></DeleteImg>
     </WishLi>
   )
 }
@@ -271,7 +231,6 @@ export default function Wishlist() {
       }
       setUsablePrice(limitPrice - wishlist.list.filter(el => el.available).reduce((acc, cur) => acc + cur.price, 0))
     }, [limitPrice, wishlist])
-    console.log(wishlist.list)
 
     const sortByPriority = () => {
       const sort = wishlist.list.sort((a, b) => {
@@ -312,25 +271,28 @@ export default function Wishlist() {
   ]
 
   const [openModal, setOpenModal] = useState(false);
-  const addWishlist = () => {
-    setOpenModal(true)
+
+  const openModalDiv = () => {
+    setOpenModal(true);
+  };
+
+  const deleteWishlist = (targetWishlist) => {
+    const updatedList = wishlist.list.filter((item) => item !== targetWishlist); 
+    setWishlist({ ...wishlist, list: updatedList });
+  };
+  const editWishlist = () =>{
+    setOpenModal(true);
   }
   return (
     <>
-      <ModalBackground open={openModal} onClick={() => setOpenModal(false)}>
-        <ModalContainer>
-          <ModalDiv>
-            <ModaMenutDiv>
-              <ModatTitleDiv>
-                <ModalTitle>안녕</ModalTitle>
-              </ModatTitleDiv>
-              <ModalContentDiv>
-                <ModalTitle>안녕</ModalTitle>
-              </ModalContentDiv>
-            </ModaMenutDiv>
-          </ModalDiv>
-        </ModalContainer>
-      </ModalBackground>
+      {openModal ? 
+      (<Modal
+        setOpenModal={setOpenModal}
+        wishlist={wishlist}
+        setWishlist={setWishlist}
+        limitPrice={limitPrice}
+      ></Modal>) : 
+      ''}
       <WishlistContainer>
         <WishlistDiv>
           <LimitDiv>
@@ -342,6 +304,7 @@ export default function Wishlist() {
                     value={limitPrice}
                     onChange={(e) => setLimitPrice(Number(e.target.value))}
                     onBlur={() => setMode(false)}
+                    fontsize='1.5rem'
                   ></LimitInput> :
                   <LimitSpan onClick={() => setMode(true)}>\{limitPrice.toLocaleString()}</LimitSpan>
                 }
@@ -377,14 +340,23 @@ export default function Wishlist() {
                   </Button>)}
               </ButtonDiv>
               <AddDiv>
-                <AddButton onClick={addWishlist}>
+                <AddButton onClick={openModalDiv}>
                   추가하기
                 </AddButton>
               </AddDiv>
             </MenuDiv>
             <ListDiv>
               <WishUl>
-                {wishlist.list.map(el => <WishLists wishlist={el}></WishLists>)}
+                {wishlist.list.map((el) => {
+                  return(
+                    <WishLists
+                      wishlist={el}
+                      editFunc={editWishlist}
+                      deleteFunc={deleteWishlist}
+                    ></WishLists>
+                  )
+                }
+                )}
               </WishUl>
             </ListDiv>
           </WishDiv>
