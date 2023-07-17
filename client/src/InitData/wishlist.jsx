@@ -7,7 +7,7 @@ export const data =
           price: 20000,
           category: '식비_간식',
           date: '2023.07.11',
-          priority: 1,
+          priority: 0,
           available: true,
         },
         {
@@ -16,7 +16,7 @@ export const data =
           price: 1200000,
           category: '교육_문화',
           date: '2023.07.06',
-          priority: 2,
+          priority: 1,
           available: true,
         },
         {
@@ -25,7 +25,7 @@ export const data =
           price: 3000,
           category: '의류_미용',
           date: '2023.07.09',
-          priority: 3,
+          priority: 2,
           available: true,
         },
         {
@@ -34,7 +34,7 @@ export const data =
           price: 700000000,
           category: '교통_차량',
           date: '2023.07.01',
-          priority: 4,
+          priority: 3,
           available: false,
         },
         {
@@ -43,7 +43,7 @@ export const data =
           price: 14000,
           category: '식비_간식',
           date: '2023.07.02',
-          priority: 5,
+          priority: 4,
           available: true,
         }
       ],

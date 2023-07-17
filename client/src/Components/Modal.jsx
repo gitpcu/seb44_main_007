@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { styled } from 'styled-components'
-import { CategoryCircle } from '../Pages/Wishlist'
+import { CategoryCircle } from '../Components/Wishlists'
 import { LimitInput } from '../Pages/Wishlist'
 import Palette from "../Palette/Palette";
+import { useSelector } from 'react-redux';
 
 const ModalBackground = styled.div`
   position: absolute;
@@ -79,22 +80,25 @@ const ModalButton = styled.button`
   margin: 0px 10%;
 `
 
-export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice}){
+export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, editMode, setEditMode, item}){
   const close = () => {
+    setEditMode(false)
     setOpenModal(false)
   }
 
   const category = ['식비_간식','주거_통신','교통_차량','생활_마트','의류_미용','의료_건강','교육_문화','보험_세금','기타지출']
-  const [addCategory, setAddCategory] = useState('식비_간식')
+  const [addCategory, setAddCategory] = useState()
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()
 
+  const date = new Date()
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const today = `${year}.${month}.${day}`;
+
+  const targetExpend = useSelector((state) => state.targetExpend);
   const addWishlist = () =>{
-    const date = new Date()
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const today = `${year}.${month}.${day}`;
     const newWishlist = {
       name: addName,
       img: '',
@@ -102,14 +106,36 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice})
       category: addCategory,
       date: today,
       priority: wishlist.length + 1,
-      available: addPrice > limitPrice ? false : true,
+      available: targetExpend > limitPrice ? false : true,
     }
     setWishlist({ ...wishlist, list: [...wishlist.list, newWishlist] });
-    setAddCategory('식비_간식')
-    setAddName('')
-    setAddPrice('')
+    setAddCategory()
+    setAddName()
+    setAddPrice()
     close()
-  }  
+  }
+  const editWishlist = () => {
+    const editedWishlist = {
+      name: addName === undefined ? item.name : addName,
+      img: item.img,
+      price: addPrice === undefined ? Number(item.price) : Number(addPrice),
+      category: addCategory === undefined ? item.category : addCategory,
+      date: item.date,
+      priority: item.priority,
+      available: addPrice > limitPrice ? false : true,
+    }
+    const updatedWishlist = wishlist.list.map(el => {
+      if (el.priority === editedWishlist.priority) {
+        return editedWishlist; // priority가 같은 경우 대체
+      }
+        return el; // 그 외의 경우는 원래 항목 유지
+    });
+    setWishlist({ ...wishlist, list: updatedWishlist });
+    setAddCategory()
+    setAddName()
+    setAddPrice()
+    close()
+  }
   return(
     <ModalBackground onClick={close}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -118,10 +144,11 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice})
             <ModalTitleDiv>
               <ModalTitle>카테고리</ModalTitle>
             </ModalTitleDiv>
-            <CategoryCircle bgcolor={Palette[addCategory]} />
+            <CategoryCircle bgcolor={addCategory === undefined ? Palette[item.category] : Palette[addCategory]} />
             <ModalContentDiv>
               <CategorySelect
-                value={addCategory}
+                value={editMode ? undefined : addCategory}
+                defaultValue={editMode ? item.category : undefined}
                 onChange={(e)=> setAddCategory(e.target.value)}
               >
                 {category.map(el => {
@@ -141,7 +168,8 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice})
             <ModalContentDiv>
               <LimitInput
                 type='input'
-                value={addName}
+                value={editMode ? undefined : addName}
+                defaultValue={editMode ? item.name : undefined}
                 onChange={(e) => setAddName(e.target.value)}
                 fontsize='1rem'
                 placeholder='항목을 입력하세요'
@@ -155,7 +183,8 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice})
             <ModalContentDiv>
               <LimitInput
                 type='input'
-                value={addPrice}
+                value={editMode ? undefined : addPrice}
+                defaultValue={editMode ? item.price : undefined}
                 onChange={(e) => setAddPrice(e.target.value)}
                 fontsize='1rem'
                 placeholder='금액을 입력하세요'
@@ -163,7 +192,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice})
             </ModalContentDiv>
           </ModalMenuDiv>
           <ModalButtonDiv>
-            <ModalButton save={true} onClick={addWishlist}>저장</ModalButton>
+            <ModalButton save={true} onClick={editMode ? editWishlist : addWishlist}>저장</ModalButton>
             <ModalButton save={false} onClick={close}>취소</ModalButton>
           </ModalButtonDiv>
         </ModalDiv>

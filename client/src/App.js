@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import Accountbook from "./Pages/accountbook";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -22,14 +24,13 @@ function App() {
   useEffect(() => {
     dispatch(setfetchData(data));
   }, [dispatch]);
-  const [isHome, setIsHome] = useState(true)
-  console.log(isHome)
+  const [isHome, setIsHome] = useState(true);
   return (
-    <main className={isHome ? 'main-home' : 'main-else'}>
+    <main className={isHome ? "main-home" : "main-else"}>
       <BrowserRouter>
         <SideNavBar setIsHome={setIsHome} />
         <Routes>
-          <Route path="/" element={<Home /> } />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/accountbook" element={<Accountbook />} />
