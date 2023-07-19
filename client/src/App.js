@@ -9,6 +9,7 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Wishlist from "./Pages/Wishlist";
+import Premium from "./Pages/Premium";
 import SideNavBar from "./Components/SideNavBar";
 import Analysis from "./Pages/Analysis/Analysis";
 
@@ -36,7 +37,7 @@ function App() {
           <Route path="/accountbook" element={<Accountbook />} />
           <Route path="/analysis" element="소비패턴분석" />
           <Route path="/wishList" element={<Wishlist />} />
-          <Route path="/premium" element="프리미엄" />
+          <Route path="/premium" element={<Premium />} />
         </Routes>
       </BrowserRouter>
     </main>

@@ -2,6 +2,9 @@ import { styled } from "styled-components";
 import Palette from "../Palette/Palette";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef, useState, useEffect } from 'react';
+import { useDispatch } from "react-redux";
+import { setId } from "../Redux/id_reducer";
+import axios from "axios"
 
 const WishUl = styled.ul`
   width: 100%;
@@ -81,13 +84,28 @@ const DeleteImg = styled.img`
     brightness(100%) contrast(103%);
 `;
 
-const WishLists = ({ list, index, moveList, editFunc, deleteFunc }) => {
+const WishLists = ({ list, index, moveList, editFunc }) => {
+  const memberId = localStorage.getItem('memberId')
   const ref = useRef(null);
   const handleDelete = () => {
-    deleteFunc(list);
+    axios
+    .delete(
+      `https://1a35-58-234-27-220.ngrok-free.app/wishlists/${list.wishlistId}/${memberId}`,
+      {
+        headers: {
+          'Authorization': localStorage.getItem('Authorization-Token'),
+          'key' : 'ngrok-skip-browser-warning',
+          'value' : true
+        },
+      }
+    )
+    .then((res) => window.location.reload())
+    .catch((err) => console.log(err));
   };
+  const dispatch = useDispatch();
   const handleEdit = () => {
     editFunc(list);
+    dispatch(setId(list.wishlistId))
   };
 
   const [, drag] = useDrag({
@@ -125,7 +143,7 @@ const WishLists = ({ list, index, moveList, editFunc, deleteFunc }) => {
       <ProductImg src={list.img}></ProductImg>
       <ListSpanContainer>
         <ListSpanDiv>
-          <ListSpan>{list.name}</ListSpan>
+          <ListSpan>{list.wishlistName}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
           <ListSpan>\{list.price.toLocaleString()}</ListSpan>
@@ -162,13 +180,12 @@ export default function WishListDragContainer({
   const moveList = (dragIndex, hoverIndex) => {
     const draggedList = wishlist[dragIndex];
     const updatedLists = wishlist.slice();
-    console.log(`dragIndex: ${dragIndex} / hoverIndex: ${hoverIndex}`)
     updatedLists.splice(dragIndex, 1);
     updatedLists.splice(hoverIndex, 0, draggedList);
 
     const updatedListsWithNewPriority = updatedLists.map((list, index) => ({
       ...list,
-      priority: index
+      // priority: index
     }));
     setWishlist({list:updatedListsWithNewPriority})
   };

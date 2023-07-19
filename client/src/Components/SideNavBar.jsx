@@ -182,6 +182,7 @@ export default function SideNavBar({setIsHome}){
     {
       image: 'https://www.svgrepo.com/show/507772/logout.svg',
       title: '로그아웃',
+      path: '/'
     }
   ]
 
@@ -191,19 +192,19 @@ export default function SideNavBar({setIsHome}){
   const navigate = useNavigate();
   const logout =() => {
     alert('로그아웃합니다!');
+    localStorage.clear();
     navigate('/')
   }
 
   const location = useLocation().pathname;
   useEffect(() => {
     setLocation(location)
+    if(location === '/'){
+      setIsHome(true)
+    } else {
+      setIsHome(false)
+    }
   }, [location]);
-
-  if(location === '/'){
-    setIsHome(true)
-  } else {
-    setIsHome(false)
-  }
 
   if(location === '/'
   || location === '/login'
@@ -221,17 +222,16 @@ export default function SideNavBar({setIsHome}){
           <Menu>
           {menuList.map((el, idx) => {
             return idx < 3 ? (
-              <>
+              <div key={idx}>
                 <UpperMenu
                   el={el}
                   idx={idx}
                   hoveredIdx={hoveredIdx}
                   setHoveredIdx={setHoveredIdx}
                   curLocation={curLocation}
-                  key={idx}
                 />
                 {idx === 2 ? <DivideBar margin='3rem 0px 18rem 0px' /> : null}
-              </>
+              </div>
             ) : (
               <LowerMenu
                 el={el}

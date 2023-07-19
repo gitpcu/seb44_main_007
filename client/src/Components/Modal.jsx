@@ -4,8 +4,9 @@ import { CategoryCircle } from '../Components/Wishlists'
 import { LimitInput } from '../Pages/Wishlist'
 import Palette from "../Palette/Palette";
 import { useSelector } from 'react-redux';
+import axios from "axios"
 
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +18,7 @@ const ModalBackground = styled.div`
   align-items: center;
   justify-content: center;
 `
-const ModalContainer = styled.div`
+export const ModalContainer = styled.div`
   width: 25%;
   height: 60%;
   border-radius: 20px;
@@ -25,7 +26,7 @@ const ModalContainer = styled.div`
   padding: 3% 2% 5% 2%;
   z-index: 20;
 `
-const ModalDiv = styled.div`
+export const ModalDiv = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -95,46 +96,62 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
-  const today = `${year}.${month}.${day}`;
+  // const today = `${year}.${month}.${day}`;
 
-  const targetExpend = useSelector((state) => state.targetExpend);
+  const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
-      name: addName,
-      img: '',
-      price: Number(addPrice),
-      category: addCategory,
-      date: today,
-      priority: wishlist.length + 1,
-      available: targetExpend > limitPrice ? false : true,
-    }
-    setWishlist({ ...wishlist, list: [...wishlist.list, newWishlist] });
+      "wishlistName": addName.toString() ,
+      "price": Number(addPrice),
+      "category": addCategory,
+      }
+      axios.post(`https://1a35-58-234-27-220.ngrok-free.app/wishlists/${memberId}`,
+      newWishlist,
+      {
+        headers: {
+          'Authorization': localStorage.getItem('Authorization-Token'),
+          'ngrok-skip-browser-warning': '69420',
+          'withCredentials': true,
+        },
+      }
+      )
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
     setAddCategory()
     setAddName()
     setAddPrice()
-    close()
+    window.location.reload();
   }
+  const wishlistId = useSelector((state) => state.id.id);
+  console.log(addName)
   const editWishlist = () => {
     const editedWishlist = {
-      name: addName === undefined ? item.name : addName,
-      img: item.img,
-      price: addPrice === undefined ? Number(item.price) : Number(addPrice),
-      category: addCategory === undefined ? item.category : addCategory,
-      date: item.date,
-      priority: item.priority,
-      available: addPrice > limitPrice ? false : true,
+      'wishlistName': addName,
+      'price': Number(addPrice),
+      'category': addCategory,
     }
-    const updatedWishlist = wishlist.list.map(el => {
-      if (el.priority === editedWishlist.priority) {
-        return editedWishlist; // priority가 같은 경우 대체
-      }
-        return el; // 그 외의 경우는 원래 항목 유지
-    });
-    setWishlist({ ...wishlist, list: updatedWishlist });
+    // const updatedWishlist = wishlist.list.map(el => {
+    //   if (el.priority === editedWishlist.priority) {
+    //     return editedWishlist; // priority가 같은 경우 대체
+    //   }
+    //     return el; // 그 외의 경우는 원래 항목 유지
+    // });
+    axios
+    .patch(`https://1a35-58-234-27-220.ngrok-free.app/wishlists/${wishlistId}/${memberId}`,
+    editedWishlist,
+    {
+      headers: {
+        'Authorization': localStorage.getItem('Authorization-Token'),
+        'ngrok-skip-browser-warning': '69420',
+        'withCredentials': true,
+      },
+    }
+    ).then(res => console.log(res))
+    .catch(err => console.log(err))
+    window.location.reload()
     setAddCategory()
     setAddName()
     setAddPrice()
-    close()
   }
   return(
     <ModalBackground onClick={close}>
@@ -147,8 +164,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
             <CategoryCircle bgcolor={addCategory === undefined ? Palette[item.category] : Palette[addCategory]} />
             <ModalContentDiv>
               <CategorySelect
-                value={editMode ? undefined : addCategory}
-                defaultValue={editMode ? item.category : undefined}
+                value={addCategory}
                 onChange={(e)=> setAddCategory(e.target.value)}
               >
                 {category.map(el => {
@@ -168,8 +184,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
             <ModalContentDiv>
               <LimitInput
                 type='input'
-                value={editMode ? undefined : addName}
-                defaultValue={editMode ? item.name : undefined}
+                value={addName}
                 onChange={(e) => setAddName(e.target.value)}
                 fontsize='1rem'
                 placeholder='항목을 입력하세요'
@@ -183,8 +198,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
             <ModalContentDiv>
               <LimitInput
                 type='input'
-                value={editMode ? undefined : addPrice}
-                defaultValue={editMode ? item.price : undefined}
+                value={addPrice}
                 onChange={(e) => setAddPrice(e.target.value)}
                 fontsize='1rem'
                 placeholder='금액을 입력하세요'

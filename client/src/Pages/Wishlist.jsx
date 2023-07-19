@@ -1,25 +1,28 @@
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setDataList } from "../Redux/wishlist_reducer";
 import { data } from "../InitData/wishlist";
 import Modal from "../Components/Modal";
 import WishListDragContainer from "../Components/Wishlists";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const WishlistContainer = styled.div`
   width: calc(100% - 300px);
   height: 100vh;
   padding: 10px;
-  background-color: #22221F;
+  background-color: #22221f;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const WishlistDiv = styled.div`
-  width: 80%; 
-`
+  width: 80%;
+`;
 const LimitDiv = styled.div`
   border: 1px solid white;
   border-radius: 20px;
@@ -27,7 +30,7 @@ const LimitDiv = styled.div`
   display: flex;
   flex-direction: column;
   margin: 5% 0;
-`
+`;
 const LimitSpanContainer = styled.div`
   width: 100%;
   text-align: left;
@@ -35,73 +38,73 @@ const LimitSpanContainer = styled.div`
   flex-direction: row;
   margin: 5% 0%;
   padding-left: 20%;
-`
+`;
 const LimitSpanDiv = styled.div`
-  width: 30%; 
+  width: 30%;
   margin: 0px 5%;
-`
+`;
 const LimitSpan = styled.span`
   width: 50%;
   color: white;
   font-size: 1.2rem;
-`
+`;
 export const LimitInput = styled.input`
   width: 100%;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   border: 0px;
   border-radius: 5px;
   color: white;
-  font-size: ${props => props.fontsize};
+  font-size: ${(props) => props.fontsize};
   padding: 1%;
-  &:focus{
+  &:focus {
     outline: none;
   }
-  ::placeholder{
-    color: rgba(255,255,255,0.5);
+  ::placeholder {
+    color: rgba(255, 255, 255, 0.5);
   }
-`
+`;
 const WishDiv = styled.div`
   width: 100%;
-`
+`;
 const MenuDiv = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-`
+`;
 const TitleDiv = styled.div`
   width: 12.5%;
   color: white;
-`
+`;
 const TitleSpan = styled.span`
   color: white;
   font-size: 2rem;
   font-weight: bold;
   height: 100%;
-`
+`;
 const ButtonDiv = styled.div`
   width: 72.5%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding-top: 5px;
-`
+`;
 export const Button = styled.button`
   border-radius: 20px;
   margin: 0px 1%;
   padding: 10px;
   width: 18%;
-  background-color: ${props => props.selected ? '#F9591D' : 'white'};
-  color: ${props => props.selected ? 'white' : 'black'};
-`
+  background-color: ${(props) => (props.selected ? "#F9591D" : "white")};
+  color: ${(props) => (props.selected ? "white" : "black")};
+`;
 const AddDiv = styled.div`
   width: 15%;
-`
+`;
 const AddButton = styled(Button)`
   width: 100%;
-  background-color: #C5FF78;
-  color: #365A42;
+  background-color: #c5ff78;
+  color: #365a42;
   height: 100%;
-`
+`;
 const ListDiv = styled.div`
   width: 100%;
   border: 1px solid white;
@@ -112,66 +115,89 @@ const ListDiv = styled.div`
   background-color: black;
   &::-webkit-scrollbar {
     display: none;
-}
-`
+  }
+`;
+// 우선순위로 보기 할때만 하는걸로
 export default function Wishlist() {
-    const [wishlist, setWishlist] = useState(data)
-    const [usablePrice, setUsablePrice] = useState(data.useable)
-    const [index, setIdx] = useState(0)
-    const targetExpend = useSelector((state) => state.targetExpend);
-
-    useEffect(() => {
-      let sum = 0
-      for(let obj of wishlist.list){
-        if(obj.price > targetExpend || sum + obj.price > targetExpend){
-          obj.available = false
-        } else {
-          obj.available = true
-          sum += obj.price
+  const dispatch = useDispatch();
+  const memberId = localStorage.getItem('memberId')
+  const [wishlist, setWishlist] = useState(data);
+  const [usablePrice, setUsablePrice] = useState(data.useable);
+  const [index, setIdx] = useState(0);
+  const targetExpend = useSelector((state) => state.targetExpend);
+  useEffect(() => {
+    axios
+      .get(
+        `https://1a35-58-234-27-220.ngrok-free.app/wishlists/${memberId}/?tab=latest`,
+        {
+          headers: {
+            'Authorization': localStorage.getItem('Authorization-Token'),
+            'ngrok-skip-browser-warning': '69420',
+            'withCredentials': true,
+          },
         }
+      )
+      // .then((res) => dispatch(setDataList({ list: res.data })))
+      .then((res) =>setWishlist({...wishlist, list: res.data}))
+      .catch((err) => console.log(err));
+  }, []);
+  console.log(wishlist)
+  useEffect(() => {
+    let sum = 0;
+    for (let obj of wishlist.list) {
+      if (obj.price > targetExpend || sum + obj.price > targetExpend) {
+        obj.available = false;
+      } else {
+        obj.available = true;
+        sum += obj.price;
       }
-      setUsablePrice(targetExpend - wishlist.list.filter(el => el.available).reduce((acc, cur) => acc + cur.price, 0))
-    }, [targetExpend, wishlist])
+    }
+    setUsablePrice(
+      targetExpend -
+        wishlist.list
+          .filter((el) => el.available)
+          .reduce((acc, cur) => acc + cur.price, 0)
+    );
+  }, [targetExpend, wishlist]);
 
-    const sortByPriority = () => {
-      const sort = wishlist.list.sort((a, b) => {
-        return a.priority - b.priority
-      });
-      setWishlist({ ...wishlist, list: sort });
-      setIdx(0)
-    }
-    const sortByDate = () => {
-      const sort = wishlist.list.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateA - dateB;
-      });
-      setWishlist({ ...wishlist, list: sort });
-      setIdx(1)
-    }
-    const sortByPrice = () => {
-      const sort = wishlist.list.sort((a, b) => {
-        return a.price - b.price
-      });
-      setWishlist({ ...wishlist, list: sort });
-      setIdx(2)
-    }
+  const sortByPriority = () => {
+    const sort = wishlist.list.sort((a, b) => {
+      return a.priority - b.priority;
+    });
+    setWishlist({ ...wishlist, list: sort });
+    setIdx(0);
+  };
+  const sortByDate = () => {
+    const sort = wishlist.list.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateA - dateB;
+    });
+    setWishlist({ ...wishlist, list: sort });
+    setIdx(1);
+  };
+  const sortByPrice = () => {
+    const sort = wishlist.list.sort((a, b) => {
+      return a.price - b.price;
+    });
+    setWishlist({ ...wishlist, list: sort });
+    setIdx(2);
+  };
   const buttons = [
     {
-      title: '우선순위순',
+      title: "우선순위순",
       func: sortByPriority,
     },
     {
-      title: '등록순',
+      title: "등록순",
       func: sortByDate,
     },
     {
-      title: '금액순',
+      title: "금액순",
       func: sortByPrice,
-    }
-  ]
+    },
+  ];
 
-  console.log(wishlist)
   const [openModal, setOpenModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [item, setItem] = useState(false);
@@ -181,26 +207,28 @@ export default function Wishlist() {
   };
 
   const deleteWishlist = (targetWishlist) => {
-    const updatedList = wishlist.list.filter((item) => item !== targetWishlist); 
+    const updatedList = wishlist.list.filter((item) => item !== targetWishlist);
     setWishlist({ ...wishlist, list: updatedList });
   };
-  const editWishlist = (wishlist) =>{
+  const editWishlist = (wishlist) => {
     setOpenModal(true);
     setEditMode(true);
-    setItem(wishlist)
-  }
+    setItem(wishlist);
+  };
   return (
     <>
-      {openModal ? 
-      (<Modal
-        setOpenModal={setOpenModal}
-        wishlist={wishlist}
-        setWishlist={setWishlist}
-        editMode={editMode}
-        setEditMode={setEditMode}
-        item={item}
-      ></Modal>) : 
-      ''}
+      {openModal ? (
+        <Modal
+          setOpenModal={setOpenModal}
+          wishlist={wishlist}
+          setWishlist={setWishlist}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          item={item}
+        ></Modal>
+      ) : (
+        ""
+      )}
       <WishlistContainer>
         <WishlistDiv>
           <LimitDiv>
@@ -224,24 +252,21 @@ export default function Wishlist() {
           <WishDiv>
             <MenuDiv>
               <TitleDiv>
-                <TitleSpan>
-                  Wish List  
-                </TitleSpan>
+                <TitleSpan>Wish List</TitleSpan>
               </TitleDiv>
               <ButtonDiv>
-                {buttons.map((el, idx) => 
+                {buttons.map((el, idx) => (
                   <Button
                     key={idx}
                     onClick={el.func}
                     selected={index === idx ? true : false}
                   >
                     {el.title}
-                  </Button>)}
+                  </Button>
+                ))}
               </ButtonDiv>
               <AddDiv>
-                <AddButton onClick={openModalDiv}>
-                  추가하기
-                </AddButton>
+                <AddButton onClick={openModalDiv}>추가하기</AddButton>
               </AddDiv>
             </MenuDiv>
             <ListDiv>
@@ -250,8 +275,8 @@ export default function Wishlist() {
                   wishlist={wishlist.list}
                   editFunc={editWishlist}
                   deleteFunc={deleteWishlist}
-                  setWishlist={setWishlist}>
-                </WishListDragContainer>
+                  setWishlist={setWishlist}
+                ></WishListDragContainer>
               </DndProvider>
             </ListDiv>
           </WishDiv>
