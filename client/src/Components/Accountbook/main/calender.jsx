@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { format, addMonths, subMonths } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
 import { isSameMonth, isSameDay, addDays } from 'date-fns';
 import { styled } from 'styled-components';
-import { data } from '../../InitData/data';
+import leftIcon from '../../../Images/left_arrow.png'
+import rightIcon from '../../../Images/right_arrow.png'
 
+import axios from 'axios'
+import apiUrl from '../../../API_URL';
 
 const RenderDays = () => {
     const days = [];
@@ -49,19 +52,43 @@ export const Calender = () => {
     let day = weekStart;
     let formattedDate = '';
 
+    //데이터 받아오기
+    // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
+    const [accountData, setAccountData] = useState([]);
+
+    useEffect(() => {
+        const getData = async () => {
+        try {
+             const response = await axios.get(apiUrl.url + '/trades/2?startDate=2023-07-01&endDate=2023-07-31',{
+                  headers: {
+                    'ngrok-skip-browser-warning': '69420',
+                    'withCredentials': true,
+                    'Authorization': localStorage.getItem('Authorization-Token'),
+                },
+            });
+            setAccountData(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getData();
+    }, []);
+
     //데이터 리듀스
-    const accountDataList = useSelector((state) => state.accountData.accountDataList);
-    const dateSums = accountDataList.reduce((acc, item) => {
-        const { date, type, amount } = item;
-        const daySum = acc[date] || { profit: 0, expend: 0 };
-        if (type === '수입') {
-          daySum.profit += amount;
-        } else if (type === '지출') {
-          daySum.expend += amount;
-        }
-        acc[date] = daySum;
-        return acc;
-      }, {});
+    const accountDataList = accountData;
+    const dateSums = Array.isArray(accountDataList)
+        ? accountDataList.reduce((acc, item) => {
+            const { date, type, amount } = item;
+            const daySum = acc[date] || { profit: 0, expend: 0 };
+            if (type === '수입') {
+            daySum.profit += amount;
+            } else if (type === '지출') {
+            daySum.expend += amount;
+            }
+            acc[date] = daySum;
+            return acc;
+        }, {})
+        : 0;
       
 
     while (day <= weekEnd) {
@@ -80,10 +107,10 @@ export const Calender = () => {
                             ? 'not-valid'
                             : 'valid'
                     }`}
-                    key={day}
+                    key={formattedDate}
                     onClick={() => onDateClick(cloneDay)}>
                     <CellText 
-                    key={formattedDate}
+            
                     style={{color: format(currentMonth, 'M') !== format(day, 'M') ? 'rgb(95, 95, 95)' : ''
                     }} >
                         <TextDay>{format(day, 'd')}</TextDay>
@@ -107,11 +134,11 @@ export const Calender = () => {
         <CalenderWapper>
             {/* 월, 페이지 이동 */}
             <Header >
-                <Icon src="../../Images/left_arrow.png" alt="<" onClick={prevMonth} />
+                <Icon src={leftIcon} alt="<" onClick={prevMonth} />
                 <Text>
                     {format(currentMonth, 'M')}월
                 </Text>
-                <Icon src="../../Images/right_arrow.png" alt=">"  onClick={nextMonth} />   
+                <Icon src={rightIcon} alt=">"  onClick={nextMonth} />   
             </Header>
             {/* 요일 */}
             <RenderDays />
@@ -188,7 +215,6 @@ const CellTextContainer = styled.div`
         background-color: rgba(210, 210, 210, 0.1);
     }
     &.selected{
-        background-color: rgba(210, 210, 210, 0.1);
         border: 1px solid #C5FF78;
     }
 `;
@@ -213,16 +239,15 @@ const TextType = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #365A42;
 `;
 
 const Profit = styled.p`
     text-align: center;
-    color: #365A42;
+    color: rgb(255, 64, 52);
     margin-bottom: 3px;
 `;
 
 const Expend = styled.p`
     text-align: center;
-    color: rgb(255, 64, 52);
+    color: #C5FF78;
 `;

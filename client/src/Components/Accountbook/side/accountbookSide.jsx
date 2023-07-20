@@ -1,12 +1,46 @@
+import React, { useState, useEffect } from 'react';
 import {styled} from "styled-components";
 import { useSelector } from 'react-redux';
 import SubmitData from "./submit_data";
 
+import axios from 'axios'
+import apiUrl from '../../../API_URL';
+
 const AccountbookSide = () => {
-    const targetExpend = useSelector((state) => state.targetExpend);
+
+  // 목표 지출 금액 서버에서 받아오기
+  const [amountGoal, setAmountGoal] = useState(0);
+
+  useEffect(() => {
+    const getAmountGoal = async () => {
+      try {
+        const response = await axios.get(apiUrl.url + '/totals/1', {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+            'withCredentials': true,
+            'Authorization': localStorage.getItem('Authorization-Token'),
+          },
+        });
+        setAmountGoal(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    getAmountGoal();
+    
+  }, []);
+    
+    const targetExpend = () => {
+        if(amountGoal === 0){
+            return amountGoal
+        } else {
+            return amountGoal.data.goal
+        }
+    }
     const totalExpend = useSelector((state) => state.totalExpend);
     // 퍼센트 계산
-    const percentage = (totalExpend / targetExpend) * 100;
+    const percentage = (totalExpend / targetExpend()) * 100;
     const formattedPercentage = percentage.toFixed(2);
 
     //날짜
@@ -29,13 +63,39 @@ const AccountbookSide = () => {
     }
     const currentDate = selectedDate.selectedDate;
 
-    //일별 총 수입/지출
-    const accountDataList = useSelector((state) => state.accountData.accountDataList); 
-    const calTotalProfit = accountDataList.filter((item) => item.type === '수입' && item.date === formatDate(currentDate))
-          .reduce((sum, item) => sum + item.amount, 0);
+    //데이터 받아오기
+    const [accountData, setAccountData] = useState([]);
 
-      const calTotalExpend = accountDataList.filter((item) => item.type === '지출' && item.date === formatDate(currentDate))
-          .reduce((sum, item) => sum + item.amount, 0);
+    useEffect(() => {
+        const getData = async () => {
+        try {
+             const response = await axios.get(apiUrl.url + '/trades/2?startDate=2023-07-01&endDate=2023-07-31',{
+                  headers: {
+                    'ngrok-skip-browser-warning': '69420',
+                    'withCredentials': true,
+                    'Authorization': localStorage.getItem('Authorization-Token'),
+                },
+            });
+            setAccountData(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getData();
+    }, []);
+
+    //일별 총 수입/지출
+    // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
+    const accountDataList = accountData; 
+    const calTotalProfit = Array.isArray(accountDataList)
+        ? accountDataList.filter((item) => item.type === '수입' && item.date === formatDate(currentDate))
+            .reduce((sum, item) => sum + item.amount, 0)
+        :0;
+
+    const calTotalExpend = Array.isArray(accountDataList)
+        ? accountDataList.filter((item) => item.type === '지출' && item.date === formatDate(currentDate))
+            .reduce((sum, item) => sum + item.amount, 0)
+        :0;
 
     const total = calTotalProfit - calTotalExpend;
 
@@ -48,14 +108,16 @@ const AccountbookSide = () => {
                     <TargetAmountForm>
                         <Header>
                             <Title>목표 금액 대비 지출</Title>
-                            <Percentage>{formattedPercentage} %</Percentage>
+                            <Percentage zero={targetExpend() === 0}>
+                                {targetExpend() === 0 ? '목표 지출 금액을 설정해 주세요.' : formattedPercentage + '%'}
+                            </Percentage>
                         </Header>
                         <AmountBar>           
                             <AmountProgress style={{width: `${formattedPercentage}%` }}> </AmountProgress>
                         </AmountBar>
                         <TextDiv>
                             <p>{totalExpend.toLocaleString()}</p>
-                            <p>{targetExpend.toLocaleString()}</p>
+                            <p>{targetExpend().toLocaleString()}</p>
                         </TextDiv>
                         <TextDiv>
                             <p>총 지출</p>
@@ -113,9 +175,11 @@ const TargetAmountForm = styled.div`
 
 const Header = styled.div`
     width: 100%;
+    height: 24px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 18px;
 `
 const Title = styled.p`
@@ -123,9 +187,9 @@ const Title = styled.p`
     font-weight: 700;
 `
 const Percentage = styled.p`
-    font-size: 20px;
-    font-weight: 700;   
-    color: rgb(246, 111, 60);
+    font-weight: ${props => props.zero ? '400' : '700'};
+    font-size: ${props => props.zero ? '14px' : '20px'};
+    color: ${props => props.zero ? 'rgb(160, 160, 160);' : 'rgb(246, 111, 60)'};
 `
 
 const AmountBar = styled.div`

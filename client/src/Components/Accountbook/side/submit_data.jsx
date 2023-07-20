@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {styled} from "styled-components";
-import { addAccountData } from '../../Redux/submit_data_reducer';
+import { addAccountData } from '../../../Redux/submit_data_reducer';
 import DropdownExpend from './category_dropdown_expend';
 import DropdownProfit from './category_dropdown_profit';
+
+import axios from 'axios'
+import apiUrl from '../../../API_URL';
 
 const SubmitData = () => {
     //날짜
@@ -26,6 +29,9 @@ const SubmitData = () => {
         setActiveTab(tabIndex);
         setType(tabIndex === 0 ? '수입' : '지출');
       };
+
+      const authorizationToken = localStorage.getItem('Authorization-Token');
+console.log(authorizationToken);
 
     //입력창
     const [amountInput, setAmountInput] = useState()
@@ -60,15 +66,20 @@ const SubmitData = () => {
         e.preventDefault();
         
         const inputData = {
-            tradeId:Date.now(),
             type: type,
             tradeName: tradeName,
-            amount: amountInput,
+            amount: Number(amountInput),
             note: noteInput,
             date: formatDate(currentDate),
             category: selectedOption ? selectedOption.label : '',
         };
-        dispatch(addAccountData(inputData));
+        axios.post(apiUrl.url + '/trades/2',inputData,{
+            headers: {
+              'Authorization': localStorage.getItem('Authorization-Token'),
+            },
+        })
+
+        // dispatch(addAccountData(inputData));
 
         setAmountInput('');
         setTradeName('');
@@ -76,11 +87,7 @@ const SubmitData = () => {
 
         console.log(inputData)
         console.log(accountDataList)
-      };
-    //delete
-    // const handleDelete = (tradeId) => {
-    //     dispatch(deleteAccountData(tradeId));
-    //   };
+    };
     
     return (
         <SubmitWrapper>

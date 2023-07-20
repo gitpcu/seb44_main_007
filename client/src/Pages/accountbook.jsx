@@ -1,5 +1,5 @@
-import AccountbookMain from "../Accountbook/main/accountbookMain";
-import AccountbookSide from "../Accountbook/side/accountbookSide";
+import AccountbookMain from "../Components/Accountbook/main/accountbookMain";
+import AccountbookSide from "../Components/Accountbook/side/accountbookSide";
 import {styled} from "styled-components";
 
 const AccountBook = styled.div`

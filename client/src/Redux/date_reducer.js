@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+
 const initialState = {
-    selectedDate: '2023-07-10',
+    selectedDate: `${year}-${month}-${day}`,
   };
 
 const selectedDateSlice = createSlice({

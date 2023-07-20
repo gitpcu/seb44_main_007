@@ -1,4 +1,5 @@
 import {styled} from "styled-components";
+import DatePicker from 'react-datepicker';
 
 export const AccountbookPage = styled.body`
 height: 100%;
@@ -15,7 +16,7 @@ padding: 50px;
 `
 
 export const userWelcome = styled.p`
-font-size: 36px;
+font-size: 30px;
 margin-bottom: 36px;
 `
 
@@ -35,7 +36,7 @@ flex: 1;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
-padding: 20px 30px 20px 30px;
+padding: 25px 30px;
 `
 export const InnerWrapperGoal = styled(InnerWrapper)`
 background: linear-gradient(to left top , rgba(246, 111, 60, 1), rgba(34, 34, 31, 1));
@@ -43,7 +44,7 @@ border-radius: 18px;
 `
 
 export const Title = styled.div`
-font-size: 22px;
+font-size: 18px;
 display: flex;
 flex-direction: row;
 align-items: center;
@@ -51,7 +52,7 @@ justify-content: space-between;
 `
 export const Amount = styled.p`
 font-weight: bold;
-font-size: 32px;
+font-size: 28px;
 `
 export const AmountGoal = styled(Amount)`
 display: flex;
@@ -65,6 +66,7 @@ export const AccountbookHeader = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
+height: 35px;
 .datePicker {
   display: flex;
   align-items: center;
@@ -90,6 +92,21 @@ export const TabHeader = styled.div`
   >p{
     font-size: 16px;
   }
+`;
+
+export const TabHeaderWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  >p{
+    font-size: 18px;
+  }
+`;
+
+export const CustomDatePicker = styled(DatePicker)`
+  border: 1px solid #000;
+  color: white;
+  font-size: 16px;
 `;
 
 export const TabButton = styled.button`
@@ -162,9 +179,15 @@ transition: border-color 0.3s;
     border: 1px solid #C5FF78;
 }
 `
+export const Dot = styled.div`
+margin-right: 10px;
+width: 8px;
+height: 8px;
+border-radius: 10px;
+background-color: white;
+`
 
 export const Category = styled.div`
-margin-left: 30px;
 width: 80px;
 font-size: 14px;
 border-right: 1px solid rgb(160, 160, 160);

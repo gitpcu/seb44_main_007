@@ -233,13 +233,16 @@ export default function SideNavBar({ setIsHome }) {
   const location = useLocation().pathname;
   useEffect(() => {
     setLocation(location);
+    
+    if (location === "/") {
+        setIsHome(true);
+      } else {
+        setIsHome(false);
+      }
+
   }, [location]);
 
-  if (location === "/") {
-    setIsHome(true);
-  } else {
-    setIsHome(false);
-  }
+  
 
   if (location === "/" || location === "/login" || location === "/signup") {
     return "";
@@ -259,17 +262,16 @@ export default function SideNavBar({ setIsHome }) {
           <Menu>
             {menuList.map((el, idx) => {
               return idx < 3 ? (
-                <>
+                <div key={idx}>
                   <UpperMenu
                     el={el}
                     idx={idx}
                     hoveredIdx={hoveredIdx}
                     setHoveredIdx={setHoveredIdx}
                     curLocation={curLocation}
-                    key={idx}
                   />
                   {idx === 2 ? <DivideBar margin="3rem 0px 18rem 0px" /> : null}
-                </>
+                </div>
               ) : (
                 <LowerMenu
                   el={el}
