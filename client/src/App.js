@@ -26,6 +26,7 @@ function App() {
     dispatch(setfetchData(data));
   }, [dispatch]);
   const [isHome, setIsHome] = useState(true);
+  console.log(isHome);
   return (
     <main className={isHome ? "main-home" : "main-else"}>
       <BrowserRouter>
