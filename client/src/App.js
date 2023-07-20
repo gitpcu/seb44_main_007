@@ -12,6 +12,7 @@ import Wishlist from "./Pages/Wishlist";
 import Premium from "./Pages/Premium";
 import SideNavBar from "./Components/SideNavBar";
 import Analysis from "./Pages/Analysis/Analysis";
+import Mypage from "./Pages/Mypage";
 
 //dummyData
 import { data } from "./InitData/data";
