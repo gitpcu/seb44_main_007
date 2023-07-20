@@ -154,10 +154,10 @@ export default function LoginSignup({page}){
         return false
       }
       // ✅서버통신 구현되면 지울 코드
-      else if (memberdata.filter(el => el.email === email).length < 1) {
-        setEmailValidMessage("등록되지 않은 이메일입니다");
-        return false
-      }
+      // else if (memberdata.filter(el => el.email === email).length < 1) {
+      //   setEmailValidMessage("등록되지 않은 이메일입니다");
+      //   return false
+      // }
       else {
         setEmailValidMessage("");
       }
@@ -170,10 +170,10 @@ export default function LoginSignup({page}){
         return false
       } 
       // ✅서버통신 구현되면 지울 코드
-      else if (memberdata.filter(el => el.email === email)[0].password !== password) {
-        setPwValidMessage("비밀번호가 틀립니다!");
-        return false
-      } 
+      // else if (memberdata.filter(el => el.email === email)[0].password !== password) {
+      //   setPwValidMessage("비밀번호가 틀립니다!");
+      //   return false
+      // } 
       else {
         setPwValidMessage("");
       }
@@ -183,10 +183,10 @@ export default function LoginSignup({page}){
         return false
       }
       // ✅서버통신 구현되면 지울 코드
-      else if (memberdata.filter(el => el.name === nickname).length > 0) {
-        setNicknameValidMessage("다른 회원님이 사용중인 닉네임입니다");
-        return false
-      }
+      // else if (memberdata.filter(el => el.name === nickname).length > 0) {
+      //   setNicknameValidMessage("다른 회원님이 사용중인 닉네임입니다");
+      //   return false
+      // }
       else {
         setNicknameValidMessage("");
       }
@@ -199,10 +199,10 @@ export default function LoginSignup({page}){
         return false
       }
       // ✅서버통신 구현되면 지울 코드
-      else if (memberdata.filter(el => el.email === email).length > 0) {
-        setEmailValidMessage("이미 존재하는 이메일입니다");
-        return false
-      }
+      // else if (memberdata.filter(el => el.email === email).length > 0) {
+      //   setEmailValidMessage("이미 존재하는 이메일입니다");
+      //   return false
+      // }
       else {
         setEmailValidMessage("");
       }
@@ -232,57 +232,62 @@ export default function LoginSignup({page}){
     return true
   }
 
-  const login = () => {
-    if(memberdata.filter(el => el.email === email).length > 0 && 
-    memberdata.filter(el => el.password === password).length > 0){
-      navigate('/accountbook')
-    }
-  }
-  const signup = () => {
-    navigate('/login')
-  }
+  // const login = () => {
+  //   if(memberdata.filter(el => el.email === email).length > 0 && 
+  //   memberdata.filter(el => el.password === password).length > 0){
+  //     navigate('/accountbook')
+  //   }
+  // }
+  // const signup = () => {
+  //   navigate('/login')
+  // }
 
   // ✅이하 서버 통신 구현 되면 사용할 코드
-  // const login = () => {
-  //   const memberInfo = {
-  //     email: email,
-  //     password: password,
-  //   }
-  //   axios
-  //   .post('url', memberInfo)
-  //   .then(res => {
-  //     localStorage.setItem('Authorization-Token', res.Header.Authorization)
-  //     localStorage.setItem('Refresh-Token', res.Header.Refresh)
-  //     navigate('/accountbook')
-  //   })
-  //   .catch(err =>{
-  //     console.log(err)
-  //     setEmailValidMessage('이메일과 비밀번호를 확인해주세요')
-  //     setPwValidMessage('이메일과 비밀번호를 확인해주세요')
-  //   })
-  // }
+  const login = () => {
+    const memberInfo = {
+      email: email,
+      password: password,
+    }
+    axios
+    .post('https://9b2a-58-234-27-220.ngrok-free.app/login', memberInfo)
+    .then(res => {
+      console.log(res)
+      localStorage.setItem('memberId', res.headers.memberid);
+      localStorage.setItem('Authorization-Token', res.headers.authorization)
+      localStorage.setItem('Refresh-Token', res.headers.refresh)
+      navigate('/accountbook')
+    })
+    .catch(err =>{
+      console.log(err)
+      setEmailValidMessage('이메일과 비밀번호를 확인해주세요')
+      setPwValidMessage('이메일과 비밀번호를 확인해주세요')
+    })
+  }
 
-  // // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
-  // const signup = () => {
-  //   const memberInfo = {
-  //     email: email,
-  //     password: password,
-  //     name: nickname,
-  //     phoneNumber: phonenum,
-  //   }
-  //   axios
-  //   .post('url', memberInfo)
-  //   .then(res => {
-  //     navigate('/login')
-  //   })
-  //   .catch(err =>{
-  //     console.log(err)
-  //   })
-  // }
+  // 회원가입 그중에서도 닉네임, 아이디 중복에 관한 메서드는 백엔드쪽에서 만들어 주시기로 하셨음
+  const signup = () => {
+    const memberInfo = {
+      email: email,
+      password: password,
+      name: nickname,
+      phone: phonenum,
+      imageURL: 'https://www.svgrepo.com/show/362137/profile.svg',
+      premium: null,
+      address: ''
+    }
+    axios
+    .post('https://9b2a-58-234-27-220.ngrok-free.app/members', memberInfo)
+    .then(res => {
+      navigate('/login')
+    })
+    .catch(err =>{
+      console.log(err)
+    })
+  }
 
   const navigate = useNavigate()
   const clickLoginButton = () => {
-    if(page === 'login' && validCheck(email, password)){
+    if(page === 'login' && validCheck(email, password, '', '')){
       login();
     } else if(page === 'signup' && validCheck(email, password, nickname, phonenum)){
       console.log(memberdata.filter(el => el.name === nickname))
