@@ -249,7 +249,7 @@ export default function LoginSignup({page}){
       password: password,
     }
     axios
-    .post('https://1a35-58-234-27-220.ngrok-free.app/login', memberInfo)
+    .post('https://9b2a-58-234-27-220.ngrok-free.app/login', memberInfo)
     .then(res => {
       console.log(res)
       localStorage.setItem('memberId', res.headers.memberid);
@@ -276,7 +276,7 @@ export default function LoginSignup({page}){
       address: ''
     }
     axios
-    .post('https://1a35-58-234-27-220.ngrok-free.app/members', memberInfo)
+    .post('https://9b2a-58-234-27-220.ngrok-free.app/members', memberInfo)
     .then(res => {
       navigate('/login')
     })

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
   list: [],
@@ -15,4 +16,15 @@ const dataSlice = createSlice({
 });
 
 export const { setDataList } = dataSlice.actions;
-export default dataSlice.reducer;
+export const wishListReducer = dataSlice.reducer;
+
+const useableSlice = createSlice({
+  name: "data",
+  initialState: 0,
+  reducers: {
+    setUseAble: (state, action) => action.payload,
+  },
+});
+
+export const { setUseAble } = useableSlice.actions;
+export const useableReducer = useableSlice.reducer;

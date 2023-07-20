@@ -1,6 +1,8 @@
 import { styled } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { setDataList } from "../Redux/wishlist_reducer";
 import mainLogo from '../Images/logo_main.png'
 
 const Nav = styled.nav`
@@ -189,9 +191,12 @@ export default function SideNavBar({setIsHome}){
   const [curLocation, setLocation] = useState('/accountbook');
   const [hoveredIdx, setHoveredIdx] = useState(99);
 
+  const wishlist = useSelector(state => state.wishlist)
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const logout =() => {
     alert('로그아웃합니다!');
+    dispatch(setDataList([]))
     localStorage.clear();
     navigate('/')
   }

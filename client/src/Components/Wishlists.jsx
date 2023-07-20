@@ -2,8 +2,9 @@ import { styled } from "styled-components";
 import Palette from "../Palette/Palette";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef, useState, useEffect } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setId } from "../Redux/id_reducer";
+import { setDataList, setUseAble } from "../Redux/wishlist_reducer";
 import axios from "axios"
 
 const WishUl = styled.ul`
@@ -84,13 +85,14 @@ const DeleteImg = styled.img`
     brightness(100%) contrast(103%);
 `;
 
-const WishLists = ({ list, index, moveList, editFunc }) => {
+const WishLists = ({ list, index, moveList, editFunc, avail }) => {
   const memberId = localStorage.getItem('memberId')
+  const updatedListsWithNewPriority = useSelector(state => state.wishlist)
   const ref = useRef(null);
   const handleDelete = () => {
     axios
     .delete(
-      `https://1a35-58-234-27-220.ngrok-free.app/wishlists/${list.wishlistId}/${memberId}`,
+      `https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${list.wishlistId}/${memberId}`,
       {
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),
@@ -133,7 +135,7 @@ const WishLists = ({ list, index, moveList, editFunc }) => {
   });
 
   drag(drop(ref));
-
+  
   return (
     <WishLi
       available={list.available}
@@ -150,7 +152,7 @@ const WishLists = ({ list, index, moveList, editFunc }) => {
         </ListSpanDiv>
         <ListSpanDiv>
           <CategoryCircle bgcolor={Palette[list.category]}></CategoryCircle>
-          <ListSpan>{list.category.replace("/", "_")}</ListSpan>
+          <ListSpan>{list.category !== null ? list.category.replace("/", "_") : ''}</ListSpan>
         </ListSpanDiv>
         <ListSpanDiv>
           <ListSpan>{list.date}</ListSpan>
@@ -171,11 +173,9 @@ const WishLists = ({ list, index, moveList, editFunc }) => {
 export default function WishListDragContainer({
   wishlist,
   editFunc,
-  deleteFunc,
-  setWishlist
 }) {
-
-  const [lists, setLists] = useState(wishlist);
+  const dispatch = useDispatch();
+  const memberId = localStorage.getItem('memberId')
 
   const moveList = (dragIndex, hoverIndex) => {
     const draggedList = wishlist[dragIndex];
@@ -185,25 +185,44 @@ export default function WishListDragContainer({
 
     const updatedListsWithNewPriority = updatedLists.map((list, index) => ({
       ...list,
-      // priority: index
+      priority: index
     }));
-    setWishlist({list:updatedListsWithNewPriority})
+    dispatch(setDataList(updatedListsWithNewPriority));
   };
 
+  const targetExpend = useSelector((state) => state.targetExpend);
+  let sum = 0
+  const availableWishlist = wishlist.map(list => {
+    if(list.price + sum < targetExpend){
+      sum += list.price
+      return {
+        ...list,
+        available: true
+      }
+    } else {
+      return {
+        ...list,
+        available: false
+      }
+    }
+  })
+  useEffect(() => {
+    dispatch(setUseAble(targetExpend - sum))
+  }, [targetExpend])
   return (
     <WishUl>
-      {wishlist !== undefined && wishlist.map((el, idx) => {
-        return (
-          <WishLists
-            list={el}
-            index={idx}
-            moveList={moveList}
-            editFunc={editFunc}
-            deleteFunc={deleteFunc}
-            key={el.priority}
-          ></WishLists>
-        );
-      })}
+      {wishlist !== undefined &&
+        availableWishlist.map((el, idx) => {
+          return (
+            <WishLists
+              list={el}
+              index={idx}
+              moveList={moveList}
+              editFunc={editFunc}
+              key={el.priority}
+            ></WishLists>
+          );
+        })}
     </WishUl>
   );
 }

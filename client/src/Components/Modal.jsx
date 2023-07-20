@@ -81,7 +81,7 @@ const ModalButton = styled.button`
   margin: 0px 10%;
 `
 
-export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, editMode, setEditMode, item}){
+export default function Modal({setOpenModal, editMode, setEditMode, item}){
   const close = () => {
     setEditMode(false)
     setOpenModal(false)
@@ -97,15 +97,17 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   // const today = `${year}.${month}.${day}`;
+  const wishlist = useSelector(state => state.wishlist)
 
   const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
-      "wishlistName": addName.toString() ,
+      "wishlistName": addName,
       "price": Number(addPrice),
       "category": addCategory,
+      "priority": wishlist.list.length
       }
-      axios.post(`https://1a35-58-234-27-220.ngrok-free.app/wishlists/${memberId}`,
+      axios.post(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${memberId}`,
       newWishlist,
       {
         headers: {
@@ -117,13 +119,12 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
       )
       .then(res => console.log(res))
       .catch(err => console.log(err))
+    setTimeout(() => window.location.reload(), 1000)
     setAddCategory()
     setAddName()
     setAddPrice()
-    window.location.reload();
   }
   const wishlistId = useSelector((state) => state.id.id);
-  console.log(addName)
   const editWishlist = () => {
     const editedWishlist = {
       'wishlistName': addName,
@@ -137,7 +138,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
     //     return el; // 그 외의 경우는 원래 항목 유지
     // });
     axios
-    .patch(`https://1a35-58-234-27-220.ngrok-free.app/wishlists/${wishlistId}/${memberId}`,
+    .patch(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${wishlistId}/${memberId}`,
     editedWishlist,
     {
       headers: {
@@ -148,7 +149,7 @@ export default function Modal({setOpenModal, wishlist, setWishlist, limitPrice, 
     }
     ).then(res => console.log(res))
     .catch(err => console.log(err))
-    window.location.reload()
+    setTimeout(() => window.location.reload(), 1000)
     setAddCategory()
     setAddName()
     setAddPrice()

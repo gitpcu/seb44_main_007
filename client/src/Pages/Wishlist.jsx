@@ -1,13 +1,12 @@
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDataList } from "../Redux/wishlist_reducer";
 import { data } from "../InitData/wishlist";
 import Modal from "../Components/Modal";
 import WishListDragContainer from "../Components/Wishlists";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useSelector } from "react-redux";
 import axios from "axios";
 
 const WishlistContainer = styled.div`
@@ -121,14 +120,15 @@ const ListDiv = styled.div`
 export default function Wishlist() {
   const dispatch = useDispatch();
   const memberId = localStorage.getItem('memberId')
-  const [wishlist, setWishlist] = useState(data);
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
   const targetExpend = useSelector((state) => state.targetExpend);
+  const wishlist = useSelector(state => state.wishlist)
+  const useAble = useSelector(state => state.useAble)
   useEffect(() => {
     axios
       .get(
-        `https://1a35-58-234-27-220.ngrok-free.app/wishlists/${memberId}/?tab=latest`,
+        `https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${memberId}/?tab=latest`,
         {
           headers: {
             'Authorization': localStorage.getItem('Authorization-Token'),
@@ -137,21 +137,26 @@ export default function Wishlist() {
           },
         }
       )
-      // .then((res) => dispatch(setDataList({ list: res.data })))
-      .then((res) =>setWishlist({...wishlist, list: res.data}))
+      .then((res) => {
+        console.log(res.data)
+        dispatch(setDataList(res.data))
+      })
+      // .then((res) =>setWishlist({...wishlist, list: res.data}))
       .catch((err) => console.log(err));
   }, []);
+  console.log('서버로부터 받아온 위시리스트는')
   console.log(wishlist)
   useEffect(() => {
     let sum = 0;
-    for (let obj of wishlist.list) {
+    const updatedList = wishlist.list.map((obj) => {
       if (obj.price > targetExpend || sum + obj.price > targetExpend) {
-        obj.available = false;
+        sum += obj.price; // 누적 값 계산
+        return { ...obj, available: false };
       } else {
-        obj.available = true;
-        sum += obj.price;
+        sum += obj.price; // 누적 값 계산
+        return { ...obj, available: true };
       }
-    }
+    });
     setUsablePrice(
       targetExpend -
         wishlist.list
@@ -161,26 +166,28 @@ export default function Wishlist() {
   }, [targetExpend, wishlist]);
 
   const sortByPriority = () => {
-    const sort = wishlist.list.sort((a, b) => {
+    const sort = wishlist.list.slice().sort((a, b) => {
       return a.priority - b.priority;
     });
-    setWishlist({ ...wishlist, list: sort });
+    dispatch(setDataList(sort))
     setIdx(0);
   };
   const sortByDate = () => {
-    const sort = wishlist.list.sort((a, b) => {
+    const sort = wishlist.list.slice().sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       return dateA - dateB;
     });
-    setWishlist({ ...wishlist, list: sort });
+    dispatch(setDataList(sort))
     setIdx(1);
   };
   const sortByPrice = () => {
-    const sort = wishlist.list.sort((a, b) => {
+    const sort = wishlist.list.slice().sort((a, b) => {
       return a.price - b.price;
     });
-    setWishlist({ ...wishlist, list: sort });
+    dispatch(setDataList(sort))
+    console.log('금액순 정렬 한 위시리스트는')
+    console.log(wishlist)
     setIdx(2);
   };
   const buttons = [
@@ -208,7 +215,7 @@ export default function Wishlist() {
 
   const deleteWishlist = (targetWishlist) => {
     const updatedList = wishlist.list.filter((item) => item !== targetWishlist);
-    setWishlist({ ...wishlist, list: updatedList });
+    // setWishlist({ ...wishlist, list: updatedList });
   };
   const editWishlist = (wishlist) => {
     setOpenModal(true);
@@ -221,7 +228,6 @@ export default function Wishlist() {
         <Modal
           setOpenModal={setOpenModal}
           wishlist={wishlist}
-          setWishlist={setWishlist}
           editMode={editMode}
           setEditMode={setEditMode}
           item={item}
@@ -242,7 +248,7 @@ export default function Wishlist() {
             </LimitSpanContainer>
             <LimitSpanContainer>
               <LimitSpanDiv>
-                <LimitSpan>\{usablePrice.toLocaleString()}</LimitSpan>
+                <LimitSpan>\{useAble.toLocaleString()}</LimitSpan>
               </LimitSpanDiv>
               <LimitSpanDiv>
                 <LimitSpan>사용 가능 금액</LimitSpan>
@@ -275,7 +281,7 @@ export default function Wishlist() {
                   wishlist={wishlist.list}
                   editFunc={editWishlist}
                   deleteFunc={deleteWishlist}
-                  setWishlist={setWishlist}
+                  // setWishlist={setWishlist}
                 ></WishListDragContainer>
               </DndProvider>
             </ListDiv>
