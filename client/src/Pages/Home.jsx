@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer"
 
 import MainDescription from "../Components/MainDescription";

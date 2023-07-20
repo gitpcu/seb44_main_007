@@ -252,6 +252,7 @@ export default function LoginSignup({page}){
     .post('https://9b2a-58-234-27-220.ngrok-free.app/login', memberInfo)
     .then(res => {
       console.log(res)
+      localStorage.setItem('memberId', res.headers.memberid);
       localStorage.setItem('Authorization-Token', res.headers.authorization)
       localStorage.setItem('Refresh-Token', res.headers.refresh)
       navigate('/accountbook')
@@ -269,7 +270,10 @@ export default function LoginSignup({page}){
       email: email,
       password: password,
       name: nickname,
-      phone: phonenum
+      phone: phonenum,
+      imageURL: 'https://www.svgrepo.com/show/362137/profile.svg',
+      premium: null,
+      address: ''
     }
     axios
     .post('https://9b2a-58-234-27-220.ngrok-free.app/members', memberInfo)

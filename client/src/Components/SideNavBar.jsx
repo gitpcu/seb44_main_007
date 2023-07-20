@@ -1,7 +1,16 @@
+<<<<<<< HEAD
+import { styled } from 'styled-components';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { setDataList } from "../Redux/wishlist_reducer";
+import mainLogo from '../Images/logo_main.png'
+=======
 import { styled } from "styled-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import mainLogo from "../Images/logo_main.png";
+>>>>>>> cbd9250caa4d9796510cb6513d3929fc896226b1
 
 const Nav = styled.nav`
   position: relative;
@@ -216,36 +225,39 @@ export default function SideNavBar({ setIsHome }) {
       path: "/mypage",
     },
     {
-      image: "https://www.svgrepo.com/show/507772/logout.svg",
-      title: "로그아웃",
-    },
-  ];
+      image: 'https://www.svgrepo.com/show/507772/logout.svg',
+      title: '로그아웃',
+      path: '/'
+    }
+  ]
 
-  const [curLocation, setLocation] = useState("/accountbook");
-  const [hoveredIdx, setHoveredIdx] = useState(0);
+  const [curLocation, setLocation] = useState('/accountbook');
+  const [hoveredIdx, setHoveredIdx] = useState(99);
 
+  const wishlist = useSelector(state => state.wishlist)
+  const dispatch = useDispatch()
   const navigate = useNavigate();
-  const logout = () => {
-    alert("로그아웃합니다!");
-    navigate("/");
-  };
+  const logout =() => {
+    alert('로그아웃합니다!');
+    dispatch(setDataList([]))
+    localStorage.clear();
+    navigate('/')
+  }
 
   const location = useLocation().pathname;
   useEffect(() => {
-    setLocation(location);
-    
-    if (location === "/") {
-        setIsHome(true);
-      } else {
-        setIsHome(false);
-      }
-
+    setLocation(location)
+    if(location === '/'){
+      setIsHome(true)
+    } else {
+      setIsHome(false)
+    }
   }, [location]);
 
-  
-
-  if (location === "/" || location === "/login" || location === "/signup") {
-    return "";
+  if(location === '/'
+  || location === '/login'
+  || location === '/signup'){
+    return ''
   }
 
   if (location === "/" || location === "/login" || location === "/signup") {
@@ -260,33 +272,33 @@ export default function SideNavBar({ setIsHome }) {
         <DivideBar margin="3rem 0px 1rem 0px" />
         <MenuDiv>
           <Menu>
-            {menuList.map((el, idx) => {
-              return idx < 3 ? (
-                <div key={idx}>
-                  <UpperMenu
-                    el={el}
-                    idx={idx}
-                    hoveredIdx={hoveredIdx}
-                    setHoveredIdx={setHoveredIdx}
-                    curLocation={curLocation}
-                  />
-                  {idx === 2 ? <DivideBar margin="3rem 0px 18rem 0px" /> : null}
-                </div>
-              ) : (
-                <LowerMenu
+          {menuList.map((el, idx) => {
+            return idx < 3 ? (
+              <div key={idx}>
+                <UpperMenu
                   el={el}
                   idx={idx}
                   hoveredIdx={hoveredIdx}
                   setHoveredIdx={setHoveredIdx}
                   curLocation={curLocation}
-                  logout={logout}
-                  key={idx}
                 />
-              );
-            })}
+                {idx === 2 ? <DivideBar margin='3rem 0px 18rem 0px' /> : null}
+              </div>
+            ) : (
+              <LowerMenu
+                el={el}
+                idx={idx}
+                hoveredIdx={hoveredIdx}
+                setHoveredIdx={setHoveredIdx}
+                curLocation={curLocation}
+                logout={logout}
+                key={idx}
+              />
+            );
+          })}
           </Menu>
         </MenuDiv>
       </SidebarContainer>
     </Nav>
-  );
+  )
 }
