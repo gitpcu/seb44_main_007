@@ -5,6 +5,7 @@ import dataReducer from './submit_data_reducer';
 import selectedDateReducer from './date_reducer'
 import idReducer from './id_reducer'; // 새로운 slice를 추가합니다.
 import { wishListReducer, useableReducer } from './wishlist_reducer';
+import paymentReducer from './payment_reducer'; // 새로운 slice를 추가합니다.
 
 const rootReducer = combineReducers({
   data: dataSlice,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   selectedDate: selectedDateReducer, //선택한 날짜
   id: idReducer, // 새로운 slice를 rootReducer에 추가합니다.
   wishlist: wishListReducer,
-  useAble: useableReducer
+  useAble: useableReducer,
+  payment: paymentReducer
 });
 
 const store = configureStore({

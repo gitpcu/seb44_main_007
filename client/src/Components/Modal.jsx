@@ -93,14 +93,13 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()
 
-  const date = new Date()
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  // const date = new Date()
+  // const year = date.getFullYear();
+  // const month = String(date.getMonth() + 1).padStart(2, '0');
+  // const day = String(date.getDate()).padStart(2, '0');
   // const today = `${year}.${month}.${day}`;
   const wishlist = useSelector(state => state.wishlist)
 
-  console.log(apiUrl.url)
   const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
@@ -119,12 +118,14 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
         },
       }
       )
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+        setAddCategory()
+        setAddName()
+        setAddPrice()
+      })
       .catch(err => console.log(err))
-    setTimeout(() => window.location.reload(), 1000)
-    setAddCategory()
-    setAddName()
-    setAddPrice()
   }
   const wishlistId = useSelector((state) => state.id.id);
   const editWishlist = () => {

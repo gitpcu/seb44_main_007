@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "./Wishlist";
 import { ModalBackground, ModalContainer, ModalDiv } from "../Components/Modal"
+import axios from "axios"
 
 const PremiumContainer = styled.div`
   width: calc(100% - 300px);
@@ -205,18 +207,52 @@ const PaySpan = styled.span`
 `
 const PaymentModal = ({closeModal}) => {
   const [onPayment, setOnPayment] = useState(false)
-  console.log(onPayment)
+  const [payInfo, setPayInfo] = useState({next_redirect_pc_url: "",tid: ""})
+  
+  const kakaoPayment = () => {
+    console.log('카카오결제')
+    const params = {
+        cid: "TC0ONETIME",
+        partner_order_id: "partner_order_id",
+        partner_user_id: "partner_user_id",
+        item_name: "정기결제",
+        quantity: 1,
+        total_amount: 2000,
+        vat_amount: 0,
+        tax_free_amount: 0,
+        approval_url: "http://localhost:3000/paying",
+        fail_url: "http://localhost:3000/paying",
+        cancel_url: "http://localhost:3000/paying",
+      }
+    axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
+      headers: {
+        Authorization: "KakaoAK 24a6516395e63c6bafa73862364422ac",
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    })
+    .then(res => {
+      console.log(res)
+      setPayInfo({next_redirect_pc_url: res.data.next_redirect_pc_url, tid: res.data.tid})
+    })
+    .then(res => {
+      localStorage.setItem('tid', payInfo.tid)
+      localStorage.setItem('next_redirect_pc_url', payInfo.next_redirect_pc_url)
+      window.open(payInfo.next_redirect_pc_url, "정기결제", '_blank')
+    })
+    .catch(err => console.log(err))
+  }
+
   return (
     <ModalBackground onClick={closeModal}>
       {!onPayment ? (
-        <PayContainer>
+        <PayContainer onClick={(e) => e.stopPropagation()}>
           <PayTypeDiv>
             <PayTypeContainer>
               <PayTypeImg src='https://www.svgrepo.com/show/442692/pay.svg'></PayTypeImg>
               <PayTypeSpan>일반결제</PayTypeSpan>
             </PayTypeContainer>
             <PayTypeContainer>
-              <PayTypeImg src='https://www.svgrepo.com/show/368253/kakao-square.svg'></PayTypeImg>
+              <PayTypeImg src='https://www.svgrepo.com/show/368253/kakao-square.svg' onClick={kakaoPayment}></PayTypeImg>
               <PayTypeSpan>카카오결제</PayTypeSpan>
             </PayTypeContainer>
           </PayTypeDiv>
@@ -232,7 +268,7 @@ const PaymentModal = ({closeModal}) => {
           </PayInfoDiv>
         </PayContainer>
       ) : (
-      <ModalContainer>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalDiv>
           <PaymentTitleDiv>
             <TitleLogo src='https://www.svgrepo.com/show/485696/diamond.svg'></TitleLogo>
@@ -290,6 +326,8 @@ export default function Premium(){
   const closeModal = () =>{
     setModal(false)
   }
+  const isPayOver = useSelector(state => state.payment)
+  console.log(isPayOver)
   return(
     <>
       {modal ? <PaymentModal closeModal={closeModal}></PaymentModal>: ''}

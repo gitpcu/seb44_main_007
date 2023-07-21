@@ -249,7 +249,8 @@ export default function SideNavBar({ setIsHome }) {
 
   if(location === '/'
   || location === '/login'
-  || location === '/signup'){
+  || location === '/signup'
+  || location === '/paying'){
     return ''
   }
 

@@ -31,19 +31,19 @@ const TargetAmountModal = () => {
   //목표 지출 금액 리듀서
   const [inputTarget, setInputTarget] = useState(0);
   // const dispatch = useDispatch();
-  const memberId = localStorage.getItem('memberId')
+
   const handleTarget = () => {
     const inputData = {
       goal: inputTarget,
     };
-    if(inputTarget !== 0){
-      axios.post(`${apiUrl.url}/totals/${memberId}`,inputData,{
+    if(inputTarget === 0){
+      axios.post(apiUrl.url + '/totals',inputData,{
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),
         },
       })
     } else {
-      axios.patch(`${apiUrl.url}/totals/${memberId}`,inputData,{
+      axios.patch(apiUrl.url + '/totals/1',inputData,{
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),
         },
