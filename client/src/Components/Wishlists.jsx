@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { setId } from "../Redux/id_reducer";
 import { setDataList, setUseAble } from "../Redux/wishlist_reducer";
+import apiUrl from '../API_URL';
 import axios from "axios"
 
 const WishUl = styled.ul`
@@ -92,7 +93,7 @@ const WishLists = ({ list, index, moveList, editFunc, avail }) => {
   const handleDelete = () => {
     axios
     .delete(
-      `https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${list.wishlistId}/${memberId}`,
+      `${apiUrl.url}/wishlists/${list.wishlistId}/${memberId}`,
       {
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),

@@ -4,6 +4,7 @@ import { CategoryCircle } from '../Components/Wishlists'
 import { LimitInput } from '../Pages/Wishlist'
 import Palette from "../Palette/Palette";
 import { useSelector } from 'react-redux';
+import apiUrl from '../API_URL';
 import axios from "axios"
 
 export const ModalBackground = styled.div`
@@ -99,6 +100,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
   // const today = `${year}.${month}.${day}`;
   const wishlist = useSelector(state => state.wishlist)
 
+  console.log(apiUrl.url)
   const memberId = localStorage.getItem('memberId')
   const addWishlist = () =>{
     const newWishlist = {
@@ -107,7 +109,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
       "category": addCategory,
       "priority": wishlist.list.length
       }
-      axios.post(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${memberId}`,
+      axios.post(`${apiUrl.url}/wishlists/${memberId}`,
       newWishlist,
       {
         headers: {
@@ -138,7 +140,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
     //     return el; // 그 외의 경우는 원래 항목 유지
     // });
     axios
-    .patch(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${wishlistId}/${memberId}`,
+    .patch(`${apiUrl.url}/wishlists/${wishlistId}/${memberId}`,
     editedWishlist,
     {
       headers: {

@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-import { styled } from 'styled-components';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { setDataList } from "../Redux/wishlist_reducer";
-import mainLogo from '../Images/logo_main.png'
-=======
 import { styled } from "styled-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataList } from "../Redux/wishlist_reducer";
 import { useState, useEffect } from "react";
 import mainLogo from "../Images/logo_main.png";
->>>>>>> cbd9250caa4d9796510cb6513d3929fc896226b1
 
 const Nav = styled.nav`
   position: relative;
