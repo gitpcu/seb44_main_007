@@ -7,6 +7,7 @@ import Modal from "../Components/Modal";
 import WishListDragContainer from "../Components/Wishlists";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import apiUrl from '../API_URL';
 import axios from "axios";
 
 const WishlistContainer = styled.div`
@@ -128,7 +129,7 @@ export default function Wishlist() {
   useEffect(() => {
     axios
       .get(
-        `https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${memberId}/?tab=latest`,
+        `${apiUrl.url}/wishlists/${memberId}?tab=lowPrice`,
         {
           headers: {
             'Authorization': localStorage.getItem('Authorization-Token'),
@@ -148,15 +149,7 @@ export default function Wishlist() {
   console.log(wishlist)
   useEffect(() => {
     let sum = 0;
-    const updatedList = wishlist.list.map((obj) => {
-      if (obj.price > targetExpend || sum + obj.price > targetExpend) {
-        sum += obj.price; // 누적 값 계산
-        return { ...obj, available: false };
-      } else {
-        sum += obj.price; // 누적 값 계산
-        return { ...obj, available: true };
-      }
-    });
+  
     setUsablePrice(
       targetExpend -
         wishlist.list

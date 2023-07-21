@@ -4,6 +4,7 @@ import { CategoryCircle } from '../Components/Wishlists'
 import { LimitInput } from '../Pages/Wishlist'
 import Palette from "../Palette/Palette";
 import { useSelector } from 'react-redux';
+import apiUrl from '../API_URL';
 import axios from "axios"
 
 export const ModalBackground = styled.div`
@@ -92,10 +93,10 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()
 
-  const date = new Date()
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  // const date = new Date()
+  // const year = date.getFullYear();
+  // const month = String(date.getMonth() + 1).padStart(2, '0');
+  // const day = String(date.getDate()).padStart(2, '0');
   // const today = `${year}.${month}.${day}`;
   const wishlist = useSelector(state => state.wishlist)
 
@@ -107,7 +108,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
       "category": addCategory,
       "priority": wishlist.list.length
       }
-      axios.post(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${memberId}`,
+      axios.post(`${apiUrl.url}/wishlists/${memberId}`,
       newWishlist,
       {
         headers: {
@@ -117,12 +118,14 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
         },
       }
       )
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+        setAddCategory()
+        setAddName()
+        setAddPrice()
+      })
       .catch(err => console.log(err))
-    setTimeout(() => window.location.reload(), 1000)
-    setAddCategory()
-    setAddName()
-    setAddPrice()
   }
   const wishlistId = useSelector((state) => state.id.id);
   const editWishlist = () => {
@@ -138,7 +141,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
     //     return el; // 그 외의 경우는 원래 항목 유지
     // });
     axios
-    .patch(`https://9b2a-58-234-27-220.ngrok-free.app/wishlists/${wishlistId}/${memberId}`,
+    .patch(`${apiUrl.url}/wishlists/${wishlistId}/${memberId}`,
     editedWishlist,
     {
       headers: {
