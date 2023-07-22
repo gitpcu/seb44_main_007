@@ -25,11 +25,11 @@ const LogoDiv = styled.div`
   width: 100%;
 `;
 const LogoImg = styled.img`
-  width: 80%;
+  width: 90%;
 `;
 const DivideBar = styled.div`
   width: 100%;
-  height: 3px;
+  height: 2px;
   margin: ${(props) => props.margin};
   background-color: #c0c0c0;
 `;
@@ -62,7 +62,7 @@ const MenuListDiv = styled.div`
   flex-direction: row;
   align-items: center;
   border: 0px;
-  border-radius: 20px;
+  border-radius: 1rem;
   padding: 5px 10px;
   ${(props) =>
     props.isHovered
@@ -82,7 +82,7 @@ const MenuListDiv = styled.div`
 `;
 const MenuListImg = styled.img`
   position: absolute;
-  width: 2.5rem;
+  width: 2.3rem;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 10px;
   filter: ${(props) =>
@@ -92,7 +92,7 @@ const MenuListImg = styled.img`
   transition: 500ms;
   z-index: 5;
   &:hover {
-    width: 3rem;
+    width: 2.5rem;
     filter: invert(56%) sepia(41%) saturate(7144%) hue-rotate(347deg)
       brightness(97%) contrast(101%);
   }
@@ -101,7 +101,7 @@ const MenuListSpan = styled.span`
   font-family: "ChosunBg";
   width: 100%;
   color: white;
-  transition: 400ms;
+  transition: 500ms;
   opacity: 0;
   z-index: 10;
   ${(props) =>
@@ -114,15 +114,16 @@ const MenuListSpan = styled.span`
       : ""}
 `;
 const LowerMenuImg = styled(MenuListImg)`
-  width: 2rem;
+  width: 1.8rem;
   &:hover {
-    width: 2.5rem;
+    width: 2rem;
   }
 `;
 const LowerMenuList = styled(MenuList)`
   margin: 15% 0px;
 `;
 const LowerMenuDiv = styled(MenuListDiv)`
+  border-radius: 0.7rem;
   height: 3rem;
 `;
 
