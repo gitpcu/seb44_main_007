@@ -5,7 +5,21 @@ import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const TargetAmountModal = () => {
+  
   const memberId = localStorage.getItem('memberId')
+  const [memberData, setMemberData] = useState([])
+  useEffect(() => {
+     axios.get(`${apiUrl.url}/totals/${memberId}`,{
+      headers: {
+        'Authorization': localStorage.getItem('Authorization-Token'),
+        'withCredentials': true,
+        'ngrok-skip-browser-warning': '69420'
+      },
+    })
+    .then(res => setMemberData(res.data))
+  }, [])
+ 
+  
   //모달 열기
   const [modalIsOpen, setModalIsOpen] = useState(false);
   
@@ -41,20 +55,27 @@ const TargetAmountModal = () => {
     const inputData = {
       goal: inputTarget,
     };
-    // if(inputTarget === 0){
-      // axios.post(`${apiUrl.url}/totals/${memberId}`,inputData,{
-      //   headers: {
-      //     'Authorization': localStorage.getItem('Authorization-Token'),
-      //   },
-      // })
-    // } else {
+    if(memberData === ''){
+      axios.post(`${apiUrl.url}/totals/${memberId}`,inputData,{
+        headers: {
+          'Authorization': localStorage.getItem('Authorization-Token'),
+        },
+      })
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    } else {
       axios.patch(`${apiUrl.url}/totals/${memberId}`,inputData,{
         headers: {
           'Authorization': localStorage.getItem('Authorization-Token'),
         },
       })
-    // }
-    closeModal();
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    }
   };
 
   return (

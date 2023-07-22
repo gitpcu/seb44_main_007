@@ -109,6 +109,7 @@ const EditDelete = (props) => {
       console.log(res)
       setEditDeleteModalIsOpen(false);
       setEditModalIsOpen(false);
+      window.location.reload()
     })
 
 

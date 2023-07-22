@@ -2,6 +2,7 @@ import { styled } from "styled-components";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataList } from "../Redux/wishlist_reducer";
+import { setTargetExpend } from "../Redux/account_reducer";
 import { data } from "../InitData/wishlist";
 import Modal from "../Components/Modal";
 import WishListDragContainer from "../Components/Wishlists";
@@ -130,9 +131,10 @@ export default function Wishlist() {
   const memberId = localStorage.getItem('memberId')
   const [usablePrice, setUsablePrice] = useState(data.useable);
   const [index, setIdx] = useState(0);
-  const targetExpend = useSelector((state) => state.targetExpend);
+  const targetExpend = useSelector(state => state.targetExpend)
   const wishlist = useSelector(state => state.wishlist)
   const useAble = useSelector(state => state.useAble)
+  console.log(targetExpend)
   useEffect(() => {
     axios
       .get(
@@ -146,14 +148,23 @@ export default function Wishlist() {
         }
       )
       .then((res) => {
-        console.log(res.data)
         dispatch(setDataList(res.data))
       })
       // .then((res) =>setWishlist({...wishlist, list: res.data}))
       .catch((err) => console.log(err));
   }, []);
-  console.log('서버로부터 받아온 위시리스트는')
-  console.log(wishlist)
+  useEffect(() => {
+    axios.get(`${apiUrl.url}/totals/${memberId}`,{
+      headers: {
+        'Authorization': localStorage.getItem('Authorization-Token'),
+        'ngrok-skip-browser-warning': '69420',
+        'withCredentials': true,
+      },
+    })
+    .then(res => dispatch(setTargetExpend(res.data[0].goal)))
+    .catch(err => console.log(err))
+  }, [])
+
   useEffect(() => {
     let sum = 0;
   

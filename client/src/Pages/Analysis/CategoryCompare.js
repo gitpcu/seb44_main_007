@@ -15,7 +15,7 @@ function CategoryCompare({ spendData, lastmonthData }) {
   const categoryArr = Array.from(new Set(categoryOrder));
 
   //지출만
-  const spendDataExpend = spendData.filter((item) => item.type === '지출');
+  const spendDataExpend = Array.isArray(spendData) ? spendData.filter((item) => item.type === '지출') : [];
   const lastmonthDataExpend = lastmonthData.filter((item) => item.type === '지출');
 
   // 이번달의 카테고리별 총 사용금액
