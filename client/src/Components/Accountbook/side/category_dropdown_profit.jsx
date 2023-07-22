@@ -4,7 +4,7 @@ import Select, {components} from 'react-select';
 
 // 수입 카테고리 드롭 다운
 const options = [
-  { value: 'option1', label: '월급_용돈', color: '#F4CD72' },
+  { value: 'option1', label: '월급_용돈', color: '#F49291' },
   { value: 'option2', label: '투자_이자', color: '#835BA1' },
   { value: 'option3', label: '기타수입', color: '#D2D2D2' },
 ];

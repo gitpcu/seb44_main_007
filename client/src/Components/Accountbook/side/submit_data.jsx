@@ -9,6 +9,8 @@ import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const SubmitData = () => {
+    const memberId = localStorage.getItem('memberId')
+
     //날짜
     const selectedDate = useSelector((state) => state.selectedDate);
   
@@ -31,7 +33,6 @@ const SubmitData = () => {
       };
 
       const authorizationToken = localStorage.getItem('Authorization-Token');
-console.log(authorizationToken);
 
     //입력창
     const [amountInput, setAmountInput] = useState()
@@ -73,20 +74,18 @@ console.log(authorizationToken);
             date: formatDate(currentDate),
             category: selectedOption ? selectedOption.label : '',
         };
-        axios.post(apiUrl.url + '/trades/2',inputData,{
+        axios.post(`${apiUrl.url}/trades/${memberId}`,inputData,{
             headers: {
               'Authorization': localStorage.getItem('Authorization-Token'),
             },
         })
+        .then(res=> console.log(res))
 
         // dispatch(addAccountData(inputData));
 
         setAmountInput('');
         setTradeName('');
         setNoteInput('');
-
-        console.log(inputData)
-        console.log(accountDataList)
     };
     
     return (
@@ -117,7 +116,7 @@ console.log(authorizationToken);
                     <Input name='tradeName' type="text" value={tradeName} onChange={tradeNameChange}/>
                 </SubmitInputContents>
                 <SubmitInputContents>
-                    <Title>비고</Title>
+                    <Title>노트</Title>
                     <NoteInput name='note' type="text" value={noteInput} onChange={noteInputChange}/>
                 </SubmitInputContents>
                 <SubmitButton type="submit">확인</SubmitButton>
@@ -148,9 +147,9 @@ const TabButton = styled.button`
     font-size: 12px;
     padding: 6px 12px;
     margin-left: 6px;
-    background-color: ${(props) => (props.active ? 'rgb(95, 95, 95)' : 'white')};
+    background-color: ${(props) => (props.active ? 'rgb(246, 111, 60)' : 'white')};
     color: ${(props) => (props.active ? 'white' : 'rgb(95, 95, 95)')};
-    border: 1px solid ${(props) => (props.active ? 'rgb(95, 95, 95)' : 'rgb(210, 210, 210)')};
+    border: 1px solid ${(props) => (props.active ? 'rgb(246, 111, 60)' : 'rgb(210, 210, 210)')};
     border-radius: 6px;
     cursor: pointer;
     outline: none;

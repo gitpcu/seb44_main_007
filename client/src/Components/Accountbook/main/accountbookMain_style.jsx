@@ -1,5 +1,6 @@
 import {styled} from "styled-components";
 import DatePicker from 'react-datepicker';
+import Palette from "../../../Palette/Palette";
 
 export const AccountbookPage = styled.body`
 height: 100%;
@@ -16,7 +17,7 @@ padding: 50px;
 `
 
 export const userWelcome = styled.p`
-font-size: 30px;
+font-size: 26px;
 margin-bottom: 36px;
 `
 
@@ -99,14 +100,15 @@ export const TabHeaderWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   >p{
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 
 export const CustomDatePicker = styled(DatePicker)`
   border: 1px solid #000;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  cursor: pointer;
 `;
 
 export const TabButton = styled.button`
@@ -184,7 +186,7 @@ margin-right: 10px;
 width: 8px;
 height: 8px;
 border-radius: 10px;
-background-color: white;
+background-color: ${({ category }) => Palette[category] || "white"};
 `
 
 export const Category = styled.div`

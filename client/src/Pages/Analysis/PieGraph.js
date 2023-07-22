@@ -48,7 +48,7 @@ function PieGraph({ data }) {
     <PieChart
       width={180}
       height={180}
-      style={{ marginLeft: "10%", width: "35%" }}
+      style={{ marginLeft: "5%", width: "35%" }}
     >
       <Pie
         data={chartData}
@@ -61,6 +61,8 @@ function PieGraph({ data }) {
         startAngle={90}
         endAngle={-270}
         fill="#8884d8"
+        stroke="none"
+        strokeWidth={1}
       >
         {chartData.map((entry, index) => (
           <Cell key={index} fill={chartColors[index % chartColors.length]} />

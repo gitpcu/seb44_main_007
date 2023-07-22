@@ -14,10 +14,30 @@ import EditDelete from './edit,delete';
 import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
-
-
-
 const AccountbookMain = () => {
+  const memberId = localStorage.getItem('memberId')
+
+  //유저 정보 받아오기
+  const [memberName, setMemberName] = useState('');
+
+  useEffect(() => {
+      const fetchMember = async () => {
+      try {
+          const response = await axios.get(`${apiUrl.url}/members/${memberId}`,{
+              headers: {
+                'ngrok-skip-browser-warning': '69420',
+                'withCredentials': true,
+                'Authorization': localStorage.getItem('Authorization-Token'),
+              },
+            });
+            setMemberName(response.data.data.name);
+      } catch (error) {
+          console.error(error);
+      }
+      };
+
+      fetchMember();
+  }, []);
 
   //데이터 받아오기
   const [accountData, setAccountData] = useState([]);
@@ -25,7 +45,7 @@ const AccountbookMain = () => {
   useEffect(() => {
       const getData = async () => {
       try {
-          const response = await axios.get(apiUrl.url + '/trades/2?startDate=2023-07-01&endDate=2023-07-31',{
+          const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-07-01&endDate=2023-07-31`,{
               headers: {
                 'ngrok-skip-browser-warning': '69420',
                 'withCredentials': true,
@@ -36,13 +56,12 @@ const AccountbookMain = () => {
       } catch (error) {
           console.error(error);
       }
-      };
-
-      getData();
-  }, []);
+    };
+    getData();
+  }, [memberId]);
 
   const dispatch = useDispatch();
-  const targetExpend = useSelector((state) => state.targetExpend);
+  // const targetExpend = useSelector((state) => state.targetExpend);
   const totalProfitSelector = useSelector((state) => state.totalProfit);
   const totalExpendSelector = useSelector((state) => state.totalExpend);
   
@@ -66,29 +85,6 @@ const AccountbookMain = () => {
     console.log(date)
 
   };
-
-  // 목표 지출 금액 서버에서 받아오기
-  const [amountGoal, setAmountGoal] = useState(0);
-
-  useEffect(() => {
-    const getAmountGoal = async () => {
-      try {
-        const response = await axios.get(apiUrl.url + '/totals/1', {
-          headers: {
-            'ngrok-skip-browser-warning': '69420',
-            'withCredentials': true,
-            'Authorization': localStorage.getItem('Authorization-Token'),
-          },
-        });
-        setAmountGoal(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    getAmountGoal();
-    
-  }, []);
 
   const currentDate = selectedDate.selectedDate;
 
@@ -135,11 +131,33 @@ const AccountbookMain = () => {
     calTotalExpend();
   }, [dispatch, accountDataList] );
 
+
+  // 목표 지출 금액 서버에서 받아오기
+  const [amountGoal, setAmountGoal] = useState(10);
+
+  useEffect(() => {
+    const getAmountGoal = async () => {
+      try {
+        const response = await axios.get(`${apiUrl.url}/totals/${memberId}`, {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+            'withCredentials': true,
+            'Authorization': localStorage.getItem('Authorization-Token'),
+          },
+        });
+        setAmountGoal(response.data[0].goal);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAmountGoal()
+  }, [memberId]);
+
     return (
       <>
       <S.AccountbookPage>
         <S.AccountbookWrapper>
-            <S.userWelcome>Welcome, user!</S.userWelcome>
+            <S.userWelcome>{memberName}님 환영합니다!</S.userWelcome>
             <S.AccountBox>
               <S.InnerWrapper>
                 <S.Title>총 수입</S.Title>
@@ -154,7 +172,7 @@ const AccountbookMain = () => {
                   목표 지출 금액
                   <TargetAmountModal />
                 </S.Title>
-                <S.AmountGoal>{amountGoal === 0? amountGoal : amountGoal.data.goal.toLocaleString()}</S.AmountGoal>
+                <S.AmountGoal>{amountGoal}</S.AmountGoal>
               </S.InnerWrapperGoal>
             </S.AccountBox>
             
@@ -192,13 +210,16 @@ const AccountbookMain = () => {
                     <S.DataUl>
                       {Array.isArray(accountDataList)?accountDataList.filter((data) => data.date === formatDate(currentDate)).map((item) => {return(
                         <S.DataLi>
-                          <S.Dot />
+                          <S.Dot category={item.category}/>
                           <S.Category>{item.category}</S.Category>
                           <S.TradeName>{item.tradeName}</S.TradeName>
                           <S.Note>{item.note}</S.Note>
                           <S.AmountLi isIncome={item.type === "수입"}>
-                            {item.type === "수입" ? '+ '+(item.amount.toLocaleString()) : '- '+(item.amount.toLocaleString())}</S.AmountLi>
-                          <EditDelete />
+                            {item.type === "수입" 
+                            ? '+ '+(item.amount.toLocaleString()) 
+                            : '- '+(item.amount.toLocaleString())}
+                          </S.AmountLi>
+                          <EditDelete data={item.tradeId}/>
                         </S.DataLi>
                       );
                       }):''}
