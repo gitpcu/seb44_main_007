@@ -150,6 +150,7 @@ function Analysis() {
 
   //데이터 받아오기
   const [accountData, setAccountData] = useState([]);
+  const [lastmonthData, setLastMonthData] = useState(lastDummy); // 전체 데이터(지난달)
 
   useEffect(() => {
       const getData = async () => {
@@ -162,6 +163,15 @@ function Analysis() {
               },
             });
             setAccountData(response.data);
+            // 지난달 데이터 받아오기
+            // axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month-1}-01&endDate=2023-0${month-1}-31`,{
+            //   headers: {
+            //     'ngrok-skip-browser-warning': '69420',
+            //     'withCredentials': true,
+            //     'Authorization': localStorage.getItem('Authorization-Token'),
+            //   },
+            // })
+            // .then(res => setLastMonthData(res.data))
       } catch (error) {
           console.error(error);
       }
@@ -177,7 +187,6 @@ function Analysis() {
   const initData = useSelector((state) => state.data.initData);
 
   // dataState
-  const [lastmonthData, setLastMonthData] = useState(lastDummy); // 전체 데이터(지난달)
   const [monthData, setMonthData] = useState([]); // 전체 데이터(이번달)
   const [spend, setSpend] = useState(0); // 총 지출
   const [income, setIncome] = useState(0); // 총 수입
@@ -259,7 +268,7 @@ function Analysis() {
       }
     }
   };
-
+  console.log(accountData)
   return (
     <AnalysisPage>    
       <PageTop>
@@ -277,8 +286,16 @@ function Analysis() {
                 <p>{totalExpendSelector.toLocaleString()} 원</p>
               </Title>
               <GraphZone>
-                <PieGraph alt="원형그래프" data={spendData} />
-                <PieGraphList alt="그래프리스트" data={spendData} />
+                <PieGraph data={
+                  Array.isArray(accountData) // Check if accountData is an array
+                    ? accountData.filter(el => el.type === '지출') // Use filter if it's an array
+                    : [] // Otherwise, use an empty array
+                } />
+                <PieGraphList alt="그래프리스트" data={
+                  Array.isArray(accountData) // Check if accountData is an array
+                    ? accountData.filter(el => el.type === '지출') // Use filter if it's an array
+                    : [] // Otherwise, use an empty array
+                } />
               </GraphZone>
             </TotalContent>
             <TotalContent>
@@ -288,8 +305,16 @@ function Analysis() {
                 <p>{totalProfitSelector.toLocaleString()} 원</p>
               </Title>
               <GraphZone>
-                <PieGraph alt="원형그래프" data={incomeData} />
-                <PieGraphList alt="그래프리스트" data={incomeData} />
+                <PieGraph alt="원형그래프" data={
+                  Array.isArray(accountData) // Check if accountData is an array
+                    ? accountData.filter(el => el.type === '수입') // Use filter if it's an array
+                    : [] // Otherwise, use an empty array
+                }/>
+                <PieGraphList alt="그래프리스트" data={
+                  Array.isArray(accountData) // Check if accountData is an array
+                    ? accountData.filter(el => el.type === '수입') // Use filter if it's an array
+                    : [] // Otherwise, use an empty array
+                } />
               </GraphZone>
             </TotalContent>
           </MiddleLeft>
@@ -309,7 +334,7 @@ function Analysis() {
             </MiddleRightTop>
             <MiddleRightBottomWrap>
               <CategoryCompare
-                spendData={spendData}
+                spendData={accountData}
                 lastmonthData={lastmonthData}
               />
             </MiddleRightBottomWrap>

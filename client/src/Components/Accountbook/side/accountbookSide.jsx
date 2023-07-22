@@ -22,7 +22,11 @@ const AccountbookSide = () => {
             'Authorization': localStorage.getItem('Authorization-Token'),
           },
         });
-        setAmountGoal(response.data[0].goal);
+        if(response.data[0].goal === undefined){
+            setAmountGoal(0);
+        } else {
+            setAmountGoal(response.data[0].goal);
+        }
       } catch (error) {
         console.error(error);
       }

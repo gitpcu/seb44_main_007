@@ -97,7 +97,7 @@ function CategoryCompageDetail({
           <GraphRight color={Palette[category]} length={curPercent} />
           <Money>
             {interval > 0 ? "+" : null}
-            {interval}원
+            {interval.toLocaleString()}원
           </Money>
         </RightWrap>
       </Graph>

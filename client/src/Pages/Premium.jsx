@@ -48,9 +48,10 @@ const TitleLogo = styled.img`
 const PayButton = styled(Button)`
   background-color: #F9591D;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   border: none;
+  padding: 1%;
 `
 const PremiumBodyDiv = styled.div`
   width: 100%;

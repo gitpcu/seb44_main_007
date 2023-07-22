@@ -30,9 +30,9 @@ const targetSlice = createSlice({
   name: 'targetExpend',
   initialState: 0,
   reducers: {
-    targetExpend : (state, action) => action.payload,
+    setTargetExpend : (state, action) => action.payload,
   },
 });
 
-export const { targetExpend } = targetSlice.actions;
+export const { setTargetExpend } = targetSlice.actions;
 export const targetReducer = targetSlice.reducer;

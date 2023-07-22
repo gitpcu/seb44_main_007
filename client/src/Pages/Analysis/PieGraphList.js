@@ -4,25 +4,26 @@ import Palette from "../../Palette/Palette";
 
 
 function PieGraphList({ data }) {
-
+  console.log(data)
   const sum = data.reduce((sums, obj) => {
     const { amount, category } = obj;
     if (sums[category]) {
+      console.log(sums[category])
       sums[category] += amount;
     } else {
       sums[category] = amount;
     }
     return sums;
   }, {});
-
-  const chartData = Object.entries(sum)
+  console.log(sum)
+  let chartData = Object.entries(sum)
     .map(([name, value]) => ({
       name,
       value,
     }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 4);
-
+    
   const totalSum = chartData.reduce((sum, obj) => sum + obj.value, 0);
 
   // Convert data to the desired format
@@ -32,7 +33,7 @@ function PieGraphList({ data }) {
     price: obj.value,
     color: Palette[obj.name.toLowerCase().replace(/ /g, "_")],
   }));
-
+  console.log(ListData)
   return (
     <ListUL>
       {ListData.map((it) => {
@@ -43,7 +44,7 @@ function PieGraphList({ data }) {
               <ListCategory> {it.category}</ListCategory>
               <ListPercentage> {it.percentage}%</ListPercentage>
             </div>
-            <ListPrice> {it.price} 원</ListPrice>
+            <ListPrice> {it.price.toLocaleString()} 원</ListPrice>
           </Listli>
         );
       })}

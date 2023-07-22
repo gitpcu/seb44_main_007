@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 import apiUrl from '../API_URL';
 
 const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아몬드 아이콘
-const memberId = localStorage.getItem('memberId')
 
 const MypageComponent = () => {
+    const memberId = localStorage.getItem('memberId')
     //유저 데이터 받아오기
     const [member, setMember] = useState(''); //useState(null)
 
@@ -91,7 +91,6 @@ const MypageComponent = () => {
     //     }
     //   };
 
-
     //데이터 수정
     const [isEdit, setIsEdit] = useState(false);
     const [updatedMember, setUpdatedMember] = useState(null);
@@ -108,7 +107,7 @@ const MypageComponent = () => {
           [name]: value
         }));
       };
-
+      console.log(member)
     const handleEditInfo = async () => {
         try {
           await axios.patch(`${apiUrl.url}/members/${memberId}`, updatedMember,{
@@ -138,6 +137,32 @@ const MypageComponent = () => {
         setModalIsOpen(false);
         alert('탈퇴되었습니다.');
         window.location.href = '/';
+    };
+
+    //구독해지
+    const [unsubModalIsOpen, setUnsubModalIsOpen] = useState(false);
+
+    const openUnsubModal = () => {
+        setUnsubModalIsOpen(true);
+    };
+
+    const closeUnsubModal = () => {
+        setUnsubModalIsOpen(false);
+    };
+
+    const unsubscribe = () => {
+        axios.patch(`${apiUrl.url}/members/${memberId}`, { premium: false }, {
+            headers: {
+              'Authorization': localStorage.getItem('Authorization-Token'),
+              'ngrok-skip-browser-warning': '69420',
+              'withCredentials': true,
+            },
+          })
+          .then(res => {
+            alert('구독 해지되었습니다')
+            window.location.reload()
+          })
+          .catch(err => console.log(err))
     };
 
     return (
@@ -170,12 +195,35 @@ const MypageComponent = () => {
                     </LeftContents>
                     <RightContents>
                         <p>{member.name}님 환영합니다!</p>
-                        <Link to="/premium">
+                        {member.premium ? (
+                            <PremiumDiv>
+                                <PremiumInfoDiv>
+                                    <PremiumImgDiv>
+                                        <PremiumLogoImg  src={PremiumImg}></PremiumLogoImg>
+                                    </PremiumImgDiv>
+                                    <PremiumInfoSpan>프리미엄 구독중</PremiumInfoSpan>
+                                </PremiumInfoDiv>
+                                <PremiumBtn onClick={openUnsubModal}>구독 해지</PremiumBtn>
+                                {unsubModalIsOpen ? 
+                                <ModalBackdrop onClick={closeUnsubModal}>
+                                    <ModalContent>
+                                        <p>구독 해지하시겠습니까?</p>
+                                        <ModalBtn>
+                                            <button onClick={unsubscribe}>예</button>
+                                            <button onClick={closeUnsubModal}>아니요</button>
+                                        </ModalBtn>
+                                    </ModalContent>
+                                </ModalBackdrop>
+                        : null}
+                            </PremiumDiv>
+                        ) : (
+                            <Link to="/premium" className='navLink'>
                             <PremiumBtn>
                                 <img src={PremiumImg} alt='diamond'/>
                                 <p>프리미엄 구독하기</p>
                             </PremiumBtn>
                         </Link>
+                        )}
                     </RightContents>
                 </Header>
                 <Body>
@@ -459,4 +507,35 @@ const ModalBtn = styled.div`
                 background-color: rgb(160, 160, 160);
             }
         }  
+`
+
+const PremiumDiv = styled.div`
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`
+const PremiumInfoDiv = styled.div`
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+const PremiumImgDiv = styled.div`
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background-color: rgb(246, 111, 60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+const PremiumLogoImg = styled.img`
+    width: 20px;
+    height: 20px;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(303deg) brightness(102%) contrast(103%);
+`
+const PremiumInfoSpan = styled.span`
+    color: white;
+    margin-left: 3%;
 `

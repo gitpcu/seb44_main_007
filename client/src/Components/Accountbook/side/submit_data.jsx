@@ -79,13 +79,13 @@ const SubmitData = () => {
               'Authorization': localStorage.getItem('Authorization-Token'),
             },
         })
-        .then(res=> console.log(res))
-
-        // dispatch(addAccountData(inputData));
-
-        setAmountInput('');
-        setTradeName('');
-        setNoteInput('');
+        .then(res=> {
+            console.log(res)
+            window.location.reload()
+            setAmountInput('');
+            setTradeName('');
+            setNoteInput('');
+        })
     };
     
     return (
