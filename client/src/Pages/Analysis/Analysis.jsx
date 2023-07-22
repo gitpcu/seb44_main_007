@@ -2,6 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
+import rightArrow from '../../Images/right_arrow.png'
+import leftArrow from '../../Images/left_arrow.png'
+
+import axios from 'axios'
+import apiUrl from '../../API_URL';
+
 // component import
 import PieGraph from "./PieGraph";
 import PieGraphList from "./PieGraphList";
@@ -66,26 +72,26 @@ const lastDummy = [
   {
     tradeId: 6,
     type: "지출",
-    tradeName: "다이소",
-    amount: 5000,
-    note: "모니터 클리너랑 에탄올 구매",
+    tradeName: "셔츠",
+    amount: 45000,
+    note: "매우 맘에 듬",
     date: "2023-06-02",
-    category: "식비_간식",
+    category: "의류_미용",
   },
   {
     tradeId: 7,
     type: "지출",
-    tradeName: "커피",
+    tradeName: "이마트",
     amount: 4900,
-    note: "메가커피에서 커피 수혈",
+    note: "커피 구매",
     date: "2023-06-03",
-    category: "식비_간식",
+    category: "생활_마트",
   },
   {
     fixedId: 1,
     type: "지출",
     tradeName: "월세",
-    amount: 500000,
+    amount: 400000,
     note: "월세 지출,,,,",
     date: "2023-06-03",
     category: "주거_통신",
@@ -119,147 +125,62 @@ const lastDummy = [
   },
   {
     incomeId: 2,
-    type: "수입",
-    tradeName: "월급",
-    amount: 3000000,
-    note: "하나님 아버지 오늘 한명 살리셨습니다",
+    type: "지출",
+    tradeName: "교통비",
+    amount: 50000,
+    note: "지하철",
     date: "2023-06-05",
-    category: "월급_용돈",
+    category: "교통_차량",
   },
   {
     incomeId: 3,
-    type: "수입",
+    type: "지출",
     tradeName: "찬호형 n빵",
     amount: 30000,
     note: "송금 메모가 '제가LA에있을' 에서 끊겨 있다.",
     date: "2023-06-05",
-    category: "기타수입",
-  },
-  {
-    tradeId: 11,
-    type: "지출",
-    tradeName: "누나에게 대출",
-    amount: 100000,
-    note: "하나님 아버지 한명 올라갑니다",
-    date: "2023-06-05",
-    category: "기타지출",
+    category: "의료_건강",
   },
 ];
 // Dummy Data Import
-const PageWrap = styled.div`
-  background-color: rgb(34, 34, 31);
-  display: flex;
-  flex-direction: column;
-  padding: 1%;
-  width: calc(100% - 285px);
-  height: 100vh;
-`;
-
-// PageTop
-const PageTop = styled.div`
-  display: flex;
-  height: 5%;
-`;
-const PageMoveButton = styled.button`
-  border: none;
-  background-color: transparent;
-  font-size: 24px;
-  font-weight: 600;
-  color: rgb(210, 210, 210);
-`;
-const Month = styled.div`
-  font-size: 24px;
-  font-weight: 600;
-  color: rgb(210, 210, 210);
-  margin-left: 16px;
-  margin-right: 16px;
-  display: flex;
-  align-items: center;
-`;
-
-//PageMiddle
-const PageMiddle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 1%;
-  height: 65%;
-`;
-// MiddleLeft
-const MiddleLeft = styled.div`
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  padding: 1%;
-`;
-
-// Expenditure
-const Expenditure = styled.div`
-  height: 50%;
-`;
-const GraphZone = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-// Earnings
-const Earnings = styled.div`
-  height: 50%;
-`;
-
-// MiddleRight
-const MiddleRight = styled.div`
-  width: 50%;
-  padding: 1%;
-`;
-// MiddleRightTop
-const MiddleRightTop = styled.div`
-  display: flex;
-  justify-content: space-between;
-  height: 5%;
-`;
-const RightTitle = styled.div`
-  width: 40%;
-  font-weight: 600;
-  font-size: 20px;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-`;
-const RightlegendWrap = styled.div`
-  width: 20%;
-  justify-content: center;
-`;
-const Rightlegend = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const ListDot = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: ${(props) => props.color};
-  border-radius: 50%;
-  margin-right: 10px;
-`;
-// MiddleRightBottom
-const MiddleRightBottomWrap = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 5%;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 95%;
-`;
-
-const PageBottom = styled.div`
-  height: 30%;
-`;
 
 function Analysis() {
+
+  const memberId = localStorage.getItem('memberId')
+
+  //데이터 받아오기
+  const [accountData, setAccountData] = useState([]);
+
+  useEffect(() => {
+      const getData = async () => {
+      try {
+          const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month}-01&endDate=2023-0${month}-${day}`,{
+              headers: {
+                'ngrok-skip-browser-warning': '69420',
+                'withCredentials': true,
+                'Authorization': localStorage.getItem('Authorization-Token'),
+              },
+            });
+            setAccountData(response.data);
+      } catch (error) {
+          console.error(error);
+      }
+    };
+    getData();
+  }, [memberId]);
+
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
+  const day = () => {
+    if (month = 1 || 3 || 5 || 7 || 8 || 10 || 12) {
+      return 31
+    } else if (month = 2){
+      return 28
+    } else {
+      return 30
+    }
+  }
 
   // get Data from Redux
   const initData = useSelector((state) => state.data.initData);
@@ -269,8 +190,9 @@ function Analysis() {
   const [monthData, setMonthData] = useState([]); // 전체 데이터(이번달)
   const [spend, setSpend] = useState(0); // 총 지출
   const [income, setIncome] = useState(0); // 총 수입
-  const [spendData, setSpendData] = useState([]);
-  const [incomeData, setIncomeData] = useState([]);
+  const [spendData, setSpendData] = useState([]); // 지출 데이터
+  const [incomeData, setIncomeData] = useState([]); //수입 데이터
+
 
   // 받아온 데이터를 설정한 달에 맞게 filter
   useEffect(() => {
@@ -285,6 +207,22 @@ function Analysis() {
   }, [initData, month, year]);
 
   // 수입,지출 총 금액 산정
+  const totalProfitSelector = useSelector((state) => state.totalProfit); //총 수입
+  const totalExpendSelector = useSelector((state) => state.totalExpend); //총 지출
+  const accountDataList = accountData;
+  
+  // //서버
+  // useEffect(() => {
+  //   const ExpendData = Array.isArray(accountDataList) // 지출 데이터
+  //     ? accountDataList.filter((item) => item.type === '지출')
+  //     : 0;
+  //   setSpendData(ExpendData);
+  //   const ProfitData = Array.isArray(accountDataList) //수입 데이터
+  //     ? accountDataList.filter((item) => item.type === '수입')
+  //     : 0;
+  //   setIncomeData(ProfitData);
+  // }, [accountDataList]);
+
   useEffect(() => {
     const filterData1 = monthData.reduce((acc, cur, idx) => {
       if (cur.type === "지출") {
@@ -310,6 +248,7 @@ function Analysis() {
     setIncomeData(filterData4);
   }, [monthData]);
 
+
   // function
   const onClickHandler = (e) => {
     const result = e.target.value;
@@ -331,110 +270,195 @@ function Analysis() {
   };
 
   return (
-    <PageWrap>
+    <AnalysisPage>    
       <PageTop>
-        <PageMoveButton onClick={onClickHandler} value="prev">
-          {"<"}
-        </PageMoveButton>
-        <Month>
-          {year}년 {month}월
-        </Month>
-        <PageMoveButton onClick={onClickHandler} value="next">
-          {">"}
-        </PageMoveButton>
+        <PageMoveImg src={leftArrow} onClick={onClickHandler} value="prev" />
+        <p>{year}년 {month}월</p>
+        <PageMoveImg src={rightArrow} onClick={onClickHandler} value="next" />
       </PageTop>
-      <PageMiddle>
-        <MiddleLeft>
-          <Expenditure>
-            <div style={{ display: "flex" }}>
-              <div
-                style={{
-                  minWidth: "50px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  borderRight: "1px solid white",
-                  color: "#ffffff",
-                  textAlign: "center",
-                }}
-              >
-                지출
-              </div>
-              <div
-                style={{
-                  minwidth: "150px",
-                  fontSize: "23px",
-                  color: "#ffffff",
-                  textAlign: "center",
-                }}
-              >
-                <span style={{ fontSize: "16px", marginRight: "5px" }}>총</span>
-                {spend} 원
-              </div>
-            </div>
-            <GraphZone>
-              <PieGraph alt="원형그래프" data={spendData} />
-              <PieGraphList alt="그래프리스트" data={spendData} />
-            </GraphZone>
-          </Expenditure>
-          <Earnings>
-            <div style={{ display: "flex" }}>
-              <div
-                style={{
-                  minwidth: "50px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  borderRight: "1px solid white",
-                  color: "#ffffff",
-                  textAlign: "center",
-                }}
-              >
-                수입
-              </div>
-              <div
-                style={{
-                  minwidth: "150px",
-                  fontSize: "23px",
-                  color: "#ffffff",
-                  textAlign: "center",
-                }}
-              >
-                <span style={{ fontSize: "16px", marginRight: "5px" }}>총</span>
-                {income} 원
-              </div>
-            </div>
-            <GraphZone>
-              <PieGraph alt="원형그래프" data={incomeData} />
-              <PieGraphList alt="그래프리스트" data={incomeData} />
-            </GraphZone>
-          </Earnings>
-        </MiddleLeft>
-        <MiddleRight>
-          <MiddleRightTop>
-            <RightTitle>카테고리별 지난달 지출 비교</RightTitle>
-            <RightlegendWrap>
-              <Rightlegend>
-                <ListDot color="#F4CD72" />
-                <p style={{ color: "#ffffff" }}>이번 달</p>
-              </Rightlegend>
-              <Rightlegend>
-                <ListDot color="#A0A0A0" />
-                <p style={{ color: "#ffffff" }}>지난 달</p>
-              </Rightlegend>
-            </RightlegendWrap>
-          </MiddleRightTop>
-          <MiddleRightBottomWrap>
-            <CategoryCompare
-              spendData={spendData}
-              lastmonthData={lastmonthData}
-            />
-          </MiddleRightBottomWrap>
-        </MiddleRight>
-      </PageMiddle>
-      <PageBottom>
-        <LineGraph />
-      </PageBottom>
-    </PageWrap>
+      <PageWrap>
+        <PageMiddle>
+          <MiddleLeft>
+            <TotalContent>
+              <Title>
+                <InnerTitle>지출</InnerTitle>
+                <span>총</span>
+                <p>{totalExpendSelector.toLocaleString()} 원</p>
+              </Title>
+              <GraphZone>
+                <PieGraph alt="원형그래프" data={spendData} />
+                <PieGraphList alt="그래프리스트" data={spendData} />
+              </GraphZone>
+            </TotalContent>
+            <TotalContent>
+              <Title>
+                <InnerTitle>수입</InnerTitle>
+                <span>총</span>
+                <p>{totalProfitSelector.toLocaleString()} 원</p>
+              </Title>
+              <GraphZone>
+                <PieGraph alt="원형그래프" data={incomeData} />
+                <PieGraphList alt="그래프리스트" data={incomeData} />
+              </GraphZone>
+            </TotalContent>
+          </MiddleLeft>
+          <MiddleRight>
+            <MiddleRightTop>
+              <InnerTitle style={{border : 'none'}}>카테고리별 지난달 지출 비교</InnerTitle>
+              <RightlegendWrap>
+                <Rightlegend>
+                  <ListDot style={{backgroundColor : "#F4CD72"}} />
+                  <p>이번 달</p>
+                </Rightlegend>
+                <Rightlegend>
+                  <ListDot style={{background: 'linear-gradient(to left, rgba(100,100,100,1), rgba(100,100,100,0.5))'}} />
+                  <p>지난 달</p>
+                </Rightlegend>
+              </RightlegendWrap>
+            </MiddleRightTop>
+            <MiddleRightBottomWrap>
+              <CategoryCompare
+                spendData={spendData}
+                lastmonthData={lastmonthData}
+              />
+            </MiddleRightBottomWrap>
+          </MiddleRight>
+        </PageMiddle>
+        <PageBottom>
+          <InnerTitle style={{marginBottom: '20px',border : 'none'}}>월별 지출 비교</InnerTitle>
+          <LineGraph />
+        </PageBottom>
+      </PageWrap>
+    </AnalysisPage>
   );
 }
 
 export default Analysis;
+
+const AnalysisPage = styled.div`
+  background-color: rgb(34, 34, 31);
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  width: calc(100% - 285px);
+  height: 100vh;
+  color: white;
+`;
+
+const PageWrap = styled.div`
+  background-color: rgb(34, 34, 31);
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  height: 100vh;
+  color: white;
+`;
+
+// PageTop
+const PageTop = styled.div`
+  display: flex;
+  align-items: center;
+  > p {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(210, 210, 210);
+    margin: 0 16px;
+  }
+`;
+
+const PageMoveImg = styled.img`
+  width: 20px;
+  filter: invert(69%) sepia(0%) saturate(201%) hue-rotate(210deg) brightness(93%) contrast(90%);
+`;
+
+//PageMiddle
+const PageMiddle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 600px;
+`;
+// MiddleLeft
+const MiddleLeft = styled.div`
+  width: 650px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 100px;
+`;
+
+// TotalContent
+const TotalContent = styled.div`
+  margin-bottom: 20px;
+  height: 250px;
+`;
+
+const Title = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  > span {
+    font-size: 14px;
+    margin-right: 8px;
+  }
+  > p {
+    font-size: 18px;
+    font-weight: 600;
+  }
+`;
+
+const InnerTitle = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  border-right: 1px solid rgb(210, 210, 210);
+  padding-right: 20px;
+  margin-right: 20px;
+`
+const GraphZone = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+// MiddleRight
+const MiddleRight = styled.div`
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+`;
+// MiddleRightTop
+const MiddleRightTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+const RightlegendWrap = styled.div`
+`;
+const Rightlegend = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  > p {
+    color: rgb(160, 160, 160);
+    font-size: 12px;
+  }
+`;
+const ListDot = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 20%;
+  margin-right: 10px;
+`;
+// MiddleRightBottom
+const MiddleRightBottomWrap = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 20px 50px 20px;
+`;
+
+const PageBottom = styled.div`
+  height: 30%;
+`;
+

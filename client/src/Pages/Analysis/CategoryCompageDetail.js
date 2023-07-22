@@ -4,15 +4,20 @@ import Palette from "../../Palette/Palette.jsx";
 
 const Wrap = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
+  padding: 10px;
 `;
 const Title = styled.div`
   display: flex;
   align-items: center;
-  width: 20%;
+  width: 25%;
+  > p {
+    font-size: 13px;
+  }
 `;
 const Graph = styled.div`
-  width: 60%;
+  width: 75%;
   max-height: 21px;
   display: flex;
   justify-content: center;
@@ -20,21 +25,21 @@ const Graph = styled.div`
 const LeftWrap = styled.div`
   display: flex;
   justify-content: right;
-  width: 50%;
+  width: 40%;
 `;
 const RightWrap = styled.div`
   display: flex;
   justify-content: left;
-  width: 50%;
+  width: 60%;
 `;
 const GraphLeft = styled.div`
   display: flex;
   justify-content: right;
-  background-color: rgb(95, 95, 95);
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  background: linear-gradient(to left, rgba(100,100,100,1), rgba(100,100,100,0.5));
+  border-right: 1px solid rgb(210, 210, 210);
+  border-radius: 4px 0px 0px 4px;
   width: ${(props) => `${props.length}%`};
-  height: 100%;
+  height: 12px;
 `;
 const GraphRight = styled.div`
   display: flex;
@@ -42,20 +47,21 @@ const GraphRight = styled.div`
   background-color: ${(props) => props.color};
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  width: ${(props) => `${props.length - 10}%`};
-  height: 100%;
-  margin-right: 5px;
+  width: ${(props) => `${props.length}%`};
+  max-width: 65%;
+  height: 12px;
+  margin-right: 10px;
 `;
 const Money = styled.p`
-  color: white;
+  color: rgb(160, 160, 160);
   font-size: 13px;
   width: 100px;
   height: 100%;
   line-height: 21px;
 `;
 const ListDot = styled.div`
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background-color: ${(props) => props.color};
   border-radius: 50%;
   margin-right: 10px;
@@ -64,16 +70,24 @@ function CategoryCompageDetail({
   categoryamount,
   lastmonthcategoryamount,
   category,
+  lastmonthcategoryamountArr,
+  categoryamountArr,
 }) {
   const interval = categoryamount - lastmonthcategoryamount; // 이전달과 지난달의 차이
   const monthsum = categoryamount + lastmonthcategoryamount; // 이전달과 지난달의 합
-  const curPercent = (categoryamount / monthsum) * 100; // 현재 달 %
-  const prevPercent = (lastmonthcategoryamount / monthsum) * 100; // 지난 달 %
+  
+  const combineCategory = [...lastmonthcategoryamountArr,...categoryamountArr]
+  const maxValue = Math.max(...combineCategory); //이번달 지날달 모두 합친 배열의 최대값
+
+  const curPercent = (categoryamount / (maxValue - (maxValue * 0.7))) * 100; // 현재 달 %
+  const prevPercent = (lastmonthcategoryamount / (maxValue - (maxValue * 0.75))) * 100; // 지난 달 %
+
+
   return (
     <Wrap>
       <Title>
         <ListDot color={Palette[category]} />
-        <p style={{ color: Palette[category] }}>{category}</p>
+        <p>{category}</p>
       </Title>
       <Graph>
         <LeftWrap>

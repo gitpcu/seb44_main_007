@@ -1,41 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import Palette from "../../Palette/Palette";
-const ListUL = styled.ul`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  flex: auto;
-`;
-const Listli = styled.li`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  color: #ffffff;
-  justify-content: space-between;
-`;
-const ListDot = styled.div`
-  width: 10px;
-  height: 10px;
-  background-color: ${(props) => props.color};
-  border-radius: 50%;
-  margin-right: 10px;
-`;
-const ListCategory = styled.div`
-  font-size: 16px;
-  margin-right: 10px;
-  width: 80px;
-`;
-const ListPercentage = styled.div`
-  font-size: 16px;
-`;
-const ListPrice = styled.div`
-  font-size: 20px;
-  flex: auto;
-  text-align: right;
-`;
+
 
 function PieGraphList({ data }) {
+
   const sum = data.reduce((sums, obj) => {
     const { amount, category } = obj;
     if (sums[category]) {
@@ -45,6 +14,7 @@ function PieGraphList({ data }) {
     }
     return sums;
   }, {});
+
   const chartData = Object.entries(sum)
     .map(([name, value]) => ({
       name,
@@ -82,3 +52,41 @@ function PieGraphList({ data }) {
 }
 
 export default PieGraphList;
+
+const ListUL = styled.ul`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: auto;
+  padding: 10px 0 10px 10px;
+`;
+const Listli = styled.li`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  justify-content: space-between;
+`;
+const ListDot = styled.div`
+  width: 8px;
+  height: 8px;
+  background-color: ${(props) => props.color};
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+const ListCategory = styled.div`
+  font-size: 14px;
+  margin-right: 10px;
+  width: 80px;
+  color: rgb(160, 160, 160);
+`;
+const ListPercentage = styled.div`
+  font-size: 14px;
+  color: rgb(160, 160, 160);
+`;
+const ListPrice = styled.div`
+  font-size: 16px;
+  flex: auto;
+  text-align: right;
+`;
+
