@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "./Wishlist";
 import { ModalBackground, ModalContainer, ModalDiv } from "../Components/Modal"
+import axios from "axios"
 
 const PremiumContainer = styled.div`
   width: calc(100% - 300px);
@@ -117,6 +119,184 @@ const BodyRightTitle = styled.span`
 const BodyRightDescribe = styled.span`
   color: white;
 `
+const PaymentTitleDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+const PaymentTitle = styled(Title)`
+  font-size: 1.2rem;
+  margin: 0px 1%;
+`
+const PaymentBodyDiv = styled.div`
+  width: 100%;
+`
+const PaymentUl = styled.ul`
+   color: white;
+   padding: 1%;
+   list-style-position : inside;
+`
+const PaymentLi = styled.li`
+   margin: 15% 0px;
+   font-size: 1.2rem;
+`
+const PayButtonDiv = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+`
+const PayBtn = styled(PayButton)`
+  width:100%;
+  padding: 5%;
+`
+const PayContainer = styled(ModalContainer)`
+  width: 40%;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+const PayTypeDiv = styled.div`
+  width: 60%;
+  display: flex;
+`
+const PayTypeContainer = styled.div`
+  width: 20%;
+  height: 20%;
+  background-color: #D9D9D9;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 10px;
+`
+const PayTypeImg = styled.img`
+  width: 70%;
+`
+const PayTypeSpan = styled.span`
+  width:100%;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+`
+const PayInfoDiv = styled.div`
+  width: 30%;
+  height: 100%;
+  background-color: #D9D9D9;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+`
+const PaySpanDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10%;
+  margin-bottom: 10%;
+`
+const PaySpan = styled.span`
+  color: ${props => props.color};
+  font-size: ${props => props.size};
+  font-weight: bold;
+`
+const PaymentModal = ({closeModal}) => {
+  const [onPayment, setOnPayment] = useState(false)
+  const [payInfo, setPayInfo] = useState({next_redirect_pc_url: "",tid: ""})
+  
+  const kakaoPayment = () => {
+    console.log('카카오결제')
+    const params = {
+        cid: "TC0ONETIME",
+        partner_order_id: "partner_order_id",
+        partner_user_id: "partner_user_id",
+        item_name: "정기결제",
+        quantity: 1,
+        total_amount: 2000,
+        vat_amount: 0,
+        tax_free_amount: 0,
+        approval_url: "http://localhost:3000/paying",
+        fail_url: "http://localhost:3000/paying",
+        cancel_url: "http://localhost:3000/paying",
+      }
+    axios.post('https://kapi.kakao.com/v1/payment/ready', params, {
+      headers: {
+        Authorization: "KakaoAK 24a6516395e63c6bafa73862364422ac",
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    })
+    .then(res => {
+      console.log(res)
+      setPayInfo({next_redirect_pc_url: res.data.next_redirect_pc_url, tid: res.data.tid})
+    })
+    .then(res => {
+      localStorage.setItem('tid', payInfo.tid)
+      localStorage.setItem('next_redirect_pc_url', payInfo.next_redirect_pc_url)
+      window.open(payInfo.next_redirect_pc_url, "정기결제", '_blank')
+    })
+    .catch(err => console.log(err))
+  }
+
+  return (
+    <ModalBackground onClick={closeModal}>
+      {!onPayment ? (
+        <PayContainer onClick={(e) => e.stopPropagation()}>
+          <PayTypeDiv>
+            <PayTypeContainer>
+              <PayTypeImg src='https://www.svgrepo.com/show/442692/pay.svg'></PayTypeImg>
+              <PayTypeSpan>일반결제</PayTypeSpan>
+            </PayTypeContainer>
+            <PayTypeContainer>
+              <PayTypeImg src='https://www.svgrepo.com/show/368253/kakao-square.svg' onClick={kakaoPayment}></PayTypeImg>
+              <PayTypeSpan>카카오결제</PayTypeSpan>
+            </PayTypeContainer>
+          </PayTypeDiv>
+          <PayInfoDiv>
+            <PaySpanDiv>
+              <PaySpan color='rgba(0,0,0,0.5)'>결제 금액</PaySpan>
+              <PaySpan color='black' size='1.5rem'>2,000원</PaySpan>
+            </PaySpanDiv>
+            <PaySpanDiv>
+              <PaySpan color='rgba(0,0,0,0.5)'>상품명</PaySpan>
+              <PaySpan color='black' size='1.2rem'>프리미엄 구독</PaySpan>
+            </PaySpanDiv>
+          </PayInfoDiv>
+        </PayContainer>
+      ) : (
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
+        <ModalDiv>
+          <PaymentTitleDiv>
+            <TitleLogo src='https://www.svgrepo.com/show/485696/diamond.svg'></TitleLogo>
+            <PaymentTitle>프리미엄 혜택</PaymentTitle>
+          </PaymentTitleDiv>
+          <PaymentBodyDiv>
+            <PaymentUl>
+              <PaymentLi>
+                소비 습관에 대한 분석 보고서
+              </PaymentLi>
+              <PaymentLi>
+                자산 관리 전문가의 효율적인 소비 조언
+              </PaymentLi>
+              <PaymentLi>
+                AI가 알려주는 다음달 소비 계획
+              </PaymentLi>
+            </PaymentUl>
+          </PaymentBodyDiv>
+          <PayButtonDiv>
+            <PayBtn onClick={() => setOnPayment(true)}>결제창으로 이동</PayBtn>
+          </PayButtonDiv>
+        </ModalDiv>
+      </ModalContainer>
+      )
+      }
+    </ModalBackground>
+  )
+}
 export default function Premium(){
   const premiumInfo = [
     {
@@ -143,9 +323,14 @@ export default function Premium(){
   const openModal = () =>{
     setModal(true)
   }
+  const closeModal = () =>{
+    setModal(false)
+  }
+  const isPayOver = useSelector(state => state.payment)
+  console.log(isPayOver)
   return(
     <>
-      {/* {modal ? <Modal} */}
+      {modal ? <PaymentModal closeModal={closeModal}></PaymentModal>: ''}
       <PremiumContainer>
         <PremiumDiv>
           <PremiumTitleDiv>

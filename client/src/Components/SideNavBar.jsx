@@ -1,3 +1,4 @@
+
 import { styled } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -249,7 +250,8 @@ export default function SideNavBar({ setIsHome }) {
 
   if(location === '/'
   || location === '/login'
-  || location === '/signup'){
+  || location === '/signup'
+  || location === '/paying'){
     return ''
   }
 

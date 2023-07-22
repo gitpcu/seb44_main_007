@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import { memberdata } from '../InitData/memberdata';
+import apiUrl from '../API_URL';
 
 const Container = styled.div`
   width: 100%;
@@ -249,7 +250,7 @@ export default function LoginSignup({page}){
       password: password,
     }
     axios
-    .post('https://fd53-58-234-27-220.ngrok-free.app/login', memberInfo)
+    .post(`${apiUrl.url}/login`, memberInfo)
     .then(res => {
       console.log(res)
       localStorage.setItem('memberId', res.headers.memberid);
@@ -276,7 +277,7 @@ export default function LoginSignup({page}){
       address: ''
     }
     axios
-    .post('https://fd53-58-234-27-220.ngrok-free.app/members', memberInfo)
+    .post(`${apiUrl.url}/members`, memberInfo)
     .then(res => {
       navigate('/login')
     })
