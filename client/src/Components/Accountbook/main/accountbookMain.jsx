@@ -170,7 +170,7 @@ const AccountbookMain = () => {
                   목표 지출 금액
                   <TargetAmountModal />
                 </S.Title>
-                <S.AmountGoal>{amountGoal}</S.AmountGoal>
+                <S.AmountGoal>{amountGoal.toLocaleString()}</S.AmountGoal>
               </S.InnerWrapperGoal>
             </S.AccountBox>
             

@@ -360,7 +360,7 @@ const RightContents = styled.div`
     }
 `
 const PremiumBtn = styled.button`
-    background-color: rgba(246, 111, 60, 1);
+    background-color: rgb(160, 160, 160);
     border-radius: 20px;
     border: none;
     color: white;
@@ -377,6 +377,9 @@ const PremiumBtn = styled.button`
     }
     > p {
         font-size: 14px;
+    }
+    &:hover {
+        background-color: rgb(113, 113, 113);
     }
 `
 const Body = styled(Header)`
@@ -516,7 +519,7 @@ const PremiumDiv = styled.div`
     justify-content: space-between;
 `
 const PremiumInfoDiv = styled.div`
-    width: 30%;
+    width: 300px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -529,13 +532,13 @@ const PremiumImgDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: 10px;
 `
 const PremiumLogoImg = styled.img`
-    width: 20px;
+    width: 24px;
     height: 20px;
     filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(303deg) brightness(102%) contrast(103%);
 `
 const PremiumInfoSpan = styled.span`
     color: white;
-    margin-left: 3%;
 `
