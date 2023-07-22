@@ -24,7 +24,7 @@ export const ModalContainer = styled.div`
   height: 60%;
   border-radius: 20px;
   background-color: #22221F;
-  padding: 3% 2% 5% 2%;
+  padding: 80px 50px;
   z-index: 20;
 `
 export const ModalDiv = styled.div`
@@ -37,19 +37,19 @@ const ModalMenuDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 15%;
+  margin-bottom: 20%;
   padding: 1%;
   border-bottom: 1px solid white;
 `
 const ModalTitleDiv = styled.div`
   width: 60%;
+  margin-bottom: 10px;
   text-align: left;
 `
 const ModalTitle = styled.span`
   width: 50%;
   color: white;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
 `
 const ModalContentDiv = styled.div`
   width: 50%;
@@ -70,16 +70,17 @@ const ModalButtonDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 30%;
+  margin-top: 15%;
 `
 const ModalButton = styled.button`
-  border-radius: 20px;
-  margin: 0px 1%;
+  border: none;
+  border-radius: 10px;
   padding: 10px;
-  width: 25%;
+  width: 20%;
   background-color: ${props => props.save ? '#F9591D' : '#C0C0C0'};
   color: ${props => props.save ? 'white' : 'black'};
   margin: 0px 10%;
+  cursor: pointer;
 `
 
 export default function Modal({setOpenModal, editMode, setEditMode, item}){

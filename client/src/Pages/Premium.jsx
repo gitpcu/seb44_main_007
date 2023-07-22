@@ -21,11 +21,11 @@ const PremiumDiv = styled.div`
 `;
 const PremiumTitleDiv = styled.div`
   width: 100%;
-  border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 2%;
+  padding: 2% 1%;
   margin-bottom: 5%;
 `
 const TitleDiv = styled.div`
@@ -35,20 +35,22 @@ const TitleDiv = styled.div`
   align-items: center;
 `
 const Title = styled.span`
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
 `
 const TitleLogo = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   filter: invert(98%) sepia(49%) saturate(1122%) hue-rotate(26deg) brightness(100%) contrast(100%);
+  margin-right: 10px;
 `
 const PayButton = styled(Button)`
   background-color: #F9591D;
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
+  border: none;
 `
 const PremiumBodyDiv = styled.div`
   width: 100%;
@@ -86,13 +88,13 @@ const BodyLeftDivOdd = styled(BodyLeftDiv)`
   right: 15%;
 `
 const BodyLeftImg = styled.img`
-  width: 60%;
+  width: 50%;
   filter: invert(31%) sepia(37%) saturate(429%) hue-rotate(87deg) brightness(88%) contrast(89%);
   margin-bottom: 7%;
 `
 const BodyLeftSpan = styled.span`
   color: #365A42;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
 `
 const PremiumBodyRight = styled.div`
@@ -113,11 +115,12 @@ const BodyRightDivOdd = styled(BodyRightDiv)`
 `
 const BodyRightTitle = styled.span`
   color: white;
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: bold;
+  margin-bottom: 16px;
 `
 const BodyRightDescribe = styled.span`
-  color: white;
+  color: #ffffffc6;
 `
 const PaymentTitleDiv = styled.div`
   width: 100%;

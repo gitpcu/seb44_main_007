@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components'
 import axios from 'axios'
 import userImage from '../Images/user.JPG'
+import { Link } from 'react-router-dom';
 
 import apiUrl from '../API_URL';
 
@@ -169,10 +170,12 @@ const MypageComponent = () => {
                     </LeftContents>
                     <RightContents>
                         <p>{member.name}님 환영합니다!</p>
-                        <PremiumBtn>
-                            <img src={PremiumImg} alt='diamond'/>
-                            <p>프리미엄 구독하기</p>
-                        </PremiumBtn>
+                        <Link to="/premium">
+                            <PremiumBtn>
+                                <img src={PremiumImg} alt='diamond'/>
+                                <p>프리미엄 구독하기</p>
+                            </PremiumBtn>
+                        </Link>
                     </RightContents>
                 </Header>
                 <Body>

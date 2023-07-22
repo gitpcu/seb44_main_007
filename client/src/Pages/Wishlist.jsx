@@ -21,7 +21,7 @@ const WishlistContainer = styled.div`
 `;
 
 const WishlistDiv = styled.div`
-  width: 80%;
+  width: 85%;
 `;
 const LimitDiv = styled.div`
   border: 1px solid white;
@@ -70,9 +70,12 @@ const MenuDiv = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
 `;
 const TitleDiv = styled.div`
-  width: 12.5%;
+  width: 12%;
   color: white;
 `;
 const TitleSpan = styled.span`
@@ -82,37 +85,41 @@ const TitleSpan = styled.span`
   height: 100%;
 `;
 const ButtonDiv = styled.div`
-  width: 72.5%;
+  width: 78%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding-top: 5px;
 `;
 export const Button = styled.button`
-  border-radius: 20px;
+  border: 1px solid ${(props) => (props.selected ? 'rgb(246, 111, 60)' : 'rgb(210, 210, 210)')};
+  border-radius: 10px;
   margin: 0px 1%;
-  padding: 10px;
-  width: 18%;
-  background-color: ${(props) => (props.selected ? "#F9591D" : "white")};
-  color: ${(props) => (props.selected ? "white" : "black")};
+  padding: 8px;
+  width: 12%;
+  background-color: ${(props) => (props.selected ? "#F9591D" : "rgb(34, 34, 31)")};
+  color: white;
+  cursor: pointer;
 `;
 const AddDiv = styled.div`
-  width: 15%;
+  width: 10%;
 `;
 const AddButton = styled(Button)`
   width: 100%;
   background-color: #c5ff78;
   color: #365a42;
   height: 100%;
+  border: 1px solid #c5ff78;
+  cursor: pointer;
 `;
 const ListDiv = styled.div`
   width: 100%;
   border: 1px solid white;
   border-radius: 20px;
   padding: 3%;
-  margin: 1% 0%;
+  margin: 2% 0%;
   overflow: scroll;
-  background-color: black;
+  background-color: rgb(25, 25, 25);
   &::-webkit-scrollbar {
     display: none;
   }
