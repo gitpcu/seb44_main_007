@@ -173,9 +173,9 @@ function Analysis() {
   const [year, setYear] = useState(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const day = () => {
-    if (month = 1 || 3 || 5 || 7 || 8 || 10 || 12) {
+    if (month === 1 || 3 || 5 || 7 || 8 || 10 || 12) {
       return 31
-    } else if (month = 2){
+    } else if (month === 2){
       return 28
     } else {
       return 30
