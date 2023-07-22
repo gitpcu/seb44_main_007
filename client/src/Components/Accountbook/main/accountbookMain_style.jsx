@@ -2,7 +2,7 @@ import {styled} from "styled-components";
 import DatePicker from 'react-datepicker';
 import Palette from "../../../Palette/Palette";
 
-export const AccountbookPage = styled.body`
+export const AccountbookPage = styled.div`
 height: 100%;
 color: white;
 display: flex;

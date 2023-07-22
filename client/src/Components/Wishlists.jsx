@@ -71,8 +71,8 @@ const ListSpan = styled.span`
 export const CategoryCircle = styled.div`
   border-radius: 100%;
   background-color: ${(props) => props.bgcolor};
-  width: 21px;
-  height: 18px;
+  width: 12px;
+  height: 10px;
   margin: 0px 10px;
 `;
 const EditImg = styled.img`

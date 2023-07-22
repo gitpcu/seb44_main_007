@@ -154,7 +154,7 @@ function Analysis() {
   useEffect(() => {
       const getData = async () => {
       try {
-          const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month}-01&endDate=2023-0${month}-${day}`,{
+          const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-0${month}-01&endDate=2023-0${month}-31`,{
               headers: {
                 'ngrok-skip-browser-warning': '69420',
                 'withCredentials': true,
@@ -172,15 +172,6 @@ function Analysis() {
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
-  const day = () => {
-    if (month === 1 || 3 || 5 || 7 || 8 || 10 || 12) {
-      return 31
-    } else if (month === 2){
-      return 28
-    } else {
-      return 30
-    }
-  }
 
   // get Data from Redux
   const initData = useSelector((state) => state.data.initData);

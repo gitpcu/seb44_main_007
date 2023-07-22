@@ -82,8 +82,6 @@ const AccountbookMain = () => {
   
   const handleDateChange = (date) => {
     dispatch(selectDate(date));
-    console.log(date)
-
   };
 
   const currentDate = selectedDate.selectedDate;
@@ -152,7 +150,7 @@ const AccountbookMain = () => {
     };
     getAmountGoal()
   }, [memberId]);
-
+  
     return (
       <>
       <S.AccountbookPage>

@@ -118,7 +118,7 @@ const AccountbookSide = () => {
                         </AmountBar>
                         <TextDiv>
                             <p>{totalExpend.toLocaleString()}</p>
-                            <p>{targetExpend()}</p>
+                            <p>{targetExpend().toLocaleString()}</p>
                         </TextDiv>
                         <TextDiv>
                             <p>총 지출</p>
@@ -156,7 +156,7 @@ const AccountbookSide = () => {
   };
   export default AccountbookSide;
 
-const AccountSidePage = styled.body`
+const AccountSidePage = styled.div`
     color: rgb(34, 34, 31);
     height: 100%;
 `

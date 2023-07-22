@@ -252,7 +252,7 @@ const MypageComponent = () => {
 
 export default MypageComponent
 
-const MyPage = styled.body`
+const MyPage = styled.div`
     width: calc(100% - 285px);
     height: 100%;
     color: white;

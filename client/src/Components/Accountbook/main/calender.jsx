@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { selectDate } from '../../../Redux/date_reducer';
 import { format, addMonths, subMonths } from 'date-fns';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
 import { isSameMonth, isSameDay, addDays } from 'date-fns';
@@ -39,10 +40,11 @@ export const Calender = () => {
         setCurrentMonth(addMonths(currentMonth, 1));
     };
 
-      
+    const dispatch = useDispatch();
     //날짜 
     const onDateClick = (day) => {
         setSelectedDate(day);
+        dispatch(selectDate(day))
     };
 
     const monthStart = startOfMonth(currentMonth);
@@ -92,7 +94,6 @@ export const Calender = () => {
             return acc;
         }, {})
         : 0;
-      
 
     while (day <= weekEnd) {
         for (let i = 0; i < 7; i++) {
@@ -128,7 +129,7 @@ export const Calender = () => {
             day = addDays(day, 1);
         }
         rows.push(
-            <CellWeek>{days}</CellWeek>,
+            <CellWeek key={day.getTime()}>{days}</CellWeek>,
         );
         days = [];
     }
