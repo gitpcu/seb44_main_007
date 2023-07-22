@@ -37,9 +37,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/accountbook" element={<Accountbook />} />
-          <Route path="/analysis" element="소비패턴분석" />
+          <Route path="/analysis" element={<Analysis />} />
           <Route path="/wishList" element={<Wishlist />} />
           <Route path="/premium" element={<Premium />} />
+          <Route path="/mypage" element={<Mypage />} />
         </Routes>
       </BrowserRouter>
     </main>

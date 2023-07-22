@@ -11,6 +11,7 @@ import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const RenderDays = () => {
+
     const days = [];
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -25,6 +26,8 @@ const RenderDays = () => {
 };
 
 export const Calender = () => {
+    const memberId = localStorage.getItem('memberId')
+    
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -59,7 +62,7 @@ export const Calender = () => {
     useEffect(() => {
         const getData = async () => {
         try {
-             const response = await axios.get(apiUrl.url + '/trades/2?startDate=2023-07-01&endDate=2023-07-31',{
+             const response = await axios.get(`${apiUrl.url}/trades/${memberId}?startDate=2023-07-01&endDate=2023-07-31`,{
                   headers: {
                     'ngrok-skip-browser-warning': '69420',
                     'withCredentials': true,

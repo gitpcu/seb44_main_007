@@ -75,7 +75,7 @@ export const data = [
       "tradeId": 1,
       "type": "지출",
       "tradeName": "월세",
-      "amount": 500000,
+      "amount": 410000,
       "note": "월세 지출,,,,",
       "date": "2023-07-03",
       "category": "주거_통신"
@@ -93,10 +93,10 @@ export const data = [
       "tradeId": 9,
       "type": "지출",
       "tradeName": "유니폼 구매",
-      "amount": 55000,
+      "amount": 75000,
       "note": "방바닥 닦을 걸레가 하나 더 생겼나",
       "date": "2023-07-04",
-      "category": "식비_간식"
+      "category": "생활_마트"
     },
     {
       "tradeId": 10,
@@ -129,7 +129,7 @@ export const data = [
       "tradeId": 11,
       "type": "지출",
       "tradeName": "누나에게 대출",
-      "amount": 100000,
+      "amount": 50000,
       "note": "하나님 아버지 한명 올라갑니다",
       "date": "2023-07-05",
       "category": "기타지출"
@@ -156,10 +156,10 @@ export const data = [
       "tradeId": 2,
       "type": "지출",
       "tradeName": "교통카드 충전",
-      "amount": 50000,
+      "amount": 30000,
       "note": "티머니 충전",
       "date": "2023-07-06",
-      "category": "교육_문화"
+      "category": "교통_차량"
     },
     {
       "tradeId": 4,

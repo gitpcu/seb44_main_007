@@ -7,6 +7,7 @@ import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const AccountbookSide = () => {
+    const memberId = localStorage.getItem('memberId')
 
   // 목표 지출 금액 서버에서 받아오기
   const [amountGoal, setAmountGoal] = useState(0);
@@ -14,14 +15,14 @@ const AccountbookSide = () => {
   useEffect(() => {
     const getAmountGoal = async () => {
       try {
-        const response = await axios.get(apiUrl.url + '/totals/1', {
+        const response = await axios.get(apiUrl.url + '/totals/' + memberId, {
           headers: {
             'ngrok-skip-browser-warning': '69420',
             'withCredentials': true,
             'Authorization': localStorage.getItem('Authorization-Token'),
           },
         });
-        setAmountGoal(response.data);
+        setAmountGoal(response.data[0].goal);
       } catch (error) {
         console.error(error);
       }
@@ -33,9 +34,9 @@ const AccountbookSide = () => {
     
     const targetExpend = () => {
         if(amountGoal === 0){
-            return amountGoal
+            return 0
         } else {
-            return amountGoal.data.goal
+            return amountGoal
         }
     }
     const totalExpend = useSelector((state) => state.totalExpend);
@@ -69,7 +70,7 @@ const AccountbookSide = () => {
     useEffect(() => {
         const getData = async () => {
         try {
-             const response = await axios.get(apiUrl.url + '/trades/2?startDate=2023-07-01&endDate=2023-07-31',{
+             const response = await axios.get(apiUrl.url + '/trades/' + memberId + '?startDate=2023-07-01&endDate=2023-07-31',{
                   headers: {
                     'ngrok-skip-browser-warning': '69420',
                     'withCredentials': true,
@@ -84,7 +85,7 @@ const AccountbookSide = () => {
         getData();
     }, []);
 
-    //일별 총 수입/지출
+    // 일별 총 수입/지출
     // const accountDataList = useSelector((state) => state.accountData.accountDataList); 
     const accountDataList = accountData; 
     const calTotalProfit = Array.isArray(accountDataList)
@@ -117,7 +118,7 @@ const AccountbookSide = () => {
                         </AmountBar>
                         <TextDiv>
                             <p>{totalExpend.toLocaleString()}</p>
-                            <p>{targetExpend().toLocaleString()}</p>
+                            <p>{targetExpend()}</p>
                         </TextDiv>
                         <TextDiv>
                             <p>총 지출</p>

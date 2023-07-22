@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { targetExpend } from '../../../Redux/account_reducer';
 import { styled } from 'styled-components';
 
 import axios from 'axios'
 import apiUrl from '../../../API_URL';
 
 const TargetAmountModal = () => {
+  const memberId = localStorage.getItem('memberId')
   //모달 열기
   const [modalIsOpen, setModalIsOpen] = useState(false);
   
@@ -28,35 +27,34 @@ const TargetAmountModal = () => {
     }
   };
 
+
   //목표 지출 금액 리듀서
   const [inputTarget, setInputTarget] = useState(0);
-  // const dispatch = useDispatch();
-
-  const handleTarget = () => {
-    const inputData = {
-      goal: inputTarget,
-    };
-    if(inputTarget === 0){
-      axios.post(apiUrl.url + '/totals',inputData,{
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-        },
-      })
-    } else {
-      axios.patch(apiUrl.url + '/totals/1',inputData,{
-        headers: {
-          'Authorization': localStorage.getItem('Authorization-Token'),
-        },
-      })
-    }
-    // dispatch(targetExpend(inputTarget));
-    closeModal();
-  };
 
   const handleNumberChange = (e) => {
     const number = e.target.value;
     const numerValue = number.replace(/\D/g, '');
     setInputTarget(parseInt(numerValue));
+  };
+
+  const handleTarget = () => {
+    const inputData = {
+      goal: inputTarget,
+    };
+    // if(inputTarget === 0){
+      // axios.post(`${apiUrl.url}/totals/${memberId}`,inputData,{
+      //   headers: {
+      //     'Authorization': localStorage.getItem('Authorization-Token'),
+      //   },
+      // })
+    // } else {
+      axios.patch(`${apiUrl.url}/totals/${memberId}`,inputData,{
+        headers: {
+          'Authorization': localStorage.getItem('Authorization-Token'),
+        },
+      })
+    // }
+    closeModal();
   };
 
   return (
@@ -93,6 +91,9 @@ const ModalBtn = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  &:hover {
+      background-color: rgba(221, 93, 47, 0.5);
+    }
 `;
 
 const ModalBackdrop = styled.div`
@@ -152,5 +153,9 @@ const ModalInput = styled.div`
     font-weight: 600;
     color: white;
     background-color: rgb(246, 111, 60);
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(221, 93, 47);
+    }
   }  
 `;

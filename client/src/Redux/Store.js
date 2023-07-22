@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   selectedDate: selectedDateReducer, //선택한 날짜
   id: idReducer, // 새로운 slice를 rootReducer에 추가합니다.
   wishlist: wishListReducer,
-  useAble: useableReducer
+  useAble: useableReducer,
 });
 
 const store = configureStore({

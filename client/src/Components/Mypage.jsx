@@ -3,16 +3,19 @@ import { styled } from 'styled-components'
 import axios from 'axios'
 import userImage from '../Images/user.JPG'
 
+import apiUrl from '../API_URL';
+
 const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아몬드 아이콘
+const memberId = localStorage.getItem('memberId')
 
 const MypageComponent = () => {
-    //데이터 받아오기
+    //유저 데이터 받아오기
     const [member, setMember] = useState(''); //useState(null)
 
     useEffect(() => {
         const fetchMember = async () => {
         try {
-            const response = await axios.get('https://9b2a-58-234-27-220.ngrok-free.app/members/2',{
+            const response = await axios.get(`${apiUrl.url}/members/${memberId}`,{
                 headers: {
                   'ngrok-skip-browser-warning': '69420',
                   'withCredentials': true,
@@ -27,8 +30,6 @@ const MypageComponent = () => {
 
         fetchMember();
     }, []);
-
-    console.log(member);
     
     //이미지 수정
     const imgRef = useRef(null);
@@ -46,7 +47,7 @@ const MypageComponent = () => {
         // formData.append('image', file);
         
         setProfileImage(imageURL);
-        axios.patch('https://9b2a-58-234-27-220.ngrok-free.app//members/1', {
+        axios.patch(`${apiUrl.url}/members/${memberId}`, {
             imageURL: imageURL,
             }, {
                 headers: {
@@ -109,7 +110,7 @@ const MypageComponent = () => {
 
     const handleEditInfo = async () => {
         try {
-          await axios.patch('https://9b2a-58-234-27-220.ngrok-free.app//members/2', updatedMember,{
+          await axios.patch(`${apiUrl.url}/members/${memberId}`, updatedMember,{
             headers: {
                 'Authorization': localStorage.getItem('Authorization-Token'),
               },
