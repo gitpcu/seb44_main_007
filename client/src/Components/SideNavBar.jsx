@@ -10,7 +10,7 @@ const Nav = styled.nav`
   position: relative;
   top: 0px;
   left: 0px;
-  width: 15%;
+  width: 300px;
   height: 100vh;
   background-color: #191919;
 `;
@@ -23,20 +23,26 @@ const SidebarContainer = styled.div`
 `;
 const LogoDiv = styled.div`
   width: 100%;
+  height: 15%;
+  min-height: 90px;
 `;
 const LogoImg = styled.img`
   width: 90%;
 `;
 const DivideBar = styled.div`
   width: 100%;
-  height: 2px;
-  margin: ${(props) => props.margin};
+  height: 3px;
+  display: flex;
+  flex: 1;
+  margin: 10% 0px 100% 0px;
   background-color: #c0c0c0;
 `;
 const MenuDiv = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   width: 100%;
+  border-top: 2px solid #c0c0c0;
 `;
 const Menu = styled.ul`
   position: relative;
@@ -265,7 +271,6 @@ export default function SideNavBar({ setIsHome }) {
         <LogoDiv>
           <LogoImg src={mainLogo}></LogoImg>
         </LogoDiv>
-        <DivideBar margin="3rem 0px 1rem 0px" />
         <MenuDiv>
           <Menu>
           {menuList.map((el, idx) => {
@@ -278,7 +283,7 @@ export default function SideNavBar({ setIsHome }) {
                   setHoveredIdx={setHoveredIdx}
                   curLocation={curLocation}
                 />
-                {idx === 2 ? <DivideBar margin='3rem 0px 18rem 0px' /> : null}
+                {idx === 2 ? <DivideBar/> : null}
               </div>
             ) : (
               <LowerMenu

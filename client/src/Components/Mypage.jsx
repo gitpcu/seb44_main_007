@@ -304,7 +304,7 @@ const MypageComponent = () => {
 export default MypageComponent
 
 const MyPage = styled.div`
-    width: calc(100% - 285px);
+    width: calc(100% - 300px);
     height: 100%;
     color: white;
     display: flex;

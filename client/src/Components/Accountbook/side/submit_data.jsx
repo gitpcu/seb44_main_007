@@ -129,9 +129,11 @@ export default SubmitData
 
 const SubmitWrapper = styled.div`
     border: 2px solid rgb(210, 210, 210);
+    width: 100%;
     height: 100%;
+    max-height: 460px;
     border-radius: 16px;
-    padding: 28px 36px;
+    padding: 20px 30px;
 `
 const Header = styled.div`
     display: flex;
@@ -156,15 +158,15 @@ const TabButton = styled.button`
 `;
 
 const SubmitInputWapper = styled.form`
-    padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 10px 10px 0;
 `
 const SubmitInputContents = styled.div`
     width: 100%;
+    padding: 7px 0;
     margin-bottom: 10px;
-    padding: 10px 0;
     border-bottom: 2px solid rgb(210, 210, 210);
     display: flex;
     flex-direction: row;
@@ -175,11 +177,12 @@ const SubmitInputContents = styled.div`
         flex-direction: column;
         align-items: start;
         border-bottom: none;
-        margin-bottom: 15px;
+        margin-top: 5px;
     }
 `
 const Title = styled.div`
     padding-left: 10px;
+    font-size: 14px;
 `
 
 const TabCategory = styled.div`

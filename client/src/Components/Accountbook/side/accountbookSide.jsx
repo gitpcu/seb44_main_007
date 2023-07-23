@@ -108,52 +108,52 @@ const AccountbookSide = () => {
     return (
         <>
             <AccountSidePage>
-                <AccountSideWrapper>
-                    {/* 목표 금액 대비 지출 */}
-                    <TargetAmountForm>
-                        <Header>
-                            <Title>목표 금액 대비 지출</Title>
-                            <Percentage zero={targetExpend() === 0}>
-                                {targetExpend() === 0 ? '목표 지출 금액을 설정해 주세요.' : formattedPercentage + '%'}
-                            </Percentage>
-                        </Header>
-                        <AmountBar>           
-                            <AmountProgress style={{width: `${formattedPercentage}%` }}> </AmountProgress>
-                        </AmountBar>
-                        <TextDiv>
-                            <p>{totalExpend.toLocaleString()}</p>
-                            <p>{targetExpend().toLocaleString()}</p>
-                        </TextDiv>
-                        <TextDiv>
-                            <p>총 지출</p>
-                            <p>목표 지출 금액</p>
-                        </TextDiv>
-                    </TargetAmountForm>
-                    {/* 일별 총 수입/지출 */}
-                    <DayTotalForm>
-                        <Header>
-                            <Title>일별 총 수입/지출</Title>
-                            <Day> {formatDateShort(currentDate)} </Day>
-                        </Header>
-                        <DayTotalInner>
-                            <InnerLine>
-                                <Text>총 수입</Text>
-                                <Total style={{color : 'rgb(255, 64, 52)' }}>+ {calTotalProfit.toLocaleString()}</Total>
-                            </InnerLine>
-                            <InnerLine>
-                                <Text>총 지출</Text>
-                                <Total>- {calTotalExpend.toLocaleString()}</Total>
-                            </InnerLine>
-                            <Line />
-                            <InnerLine>
-                                <Text>합계</Text>
-                                <Total>{total > 0 ? '+' + total.toLocaleString() : total.toLocaleString()}</Total>
-                            </InnerLine>
-                        </DayTotalInner>
-                    </DayTotalForm>
-                    {/* 입력창 */}
+                {/* 목표 금액 대비 지출 */}
+                <TargetAmountForm>
+                    <Header>
+                        <Title>목표 금액 대비 지출</Title>
+                        <Percentage zero={targetExpend() === 0}>
+                            {targetExpend() === 0 ? '목표 지출 금액을 설정해 주세요.' : formattedPercentage + '%'}
+                        </Percentage>
+                    </Header>
+                    <AmountBar>           
+                        <AmountProgress style={{width: `${formattedPercentage}%` }}> </AmountProgress>
+                    </AmountBar>
+                    <TextDiv>
+                        <p>{totalExpend.toLocaleString()}</p>
+                        <p>{targetExpend().toLocaleString()}</p>
+                    </TextDiv>
+                    <TextDiv>
+                        <p>총 지출</p>
+                        <p>목표 지출 금액</p>
+                    </TextDiv>
+                </TargetAmountForm>
+                {/* 일별 총 수입/지출 */}
+                <DayTotalForm>
+                    <Header>
+                        <Title>일별 총 수입/지출</Title>
+                        <Day> {formatDateShort(currentDate)} </Day>
+                    </Header>
+                    <DayTotalInner>
+                        <InnerLine>
+                            <Text>총 수입</Text>
+                            <Total style={{color : 'rgb(255, 64, 52)' }}>+ {calTotalProfit.toLocaleString()}</Total>
+                        </InnerLine>
+                        <InnerLine>
+                            <Text>총 지출</Text>
+                            <Total>- {calTotalExpend.toLocaleString()}</Total>
+                        </InnerLine>
+                        <Line />
+                        <InnerLine>
+                            <Text>합계</Text>
+                            <Total>{total > 0 ? '+' + total.toLocaleString() : total.toLocaleString()}</Total>
+                        </InnerLine>
+                    </DayTotalInner>
+                </DayTotalForm>
+                {/* 입력창 */}
+                <SubmitDataForm>
                     <SubmitData />
-                </AccountSideWrapper>
+                </SubmitDataForm>
             </AccountSidePage>
         </>
     );
@@ -162,24 +162,23 @@ const AccountbookSide = () => {
 
 const AccountSidePage = styled.div`
     color: rgb(34, 34, 31);
-    height: 100%;
+    width: 30%;
+    height: 100%;    
+    min-width: 410px;
+    padding: 70px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: center;
 `
-const AccountSideWrapper = styled.div`
-    width: 520px;
-    min-height: 100vh;
-    padding: 50px;
-`
+
 const TargetAmountForm = styled.div`
     width: 100%;
-    height: 110px;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    margin-bottom: 40px;
 `
 
 const Header = styled.div`
-    width: 100%;
     height: 24px;
     display: flex;
     flex-direction: row;
@@ -193,7 +192,7 @@ const Title = styled.p`
 `
 const Percentage = styled.p`
     font-weight: ${props => props.zero ? '400' : '700'};
-    font-size: ${props => props.zero ? '14px' : '20px'};
+    font-size: ${props => props.zero ? '12px' : '20px'};
     color: ${props => props.zero ? 'rgb(160, 160, 160);' : 'rgb(246, 111, 60)'};
 `
 
@@ -224,8 +223,14 @@ const TextDiv = styled.div`
 `
 
 const DayTotalForm = styled(TargetAmountForm)`
-    height: 100%;
 `
+const SubmitDataForm = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`
+
 const Day = styled(Percentage)`
     color: rgb(34, 34, 31);
 `

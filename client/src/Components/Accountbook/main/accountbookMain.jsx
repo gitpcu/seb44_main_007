@@ -197,14 +197,16 @@ const AccountbookMain = () => {
                 </div>
               </S.AccountbookHeader>
               <S.AccountbookContents>
-                <S.TabContents active={activeTab === 0}>
-                  <S.DatePage>
+                <S.TabContents active={activeTab === 0} style={{marginTop : '30px'}}>
+                  {/* <S.DatePage>
                     <img src={leftIcon} alt="<" />
                     <p>날짜 페이지 네이션</p>
                     <img src={rightIcon} alt=">" />
-                  </S.DatePage>
+                  </S.DatePage> */}
                   <S.DateContent>
-                    <S.MonthDay>{formatDateShort(currentDate)}</S.MonthDay>
+                    <S.MonthDay>
+                      <p>{formatDateShort(currentDate)}</p>
+                    </S.MonthDay>
                     <S.DataUl>
                       {Array.isArray(accountDataList)?accountDataList.filter((data) => data.date === formatDate(currentDate)).map((item) => {return(
                         <S.DataLi>

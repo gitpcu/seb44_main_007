@@ -356,7 +356,7 @@ const AnalysisPage = styled.div`
   display: flex;
   flex-direction: column;
   padding: 40px;
-  width: calc(100% - 285px);
+  width: calc(100% - 300px);
   height: 100vh;
   color: white;
 `;

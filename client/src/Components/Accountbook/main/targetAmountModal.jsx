@@ -107,7 +107,7 @@ export default TargetAmountModal;
 const ModalBtn = styled.button`
   background: rgba(246, 111, 60, 0.5);
   text-decoration: none;
-  padding: 5px 7px;
+  padding: 4px 7px;
   color: white;
   border: none;
   border-radius: 5px;

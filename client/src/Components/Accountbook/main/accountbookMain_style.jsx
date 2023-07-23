@@ -3,45 +3,50 @@ import DatePicker from 'react-datepicker';
 import Palette from "../../../Palette/Palette";
 
 export const AccountbookPage = styled.div`
-height: 100%;
+width: 70%;
+min-width: 700px;
+height: 100vh;
 color: white;
 display: flex;
-flex-direction: row;
+flex-direction: column;
+background-color: rgb(34, 34, 31);
 `
 
 export const AccountbookWrapper = styled.div`
-width: 1100px;
-min-height: 100vh;
-background-color: rgb(34, 34, 31);
+width: 100%;
+height: 100%;
 padding: 50px;
+display: flex;
+flex-direction: column;
+flex: 1;
 `
 
 export const userWelcome = styled.p`
 font-size: 26px;
-margin-bottom: 36px;
+margin-bottom: 50px;
 `
 
-export const AccountBox = styled.ul`
-width: 1000px;
-height: 130px;
+export const AccountBox = styled.div`
+height: 15%;
+min-height: 110px;
 border-radius: 20px;
 border: solid 2px rgb(160, 160, 160) ;
 display: flex;
 flex-direction: row;
-justify-content: space-between;
-margin-bottom: 10px;
+margin-bottom: 50px;
 `
 
-export const InnerWrapper = styled.li`
+export const InnerWrapper = styled.div`
 flex: 1;
 display: flex;
 flex-direction: column;
+padding: 25px;
+padding-bottom: 18px;
+border-radius: 18px;
 justify-content: space-between;
-padding: 25px 30px;
 `
 export const InnerWrapperGoal = styled(InnerWrapper)`
 background: linear-gradient(to left top , rgba(246, 111, 60, 1), rgba(34, 34, 31, 1));
-border-radius: 18px;
 `
 
 export const Title = styled.div`
@@ -61,17 +66,19 @@ justify-content: flex-end;
 `
 
 export const AccountbookSection = styled.div`
-padding: 30px;
+margin: 0 50px;
+display: flex;
+flex-direction: column;
+flex: 1;
 `
 export const AccountbookHeader = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
-height: 35px;
 .datePicker {
   display: flex;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: rgb(34, 34, 31);
   box-shadow: none;
   box-sizing: border-box;
@@ -126,16 +133,15 @@ outline: none;
 export const AccountbookContents = styled.div`
 display: flex;
 flex: 1;
-
 `
 
 export const TabContents = styled.div`
-  display: ${(props) => (props.active ? 'block' : 'none')};
-height: 550px;
+display: ${(props) => (props.active ? 'block' : 'none')};
+flex: 1;
+height: 100%;
 
 `;
 export const DatePage = styled.div`
-padding-top: 42px;
 display: flex;
 flex-direction: row;
 >p{
@@ -148,23 +154,24 @@ flex-direction: row;
 }
 `
 export const DateContent = styled.div`
+width: 100%;
+height: 100%;
 display: flex;
 flex-direction: row;
 `
 
 export const MonthDay = styled.div`
-width: 110px;
-height: 400px;
-margin-top: 30px;
-padding: 10px 20px;
+width: 17%;
 display: flex;
 justify-content: flex-end;
 border-right: 2px solid;
 border-image: linear-gradient(to bottom,rgba(220, 220, 220, 1), rgba(34, 34, 31, 1)) 1;
+> p {
+  margin: 10px 20px;
+}
 `
 export const DataUl = styled.ul`
-width:830px;
-margin-top: 30px;
+width: 83%;
 `
 export const DataLi = styled.li`
 padding: 10px 20px;

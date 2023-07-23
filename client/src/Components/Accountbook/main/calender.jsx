@@ -155,7 +155,8 @@ export const Calender = () => {
 };
 
 const CalenderWapper = styled.div`
-    width: 940px;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -163,7 +164,7 @@ const CalenderWapper = styled.div`
 `
 
 const Header = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -184,20 +185,23 @@ const Icon = styled.img`
 `
 const DayWeek = styled.div`
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     color: rgb(160, 160, 160);
-    font-size: 14px;
+    > div { 
+        width: calc(100% / 7);
+        font-size: 14px;
+        text-align: center;
+    }
 `
 
 const Body = styled.div`
     width: 100%;
-    height: 490px;
-    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    flex: 1;
 `
 // 주, 7일씩
 const CellWeek = styled.div`
@@ -209,7 +213,7 @@ const CellWeek = styled.div`
 const CellTextContainer = styled.div`
     padding: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: wrap;
     flex: 1;
     justify-content: space-around;
     border-radius: 10px;
@@ -233,25 +237,26 @@ const CellText = styled.span`
 `;
 
 const TextDay = styled.div`
-    margin-bottom: 5px;
+    padding-bottom: 4px;
+    font-size: 16px;
 `;
 
 const TextType = styled.div`
-    height: 30px;
-    font-size: 14px;
+    font-size: 12px;
     text-align: center;
     display: flex;
     flex-direction: column;
+    flex: 1;
     align-items: center;
 `;
 
 const Profit = styled.p`
     text-align: center;
-    color: rgb(255, 64, 52);
+    color: #C5FF78;
     margin-bottom: 3px;
 `;
 
 const Expend = styled.p`
     text-align: center;
-    color: #C5FF78;
+    color: rgb(255, 64, 52);
 `;
