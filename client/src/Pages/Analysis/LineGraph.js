@@ -55,9 +55,9 @@ const GraphBottom = styled.div`
 const LineConnector = styled.svg`
   position: fixed;
   top: 746px;
-  left: 345px;
+  left: 389px;
   height: 100%;
-  width: 72%;
+  width: 71.3%;
   z-index: 2;
 `;
 
@@ -78,7 +78,7 @@ const LineGraph = () => {
           if (nextValue !== undefined) {
             const x1 = ((index + 0.5) * 100) / data.length + "%";
             const y1 = (maxDataValue - value) + "px"; // Adjust the y position
-            const x2 = ((index + 1) * 100) / data.length + 3.8 + "%";
+            const x2 = ((index + 1) * 100) / data.length + 4 + "%";
             const y2 = (maxDataValue - nextValue) + "px"; // Adjust the y position
             return <Line key={index} x1={x1} y1={y1} x2={x2} y2={y2} />;
           }
