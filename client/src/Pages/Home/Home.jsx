@@ -1,15 +1,15 @@
 import { styled } from "styled-components";
 import { useRef, useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useInView } from "react-intersection-observer"
 
-import MainDescription from "../Components/MainDescription";
-import analyze from '../Images/analyze_img.png';
-import account from '../Images/account_img.png';
-import wishlist from '../Images/wishlist_img.png';
-import logo1 from '../Images/logo_appear_1.png';
-import logo2 from '../Images/logo_appear_2.png';
-import logo3 from '../Images/logo_appear_3.png';
+import MainDescription from "./MainDescription";
+import analyze from '../../Images/analyze_img.png';
+import account from '../../Images/account_img.png';
+import wishlist from '../../Images/wishlist_img.png';
+import logo1 from '../../Images/logo_appear_1.png';
+import logo2 from '../../Images/logo_appear_2.png';
+import logo3 from '../../Images/logo_appear_3.png';
 
 const Background = styled.div`
   background-image: url('https://images.unsplash.com/photo-1580508174046-170816f65662?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
@@ -206,6 +206,11 @@ const FooterNameDiv = styled.div`
   margin-left: 100px;
 `
 export default function Home(){
+  const memberId = localStorage.getItem('memberId');
+  const navigate = useNavigate()
+  if (memberId) {
+    navigate("/accountbook");
+  }
   const innerText = [
     {
       img: account,

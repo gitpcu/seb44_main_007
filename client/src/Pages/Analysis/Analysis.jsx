@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 import rightArrow from '../../Images/right_arrow.png'
 import leftArrow from '../../Images/left_arrow.png'
@@ -147,6 +148,10 @@ const lastDummy = [
 function Analysis() {
 
   const memberId = localStorage.getItem('memberId')
+  const navigate = useNavigate()
+    if (memberId === null) {
+      navigate("/login");
+    }
 
   //데이터 받아오기
   const [accountData, setAccountData] = useState([]);

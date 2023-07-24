@@ -1,10 +1,9 @@
 import { styled } from 'styled-components'
-import { SignupButton } from '../Pages/Home'
+import { SignupButton } from '../Home/Home'
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
-import { memberdata } from '../InitData/memberdata';
-import apiUrl from '../API_URL';
+import apiUrl from '../../API_URL';
 
 const Container = styled.div`
   width: 100%;
@@ -233,16 +232,6 @@ export default function LoginSignup({page}){
     return true
   }
 
-  // const login = () => {
-  //   if(memberdata.filter(el => el.email === email).length > 0 && 
-  //   memberdata.filter(el => el.password === password).length > 0){
-  //     navigate('/accountbook')
-  //   }
-  // }
-  // const signup = () => {
-  //   navigate('/login')
-  // }
-
   // ✅이하 서버 통신 구현 되면 사용할 코드
   const login = () => {
     const memberInfo = {
@@ -291,7 +280,6 @@ export default function LoginSignup({page}){
     if(page === 'login' && validCheck(email, password, '', '')){
       login();
     } else if(page === 'signup' && validCheck(email, password, nickname, phonenum)){
-      console.log(memberdata.filter(el => el.name === nickname))
       signup();
     }
   };

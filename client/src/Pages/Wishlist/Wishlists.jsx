@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
-import Palette from "../Palette/Palette";
+import Palette from "../../Palette/Palette";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setId } from "../Redux/id_reducer";
-import { setDataList, setUseAble } from "../Redux/wishlist_reducer";
-import apiUrl from '../API_URL';
+import { setId } from "../../Redux/id_reducer";
+import { setDataList, setUseAble } from "../../Redux/wishlist_reducer";
+import apiUrl from '../../API_URL';
 import axios from "axios"
 
 const WishUl = styled.ul`
@@ -51,7 +51,6 @@ const DragImg = styled.img`
 const ProductImg = styled.img`
   width: 80px;
   height: 80px;
-  border-radius: 100%;
 `;
 const ListSpanContainer = styled.div`
   width: 70%;
@@ -137,13 +136,24 @@ const WishLists = ({ list, index, moveList, editFunc, avail }) => {
 
   drag(drop(ref));
   
+  const categoryImg = {
+    식비_간식: "https://www.svgrepo.com/show/427322/dinner-food.svg",
+    주거_통신: "https://www.svgrepo.com/show/287689/house.svg",
+    교통_차량: "https://www.svgrepo.com/show/513278/bus.svg",
+    생활_마트: "https://www.svgrepo.com/show/279438/shopping-bags-shopping-bag.svg",
+    의류_미용: "https://www.svgrepo.com/show/317632/costume.svg",
+    의료_건강: "https://www.svgrepo.com/show/268276/health-care-medicine.svg",
+    교육_문화: "https://www.svgrepo.com/show/298470/book.svg",
+    보험_세금: "https://www.svgrepo.com/show/259173/bank.svg",
+    기타지출: "https://www.svgrepo.com/show/499839/money.svg",
+  }
   return (
     <WishLi
       available={list.available}
       ref={ref}
     >
       <DragImg src="https://www.svgrepo.com/show/506246/menu-hamburger.svg"></DragImg>
-      <ProductImg src={list.img}></ProductImg>
+      <ProductImg src={categoryImg[list.category]}></ProductImg>
       <ListSpanContainer>
         <ListSpanDiv>
           <ListSpan>{list.wishlistName}</ListSpan>
@@ -209,7 +219,7 @@ export default function WishListDragContainer({
   })
   useEffect(() => {
     dispatch(setUseAble(targetExpend - sum))
-  }, [targetExpend])
+  }, [targetExpend, availableWishlist])
   return (
     <WishUl>
       {wishlist !== undefined &&

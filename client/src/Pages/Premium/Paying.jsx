@@ -1,8 +1,8 @@
 import axios from "axios"
 import { useEffect } from 'react';
-import apiUrl from '../API_URL';
+import apiUrl from '../../API_URL';
 import { useDispatch } from "react-redux";
-import { setPayment } from "../Redux/payment_reducer";
+import { setPayment } from "../../Redux/payment_reducer";
 
 export default function Paying() {
   const url = window.location.href;

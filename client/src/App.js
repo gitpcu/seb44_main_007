@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from "react";
-import Accountbook from "./Pages/accountbook";
-import Home from "./Pages/Home";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
-import Wishlist from "./Pages/Wishlist";
-import Premium from "./Pages/Premium";
-import Paying from "./Pages/Paying";
-import SideNavBar from "./Components/SideNavBar";
+import Accountbook from "./Pages/Accountbook/accountbook";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import Signup from "./Pages/Login/Signup";
+import Wishlist from "./Pages/Wishlist/Wishlist";
+import Premium from "./Pages/Premium/Premium";
+import Paying from "./Pages/Premium/Paying";
+import SideNavBar from "./Pages/Home/SideNavBar";
 import Analysis from "./Pages/Analysis/Analysis";
-import Mypage from "./Pages/Mypage";
+import Mypage from "./Pages/Mypage/Mypage";
 
 //dummyData
 import { data } from "./InitData/data";

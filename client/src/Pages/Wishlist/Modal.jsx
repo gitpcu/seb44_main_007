@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { styled } from 'styled-components'
-import { CategoryCircle } from '../Components/Wishlists'
-import { LimitInput } from '../Pages/Wishlist'
-import Palette from "../Palette/Palette";
+import { CategoryCircle } from './Wishlists'
+import { LimitInput } from './Wishlist'
+import Palette from "../../Palette/Palette";
 import { useSelector } from 'react-redux';
-import apiUrl from '../API_URL';
+import apiUrl from '../../API_URL';
 import axios from "axios"
 
 export const ModalBackground = styled.div`
@@ -89,7 +89,7 @@ export default function Modal({setOpenModal, editMode, setEditMode, item}){
     setOpenModal(false)
   }
 
-  const category = ['식비_간식','주거_통신','교통_차량','생활_마트','의류_미용','의료_건강','교육_문화','보험_세금','기타지출']
+  const category = ['식비_간식','주거_통신','교통_차량','생활_마트','의류_미용','의료_건강','교육_문화','보험_세금']
   const [addCategory, setAddCategory] = useState()
   const [addName, setAddName] = useState()
   const [addPrice, setAddPrice] = useState()

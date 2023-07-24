@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components'
 import axios from 'axios'
-import userImage from '../Images/user.JPG'
+import userImage from '../../Images/user.JPG'
 import { Link } from 'react-router-dom';
 
-import apiUrl from '../API_URL';
+import apiUrl from '../../API_URL';
 
 const PremiumImg = "https://www.svgrepo.com/show/485696/diamond.svg" //다이아몬드 아이콘
 

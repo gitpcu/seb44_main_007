@@ -1,14 +1,15 @@
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setDataList } from "../Redux/wishlist_reducer";
-import { setTargetExpend } from "../Redux/account_reducer";
-import { data } from "../InitData/wishlist";
-import Modal from "../Components/Modal";
-import WishListDragContainer from "../Components/Wishlists";
+import { useNavigate } from 'react-router-dom';
+import { setDataList } from "../../Redux/wishlist_reducer";
+import { setTargetExpend } from "../../Redux/account_reducer";
+import { data } from "../../InitData/wishlist";
+import Modal from "./Modal";
+import WishListDragContainer from "./Wishlists";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import apiUrl from '../API_URL';
+import apiUrl from '../../API_URL';
 import axios from "axios";
 
 const WishlistContainer = styled.div`
@@ -134,7 +135,10 @@ export default function Wishlist() {
   const targetExpend = useSelector(state => state.targetExpend)
   const wishlist = useSelector(state => state.wishlist)
   const useAble = useSelector(state => state.useAble)
-  console.log(targetExpend)
+  const navigate = useNavigate()
+    if (!memberId) {
+        navigate("/login");
+    }
   useEffect(() => {
     axios
       .get(

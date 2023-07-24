@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setDataList } from "../Redux/wishlist_reducer";
-import mainLogo from '../Images/logo_main.png'
+import { setDataList } from "../../Redux/wishlist_reducer";
+import mainLogo from '../../Images/logo_main.png'
 
 const Nav = styled.nav`
   position: relative;

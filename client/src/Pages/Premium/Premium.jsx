@@ -1,8 +1,9 @@
 import { styled } from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Button } from "./Wishlist";
-import { ModalBackground, ModalContainer, ModalDiv } from "../Components/Modal"
+import { Button } from "../Wishlist/Wishlist";
+import { ModalBackground, ModalContainer, ModalDiv } from "../Wishlist/Modal"
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
 const PremiumContainer = styled.div`
@@ -302,6 +303,11 @@ const PaymentModal = ({closeModal}) => {
   )
 }
 export default function Premium(){
+  const memberId = localStorage.getItem('memberId');
+  const navigate = useNavigate()
+    if (memberId === null) {
+      navigate("/login");
+    }
   const premiumInfo = [
     {
       img: 'https://www.svgrepo.com/show/454970/money-website.svg',
@@ -331,7 +337,6 @@ export default function Premium(){
     setModal(false)
   }
   const isPayOver = useSelector(state => state.payment)
-  console.log(isPayOver)
   return(
     <>
       {modal ? <PaymentModal closeModal={closeModal}></PaymentModal>: ''}
