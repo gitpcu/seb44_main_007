@@ -253,10 +253,6 @@ const PaymentModal = ({closeModal}) => {
         <PayContainer onClick={(e) => e.stopPropagation()}>
           <PayTypeDiv>
             <PayTypeContainer>
-              <PayTypeImg src='https://www.svgrepo.com/show/442692/pay.svg'></PayTypeImg>
-              <PayTypeSpan>일반결제</PayTypeSpan>
-            </PayTypeContainer>
-            <PayTypeContainer>
               <PayTypeImg src='https://www.svgrepo.com/show/368253/kakao-square.svg' onClick={kakaoPayment}></PayTypeImg>
               <PayTypeSpan>카카오결제</PayTypeSpan>
             </PayTypeContainer>
