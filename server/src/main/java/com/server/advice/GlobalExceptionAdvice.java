@@ -1,6 +1,5 @@
 package com.server.advice;
 
-import com.server.exception.BusinessLogicException;
 import com.server.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,8 +38,6 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
-
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(
@@ -50,7 +47,7 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
-    @ExceptionHandler //선생님 코드
+    @ExceptionHandler
     public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
         final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
         log.debug("# BusinessLogicException: {}-{}", e.getExceptionCode(), e.getMessage());
@@ -59,14 +56,6 @@ public class GlobalExceptionAdvice {
                 .getStatus()));
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> handleBusinessLogicException(BusinessLogicException e) {
-//        ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
-//        log.debug("# BusinessLogicException: {}-{}", e.getExceptionCode(), e.getMessage());
-//
-//        return ResponseEntity.status(e.getExceptionCode().getStatus()).body(response);
-//    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ErrorResponse handleHttpRequestMethodNotSupportedException(
@@ -74,7 +63,6 @@ public class GlobalExceptionAdvice {
 
         return ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED);
     }
-
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, MissingServletRequestParameterException.class,
             HttpMessageNotReadableException.class, IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -83,13 +71,6 @@ public class GlobalExceptionAdvice {
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, message);
     }
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    public ErrorResponse handleAccessDeniedException(AccessDeniedException e) {
-//        log.error("# handle AccessDeniedException: {}", e.getMessage());
-//        return ErrorResponse.of(HttpStatus.FORBIDDEN);
-//    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -100,4 +81,13 @@ public class GlobalExceptionAdvice {
 
         return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(RuntimeException.class) //회원가입 오류시 사용
+    public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e) {
+        log.error("RuntimeException: {}", e);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
+    }
+
+
 }

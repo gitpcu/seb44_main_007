@@ -23,4 +23,5 @@ public class ResponseDto {
             this.pageInfo = new PageInfo(page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
         }
     }
+
 }

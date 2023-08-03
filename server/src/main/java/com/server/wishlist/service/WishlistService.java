@@ -1,14 +1,20 @@
 package com.server.wishlist.service;
 
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
+import com.server.trade.entity.Trade;
 import com.server.wishlist.entity.Wishlist;
 import com.server.wishlist.repository.WishlistRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 
 @Transactional
@@ -26,36 +32,58 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
-    public Wishlist updateWishlist(Wishlist wishlist) {
-        Wishlist findWishlist = findWishlist(wishlist.getWishlistId());
-
+    public Wishlist updateWishlist(Wishlist wishlist, Long memberId) {
+        Wishlist findWishlist = findVerifiedWishlist(wishlist.getWishlistId());
+        if(!findWishlist.getMemberId().equals(memberId)){
+            throw new BusinessLogicException(ExceptionCode.WISHLIST_MEMBER_NOT_MATCH);
+        }
+        Optional.ofNullable(wishlist.getWishlistName())
+                .ifPresent(wishlistName -> findWishlist.setWishlistName(wishlistName));
+        Optional.ofNullable(wishlist.getPrice())
+                .ifPresent(price -> findWishlist.setPrice(price));
+        Optional.ofNullable(wishlist.getCategory())
+                .ifPresent(category -> findWishlist.setCategory(category));
+        Optional.ofNullable(wishlist.getPriority())
+                .ifPresent(priority -> findWishlist.setPriority(priority));
+        Optional.ofNullable(wishlist.getAvailable())
+                .ifPresent(available -> findWishlist.setAvailable(available));
         return wishlistRepository.save(findWishlist);
     }
 
     @Transactional(readOnly = true)
-    public Wishlist findWishlist(long wishlistId) {
+    public Wishlist findWishlist(Long wishlistId, Long memberId) {
         Wishlist findWishlist = wishlistRepository.findById(wishlistId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.WISHLIST_NOT_FOUND));
         return findWishlist;
     }
 
     @Transactional(readOnly = true)
-        public Page<Wishlist> findWishlistsByCategory(int page, int size, String tab) {
-            Page<Wishlist> pageWishlist;
-        if (tab.equals("latest")) {
-            pageWishlist = wishlistRepository.findAll(PageRequest.of(page, size, Sort.by(
-                    Sort.Direction.DESC, "wishlistId")));
-        } else if (tab.equals("limitAccount")) {
-            pageWishlist = wishlistRepository.findWishlistsByLA(PageRequest.of(page, size));
-        } else {
-            throw new IllegalArgumentException("Invalid sort parameter");
-        }
+    public List<Wishlist> findWishlistsByLatest(Long memberId) {
+        return wishlistRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId);
 
-        return pageWishlist;
     }
 
-    public void deleteWishlist(long wishlistId) {
-        Wishlist findWishlist = findWishlist(wishlistId);
+    @Transactional(readOnly = true)
+    public List<Wishlist> findWishlistsByLowPrice(Long memberId) {
+        return wishlistRepository.findAllByMemberIdOrderByPriceAsc(memberId);
+
+    }
+
+
+    public void deleteWishlist(Long wishlistId, Long memberId) {
+        Wishlist findWishlist = findVerifiedWishlist(wishlistId);
+        if (!findWishlist.getMemberId().equals(memberId)) {
+            throw new BusinessLogicException(ExceptionCode.WISHLIST_MEMBER_NOT_MATCH);
+        }
         wishlistRepository.delete(findWishlist);
+    }
+
+    // 해당 거래가 있는지 조회
+    private Wishlist findVerifiedWishlist(Long wishlistId) {
+        Optional<Wishlist> optionalWishlist = wishlistRepository.findById(wishlistId);
+        if(optionalWishlist.isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.WISHLIST_NOT_FOUND);
+        }
+        return optionalWishlist.get();
     }
 }

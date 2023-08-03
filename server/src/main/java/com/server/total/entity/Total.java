@@ -1,45 +1,21 @@
 package com.server.total.entity;
 
-import com.server.member.entity.Member;
-import com.server.trade.entity.Trade;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-
+@AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
 @Entity
 @Table(name = "total")
+@Builder
 public class Total {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long totalId;
-
-    private BigDecimal totalIncome;
-    private BigDecimal totalOutcome;
+    private Long memberId;
+    @Column
     private BigDecimal goal;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "memberId", nullable = false)
-    private Member member;
-
-    public void setMember(Member member) {
-        this.member = member;
-        member.getTotalList().add(this);
-    }
-
-
-    @OneToMany(mappedBy = "total", cascade = CascadeType.ALL)
-    private List<Trade> tradeList = new ArrayList<>();
-
-
-
 
 }
