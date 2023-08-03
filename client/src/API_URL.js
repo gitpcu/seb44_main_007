@@ -1,5 +1,5 @@
 const apiUrl = {
-    url: 'https://0baf-58-234-27-220.ngrok-free.app'
+    url: 'http://ec2-13-124-195-24.ap-northeast-2.compute.amazonaws.com:8080'
 };
   
 export default apiUrl;
