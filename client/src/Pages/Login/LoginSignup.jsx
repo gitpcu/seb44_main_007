@@ -268,6 +268,7 @@ export default function LoginSignup({page}){
     axios
     .post(`${apiUrl.url}/members`, memberInfo)
     .then(res => {
+      alert('회원 가입이 완료되었습니다!')
       navigate('/login')
     })
     .catch(err =>{
@@ -361,7 +362,7 @@ export default function LoginSignup({page}){
             })}
           </InfoDiv>
           <LoginButton onClick={clickLoginButton}>{info.buttonText}</LoginButton>
-          <GooglLoginButton>
+          <GooglLoginButton onClick={() => alert('준비중입니다!')}>
             <GoogleLogo src='https://www.svgrepo.com/show/452216/google.svg'></GoogleLogo>
             Login with Google
           </GooglLoginButton>

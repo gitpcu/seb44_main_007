@@ -1,62 +1,60 @@
-
 spring:
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: update
-      hibernate:
-        connection:
-          isolation: 1
-  datasource:
-    url: jdbc:mysql://localhost:3306/database1?characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: sidhdRkdhd!234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+        hibernate:
+            ddl-auto: update
+            hibernate:
+                connection:
+                    isolation: 1
+    datasource:
+        url: jdbc:mysql://localhost:3306/database1?characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: sidhdRkdhd!234
+        driver-class-name: com.mysql.cj.jdbc.Driver
 
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: 935988023864-rrm6bo9u69r2abs63t92hbsu0ovoeku8.apps.googleusercontent.com
-            clientSecret: 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
-            scope:
-              - email
-              - profile
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        clientId: 935988023864-rrm6bo9u69r2abs63t92hbsu0ovoeku8.apps.googleusercontent.com
+                        clientSecret: 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
+                        scope:
+                            - email
+                            - profile
 
-  redis:
-    host: localhost
-    port: 6379
-
-  data:
     redis:
-      repositories:
-        enabled: false
+        host: localhost
+        port: 6379
 
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+    data:
+        redis:
+            repositories:
+                enabled: false
+
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
 
 jwt:
-  key: asdfqwerasdfqwerasdfqwerasdfqwerasdfasdfasdfasdf
-  access-token-expiration-minutes: 1000
-  refresh-token-expiration-minutes: 2000
-
+    key: asdfqwerasdfqwerasdfqwerasdfqwerasdfasdfasdfasdf
+    access-token-expiration-minutes: 1000
+    refresh-token-expiration-minutes: 2000
 
 logging:
-  file:
-    name: logs/logging.log
-  level:
-    spring:
-      root: DEBUG
-      com.server: DEBUG
-      server:
-        auth: DEBUG
+    file:
+        name: logs/logging.log
+    level:
+        spring:
+            root: DEBUG
+            com.server: DEBUG
+            server:
+                auth: DEBUG
 
 #logging:
 #  file:
@@ -69,9 +67,8 @@ logging:
 #        server:
 #          auth: DEBUG
 
-
 cors:
-  allowed-origins: "*"
-  allowed-methods: GET, POST, PATCH, DELETE, OPTIONS
-  allowed-headers: Authorization, Content-Type
-  allow-credentials: true
+    allowed-origins: '*'
+    allowed-methods: GET, POST, PATCH, DELETE, OPTIONS
+    allowed-headers: Authorization, Content-Type
+    allow-credentials: true
